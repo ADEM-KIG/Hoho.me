@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ftouh</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f0f0f0;
+            padding-top: 50px;
+        }
+        h1 { color: #333; }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #d35400;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>ftouh</h1>
+    <input type="text" id="search" placeholder="Type 'fateh' here">
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("search").addEventListener("input", function() {
+            if (this.value.toLowerCase() === "fateh") {
+                document.getElementById("result").innerText = "ya mibon";
+            } else {
+                document.getElementById("result").innerText = "";
+            }
+        });
+    </script>
+</body>
+</html>
