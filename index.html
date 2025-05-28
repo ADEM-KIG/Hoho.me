@@ -1,577 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ftouh Tools</title>
-    <style>
-        /* أنماط CSS */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        
-        :root {
-            --primary-color: #1a237e;
-            --secondary-color: #000000;
-            --accent-color: #00bcd4;
-            --text-color: #ffffff;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-color);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            animation: fadeInDown 0.8s ease-out;
-        }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .logo h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, var(--accent-color), #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            margin: 5px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .nav-btn.active {
-            background: var(--accent-color);
-            color: var(--secondary-color);
-            font-weight: bold;
-        }
-        
-        .content-section {
-            display: none;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            animation: fadeIn 0.5s ease-out;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .content-section.active {
-            display: block;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-            text-align: center;
-        }
-        
-        .file-upload-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: rgba(0, 188, 212, 0.2);
-            border: 2px dashed var(--accent-color);
-            border-radius: 10px;
-            color: white;
-            font-size: 1.2rem;
-            text-align: center;
-            cursor: pointer;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .file-upload-btn:hover {
-            background: rgba(0, 188, 212, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .permission-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .permission-box {
-            background: linear-gradient(145deg, #1a237e, #000000);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9);
-            animation: scaleUp 0.3s ease-out forwards;
-            border: 1px solid var(--accent-color);
-        }
-        
-        .permission-box h3 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            color: #ff5252;
-        }
-        
-        .permission-btns {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        .permission-btn {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .allow-btn {
-            background: #ff5252;
-            color: white;
-        }
-        
-        .deny-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .file-item {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            aspect-ratio: 1;
-        }
-        
-        .file-item:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-        
-        .file-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .file-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 8px;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-        
-        .scan-results {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-        }
-        
-        .scan-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .scan-btn {
-            background: var(--accent-color);
-            color: black;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            display: block;
-            width: 100%;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes scaleUp {
-            from { transform: scale(0.9); }
-            to { transform: scale(1); }
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>محادثة فورية - Messenger</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+    }
+    .messenger {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #fff;
+      border-left: 1px solid #ddd;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .chat-window {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #e5ddd5;
+    }
+    .messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .message {
+      background: #dcf8c6;
+      margin: 10px 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      max-width: 60%;
+      align-self: flex-end;
+    }
+    .incoming {
+      background: #fff;
+      align-self: flex-start;
+    }
+    .input-box {
+      display: flex;
+      padding: 10px;
+      background-color: #fff;
+      border-top: 1px solid #ccc;
+    }
+    .input-box input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+    .input-box button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #0084ff;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .input-box button:hover {
+      background-color: #006bbf;
+    }
+    .contact {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .contact:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <h1>Ftouh Tools</h1>
-            </div>
-            <nav>
-                <button class="nav-btn active" data-section="browser-scanner">Scan Browser</button>
-                <button class="nav-btn" data-section="wifi-scanner">WiFi Scanner</button>
-                <button class="nav-btn" data-section="files-manager">Files</button>
-            </nav>
-        </header>
-        
-        <section id="browser-scanner" class="content-section active">
-            <h2 class="section-title">Browser Scanner</h2>
-            <div class="scan-results">
-                <div class="scan-item">
-                    <span class="scan-label">Browser:</span>
-                    <span class="scan-value" id="browser-type">Detecting...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">OS:</span>
-                    <span class="scan-value" id="os-type">Detecting...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">Resolution:</span>
-                    <span class="scan-value" id="screen-resolution">Detecting...</span>
-                </div>
-            </div>
-            <button class="scan-btn" id="deep-scan-btn">Deep Scan</button>
-        </section>
-        
-        <section id="wifi-scanner" class="content-section">
-            <h2 class="section-title">WiFi Scanner</h2>
-            <div class="scan-results">
-                <div class="scan-item">
-                    <span class="scan-label">Status:</span>
-                    <span class="scan-value" id="wifi-status">Detecting...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">IP Address:</span>
-                    <span class="scan-value" id="ip-address">Detecting...</span>
-                </div>
-            </div>
-            <button class="scan-btn" id="wifi-scan-btn">Scan Network</button>
-        </section>
-        
-        <section id="files-manager" class="content-section">
-            <h2 class="section-title">Files Manager</h2>
-            <label for="file-upload" class="file-upload-btn">
-                Click to upload files or images
-            </label>
-            <input type="file" id="file-upload" multiple style="display: none;">
-            
-            <div class="files-grid" id="files-container">
-                <!-- Uploaded files will appear here -->
-            </div>
-        </section>
-        
-        <div class="permission-modal" id="permission-modal">
-            <div class="permission-box">
-                <h3>Do you want Ftouh to catch you?</h3>
-                <p>This website needs permission to access your files to display them.</p>
-                <div class="permission-btns">
-                    <button class="permission-btn allow-btn" id="allow-btn">ALLOW</button>
-                    <button class="permission-btn deny-btn" id="deny-btn">DENY</button>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Copyright &copy; <span id="current-year"></span> Ftouh. All rights reserved.</p>
-        </footer>
+
+<div class="messenger">
+  <div class="sidebar">
+    <h3>جهات الاتصال</h3>
+    <div class="contact">أحمد</div>
+    <div class="contact">سارة</div>
+    <div class="contact">محمد</div>
+  </div>
+
+  <div class="chat-window">
+    <div class="messages" id="messages">
+      <div class="message incoming">مرحباً! كيف حالك؟</div>
+      <div class="message">أنا بخير، وأنت؟</div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const navBtns = document.querySelectorAll('.nav-btn');
-            const contentSections = document.querySelectorAll('.content-section');
-            const fileUploadBtn = document.querySelector('.file-upload-btn');
-            const fileUploadInput = document.getElementById('file-upload');
-            const permissionModal = document.getElementById('permission-modal');
-            const allowBtn = document.getElementById('allow-btn');
-            const denyBtn = document.getElementById('deny-btn');
-            const filesContainer = document.getElementById('files-container');
-            
-            // Load saved files from cookies
-            function loadFilesFromCookies() {
-                const savedFiles = getCookie('ftouh_files');
-                if (savedFiles) {
-                    filesContainer.innerHTML = savedFiles;
-                }
-            }
-            
-            // Save files to cookies
-            function saveFilesToCookies() {
-                setCookie('ftouh_files', filesContainer.innerHTML, 365);
-            }
-            
-            // Cookie functions
-            function setCookie(name, value, days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                const expires = "expires=" + date.toUTCString();
-                document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
-            }
-            
-            function getCookie(name) {
-                const nameEQ = name + "=";
-                const ca = document.cookie.split(';');
-                for(let i=0; i < ca.length; i++) {
-                    let c = ca[i];
-                    while (c.charAt(0) === ' ') c = c.substring(1);
-                    if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length));
-                }
-                return null;
-            }
-            
-            // Navigation
-            navBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    navBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    contentSections.forEach(section => section.classList.remove('active'));
-                    const sectionId = this.getAttribute('data-section');
-                    document.getElementById(sectionId).classList.add('active');
-                });
-            });
-            
-            // File upload
-            fileUploadBtn.addEventListener('click', function() {
-                permissionModal.style.display = 'flex';
-            });
-            
-            allowBtn.addEventListener('click', function() {
-                permissionModal.style.display = 'none';
-                fileUploadInput.click();
-            });
-            
-            denyBtn.addEventListener('click', function() {
-                permissionModal.style.display = 'none';
-                alert('Access to files was denied');
-            });
-            
-            fileUploadInput.addEventListener('change', function(e) {
-                const files = e.target.files;
-                
-                if (files.length > 0) {
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-                        
-                        if (file.type.match('image.*')) {
-                            const reader = new FileReader();
-                            
-                            reader.onload = function(e) {
-                                const fileItem = document.createElement('div');
-                                fileItem.className = 'file-item';
-                                
-                                fileItem.innerHTML = `
-                                    <img src="${e.target.result}" alt="${file.name}">
-                                    <div class="file-info">${file.name}</div>
-                                `;
-                                
-                                filesContainer.appendChild(fileItem);
-                                saveFilesToCookies();
-                            };
-                            
-                            reader.readAsDataURL(file);
-                        } else {
-                            const fileItem = document.createElement('div');
-                            fileItem.className = 'file-item';
-                            
-                            fileItem.innerHTML = `
-                                <div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:#1a237e;">
-                                    <div style="font-size:3rem;">📄</div>
-                                </div>
-                                <div class="file-info">${file.name}</div>
-                            `;
-                            
-                            filesContainer.appendChild(fileItem);
-                            saveFilesToCookies();
-                        }
-                    }
-                }
-            });
-            
-            // Browser detection
-            function detectBrowser() {
-                const userAgent = navigator.userAgent;
-                let browserName;
-                
-                if (userAgent.match(/chrome|chromium|crios/i)) {
-                    browserName = "Chrome";
-                } else if (userAgent.match(/firefox|fxios/i)) {
-                    browserName = "Firefox";
-                } else if (userAgent.match(/safari/i)) {
-                    browserName = "Safari";
-                } else if (userAgent.match(/opr\//i)) {
-                    browserName = "Opera";
-                } else if (userAgent.match(/edg/i)) {
-                    browserName = "Edge";
-                } else {
-                    browserName = "Unknown";
-                }
-                
-                document.getElementById('browser-type').textContent = browserName;
-            }
-            
-            function detectOS() {
-                const userAgent = navigator.userAgent;
-                let osName;
-                
-                if (userAgent.match(/windows/i)) {
-                    osName = "Windows";
-                } else if (userAgent.match(/macintosh|mac os x/i)) {
-                    osName = "MacOS";
-                } else if (userAgent.match(/linux/i)) {
-                    osName = "Linux";
-                } else if (userAgent.match(/android/i)) {
-                    osName = "Android";
-                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
-                    osName = "iOS";
-                } else {
-                    osName = "Unknown";
-                }
-                
-                document.getElementById('os-type').textContent = osName;
-            }
-            
-            function detectScreenResolution() {
-                const width = window.screen.width;
-                const height = window.screen.height;
-                document.getElementById('screen-resolution').textContent = `${width} × ${height}`;
-            }
-            
-            // WiFi scan (simulated)
-            function scanWifi() {
-                document.getElementById('wifi-status').textContent = "Connected";
-                
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('ip-address').textContent = data.ip;
-                    })
-                    .catch(() => {
-                        document.getElementById('ip-address').textContent = "Unknown";
-                    });
-            }
-            
-            // Set current year
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            
-            // Initialize
-            detectBrowser();
-            detectOS();
-            detectScreenResolution();
-            loadFilesFromCookies();
-            
-            // Event listeners for scan buttons
-            document.getElementById('deep-scan-btn').addEventListener('click', function() {
-                this.textContent = "Scanning...";
-                setTimeout(() => {
-                    detectBrowser();
-                    detectOS();
-                    detectScreenResolution();
-                    this.textContent = "Scan Complete";
-                }, 1500);
-            });
-            
-            document.getElementById('wifi-scan-btn').addEventListener('click', function() {
-                this.textContent = "Scanning...";
-                setTimeout(() => {
-                    scanWifi();
-                    this.textContent = "Scan Complete";
-                }, 1500);
-            });
-        });
-    </script>
+    <div class="input-box">
+      <input type="text" id="messageInput" placeholder="اكتب رسالة...">
+      <button onclick="sendMessage()">إرسال</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    if (message !== "") {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      messageDiv.textContent = message;
+      document.getElementById('messages').appendChild(messageDiv);
+      input.value = "";
+      // Scroll to bottom
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  }
+
+  // Allow pressing Enter to send
+  document.getElementById('messageInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+</script>
+
 </body>
 </html>
