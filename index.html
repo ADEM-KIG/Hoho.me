@@ -1,40 +1,241 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ftouh</title>
+    <title>Fateh Experience</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: #f0f0f0;
-            padding-top: 50px;
+        /* التنسيقات العامة */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            transition: all 0.5s;
         }
-        h1 { color: #333; }
-        input {
-            padding: 10px;
-            font-size: 16px;
+
+        /* تأثير الثلج الأحمر */
+        .snowflake {
+            position: absolute;
+            background-color: #ff0000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* الصفحة الأولى */
+        #welcome-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        #welcome-page h1 {
+            font-size: 5rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        #search-box {
+            padding: 15px;
+            font-size: 1.2rem;
             width: 300px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff0000;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 24px;
-            color: #d35400;
-            font-weight: bold;
+
+        /* الصفحة الثانية */
+        #login-page {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        #login-page h1 {
+            font-size: 4rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            margin-bottom: 50px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .input-field {
+            padding: 15px;
+            font-size: 1rem;
+            width: 250px;
+            margin: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ff0000;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* الصفحة الثالثة */
+        #final-page {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        #skull {
+            font-size: 10rem;
+            margin-bottom: 30px;
+            color: #ff0000;
+            text-shadow: 0 0 15px #ff0000;
+        }
+
+        #final-message {
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            animation: bloodDrip 5s infinite;
+        }
+
+        /* الحركات */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes bloodDrip {
+            0% { text-shadow: 0 0 10px #ff0000; }
+            25% { text-shadow: 0 5px 10px #ff0000; }
+            50% { text-shadow: 0 10px 15px #ff0000; }
+            75% { text-shadow: 0 5px 10px #ff0000; }
+            100% { text-shadow: 0 0 10px #ff0000; }
         }
     </style>
 </head>
 <body>
-    <h1>ftouh</h1>
-    <input type="text" id="search" placeholder="Type 'fateh' here">
-    <div id="result"></div>
+    <!-- الصفحة الأولى -->
+    <div id="welcome-page">
+        <h1>Fateh</h1>
+        <input type="text" id="search-box" placeholder="Type 'fateh' to continue...">
+    </div>
+
+    <!-- الصفحة الثانية -->
+    <div id="login-page">
+        <h1>Fateh</h1>
+        <input type="text" class="input-field" id="email" placeholder="Email (type 'fateh')">
+        <input type="password" class="input-field" id="password" placeholder="Password (type 'fateh')">
+    </div>
+
+    <!-- الصفحة الثالثة -->
+    <div id="final-page">
+        <div id="skull">☠</div>
+        <div id="final-message">ya mnayk</div>
+    </div>
 
     <script>
-        document.getElementById("search").addEventListener("input", function() {
-            if (this.value.toLowerCase() === "fateh") {
-                document.getElementById("result").innerText = "ya mibon";
-            } else {
-                document.getElementById("result").innerText = "";
+        // إنشاء تأثير الثلج الأحمر
+        function createSnowflakes() {
+            const snowflakeCount = 150;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                const size = Math.random() * 5 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+                snowflake.style.top = `${Math.random() * -100}px`;
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                document.body.appendChild(snowflake);
+                animateSnowflake(snowflake);
             }
+            
+            function animateSnowflake(snowflake) {
+                const duration = Math.random() * 10 + 5;
+                let start = null;
+                const initialLeft = parseFloat(snowflake.style.left);
+                const drift = Math.random() * 4 - 2;
+                
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const progress = (timestamp - start) / (duration * 1000);
+                    
+                    if (progress < 1) {
+                        snowflake.style.top = `${progress * window.innerHeight}px`;
+                        snowflake.style.left = `${initialLeft + drift * progress * window.innerHeight}px`;
+                        requestAnimationFrame(step);
+                    } else {
+                        snowflake.style.top = `${Math.random() * -100}px`;
+                        snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+                        start = null;
+                        animateSnowflake(snowflake);
+                    }
+                }
+                
+                requestAnimationFrame(step);
+            }
+        }
+
+        // بدء تأثير الثلج
+        createSnowflakes();
+
+        // التحكم بين الصفحات
+        const welcomePage = document.getElementById('welcome-page');
+        const loginPage = document.getElementById('login-page');
+        const finalPage = document.getElementById('final-page');
+        const searchBox = document.getElementById('search-box');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // الانتقال من الصفحة الأولى إلى الثانية
+        searchBox.addEventListener('input', function() {
+            if (this.value.toLowerCase() === 'fateh') {
+                welcomePage.style.display = 'none';
+                loginPage.style.display = 'flex';
+            }
+        });
+
+        // الانتقال من الصفحة الثانية إلى الثالثة
+        function checkLogin() {
+            if (emailInput.value.toLowerCase() === 'fateh' && 
+                passwordInput.value.toLowerCase() === 'fateh') {
+                loginPage.style.display = 'none';
+                finalPage.style.display = 'flex';
+            }
+        }
+
+        emailInput.addEventListener('input', checkLogin);
+        passwordInput.addEventListener('input', checkLogin);
+
+        // إعادة حجم الثلج عند تغيير حجم النافذة
+        window.addEventListener('resize', function() {
+            const snowflakes = document.querySelectorAll('.snowflake');
+            snowflakes.forEach(snowflake => {
+                snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+            });
         });
     </script>
 </body>
