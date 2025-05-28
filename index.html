@@ -1,412 +1,243 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fateh Security Scanner</title>
+    <title>Fateh Experience</title>
     <style>
-        * {
+        /* التنسيقات العامة */
+        body {
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
             background-color: #000;
             color: #fff;
-            overflow-x: hidden;
-            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            transition: all 0.5s;
         }
 
-        #matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.5;
+        /* تأثير الثلج الأحمر */
+        .snowflake {
+            position: absolute;
+            background-color: #ff0000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        header {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid #ff0000;
-        }
-
-        header h1 {
-            color: #ff0000;
-            margin-bottom: 1rem;
-        }
-
-        nav {
+        /* الصفحة الأولى */
+        #welcome-page {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
         }
 
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #ff0000;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab-btn:hover {
-            background-color: #ff0000;
-            color: #000;
-        }
-
-        .tab-btn.active {
-            background-color: #ff0000;
-            color: #000;
-            font-weight: bold;
-        }
-
-        main {
-            padding: 2rem;
-            min-height: 70vh;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .result-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .result-box {
-            background-color: rgba(34, 34, 34, 0.8);
-            border: 1px solid #ff0000;
-            border-radius: 5px;
-            padding: 1rem;
-            transition: transform 0.3s;
-        }
-
-        .result-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-        }
-
-        .result-box h3 {
+        #welcome-page h1 {
+            font-size: 5rem;
             color: #ff0000;
-            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
         }
 
-        footer {
+        #search-box {
+            padding: 15px;
+            font-size: 1.2rem;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff0000;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* الصفحة الثانية */
+        #login-page {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        #login-page h1 {
+            font-size: 4rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            margin-bottom: 50px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .input-field {
+            padding: 15px;
+            font-size: 1rem;
+            width: 250px;
+            margin: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ff0000;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* الصفحة الثالثة */
+        #final-page {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
             text-align: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-top: 1px solid #ff0000;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .result-container {
-                grid-template-columns: 1fr;
-            }
-            
-            nav {
-                flex-direction: column;
-                align-items: center;
-            }
+        #skull {
+            font-size: 10rem;
+            margin-bottom: 30px;
+            color: #ff0000;
+            text-shadow: 0 0 15px #ff0000;
+        }
+
+        #final-message {
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            animation: bloodDrip 5s infinite;
+        }
+
+        /* الحركات */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes bloodDrip {
+            0% { text-shadow: 0 0 10px #ff0000; }
+            25% { text-shadow: 0 5px 10px #ff0000; }
+            50% { text-shadow: 0 10px 15px #ff0000; }
+            75% { text-shadow: 0 5px 10px #ff0000; }
+            100% { text-shadow: 0 0 10px #ff0000; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Fateh Security Scanner</h1>
-        <nav>
-            <button class="tab-btn active" data-tab="vpn">Scan VPN</button>
-            <button class="tab-btn" data-tab="browser">Scan Browser</button>
-            <button class="tab-btn" data-tab="fingerprint">Device Fingerprint</button>
-        </nav>
-    </header>
+    <!-- الصفحة الأولى -->
+    <div id="welcome-page">
+        <h1>Fateh</h1>
+        <input type="text" id="search-box" placeholder="Type 'fateh' to continue...">
+    </div>
 
-    <main>
-        <section id="vpn" class="tab-content active">
-            <h2>VPN Detection Results</h2>
-            <div class="result-container">
-                <div class="result-box">
-                    <h3>VPN Status</h3>
-                    <p id="vpn-status">Scanning...</p>
-                </div>
-                <div class="result-box">
-                    <h3>IP Address</h3>
-                    <p id="ip-address">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>Location</h3>
-                    <p id="location">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>ISP</h3>
-                    <p id="isp">Loading...</p>
-                </div>
-            </div>
-        </section>
+    <!-- الصفحة الثانية -->
+    <div id="login-page">
+        <h1>Fateh</h1>
+        <input type="text" class="input-field" id="email" placeholder="Email (type 'fateh')">
+        <input type="password" class="input-field" id="password" placeholder="Password (type 'fateh')">
+    </div>
 
-        <section id="browser" class="tab-content">
-            <h2>Browser Scan Results</h2>
-            <div class="result-container">
-                <div class="result-box">
-                    <h3>Browser</h3>
-                    <p id="browser-name">Scanning...</p>
-                </div>
-                <div class="result-box">
-                    <h3>Version</h3>
-                    <p id="browser-version">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>Cookies Enabled</h3>
-                    <p id="cookies-status">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>Screen Resolution</h3>
-                    <p id="screen-resolution">Loading...</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="fingerprint" class="tab-content">
-            <h2>Device Fingerprint</h2>
-            <div class="result-container">
-                <div class="result-box">
-                    <h3>Device ID</h3>
-                    <p id="device-id">Generating...</p>
-                </div>
-                <div class="result-box">
-                    <h3>Operating System</h3>
-                    <p id="os">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>CPU Cores</h3>
-                    <p id="cpu-cores">Loading...</p>
-                </div>
-                <div class="result-box">
-                    <h3>WebGL Renderer</h3>
-                    <p id="webgl">Loading...</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Fateh. جميع الحقوق محفوظة.</p>
-    </footer>
-
-    <canvas id="matrix"></canvas>
+    <!-- الصفحة الثالثة -->
+    <div id="final-page">
+        <div id="skull">☠</div>
+        <div id="final-message">ya mnayk</div>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching functionality
-            const tabs = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
+        // إنشاء تأثير الثلج الأحمر
+        function createSnowflakes() {
+            const snowflakeCount = 150;
             
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                const size = Math.random() * 5 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+                snowflake.style.top = `${Math.random() * -100}px`;
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                document.body.appendChild(snowflake);
+                animateSnowflake(snowflake);
+            }
+            
+            function animateSnowflake(snowflake) {
+                const duration = Math.random() * 10 + 5;
+                let start = null;
+                const initialLeft = parseFloat(snowflake.style.left);
+                const drift = Math.random() * 4 - 2;
+                
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const progress = (timestamp - start) / (duration * 1000);
                     
-                    // Add active class to clicked tab and corresponding content
-                    tab.classList.add('active');
-                    const tabId = tab.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
-                    
-                    // Run the appropriate scan when tab is clicked
-                    if (tabId === 'vpn') {
-                        scanVPN();
-                    } else if (tabId === 'browser') {
-                        scanBrowser();
-                    } else if (tabId === 'fingerprint') {
-                        scanFingerprint();
+                    if (progress < 1) {
+                        snowflake.style.top = `${progress * window.innerHeight}px`;
+                        snowflake.style.left = `${initialLeft + drift * progress * window.innerHeight}px`;
+                        requestAnimationFrame(step);
+                    } else {
+                        snowflake.style.top = `${Math.random() * -100}px`;
+                        snowflake.style.left = `${Math.random() * window.innerWidth}px`;
+                        start = null;
+                        animateSnowflake(snowflake);
                     }
-                });
-            });
-            
-            // Initialize with VPN scan
-            scanVPN();
-            
-            // Matrix background effect
-            setupMatrix();
+                }
+                
+                requestAnimationFrame(step);
+            }
+        }
+
+        // بدء تأثير الثلج
+        createSnowflakes();
+
+        // التحكم بين الصفحات
+        const welcomePage = document.getElementById('welcome-page');
+        const loginPage = document.getElementById('login-page');
+        const finalPage = document.getElementById('final-page');
+        const searchBox = document.getElementById('search-box');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // الانتقال من الصفحة الأولى إلى الثانية
+        searchBox.addEventListener('input', function() {
+            if (this.value.toLowerCase() === 'fateh') {
+                welcomePage.style.display = 'none';
+                loginPage.style.display = 'flex';
+            }
         });
 
-        function scanVPN() {
-            // Simulate API call to get VPN and network info
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('ip-address').textContent = data.ip;
-                    
-                    // Simulate more detailed VPN detection
-                    const isVPN = Math.random() > 0.7; // 30% chance to detect as VPN
-                    document.getElementById('vpn-status').textContent = isVPN ? 'VPN Detected' : 'No VPN Detected';
-                    document.getElementById('vpn-status').style.color = isVPN ? '#ff0000' : '#00ff00';
-                    
-                    // Simulate location and ISP data
-                    const locations = ['United States', 'Germany', 'Japan', 'United Kingdom', 'France'];
-                    const isps = ['Comcast', 'Deutsche Telekom', 'NTT', 'BT', 'Orange'];
-                    const randomIndex = Math.floor(Math.random() * locations.length);
-                    
-                    document.getElementById('location').textContent = locations[randomIndex];
-                    document.getElementById('isp').textContent = isps[randomIndex];
-                })
-                .catch(() => {
-                    document.getElementById('vpn-status').textContent = 'Error in detection';
-                    document.getElementById('ip-address').textContent = 'Not available';
-                    document.getElementById('location').textContent = 'Not available';
-                    document.getElementById('isp').textContent = 'Not available';
-                });
-        }
-
-        function scanBrowser() {
-            // Get browser info
-            const userAgent = navigator.userAgent;
-            let browserName, browserVersion;
-            
-            if (userAgent.indexOf("Firefox") > -1) {
-                browserName = "Firefox";
-                browserVersion = userAgent.match(/Firefox\/([0-9.]+)/)[1];
-            } else if (userAgent.indexOf("Chrome") > -1) {
-                browserName = "Chrome";
-                browserVersion = userAgent.match(/Chrome\/([0-9.]+)/)[1];
-            } else if (userAgent.indexOf("Safari") > -1) {
-                browserName = "Safari";
-                browserVersion = userAgent.match(/Version\/([0-9.]+)/)[1];
-            } else if (userAgent.indexOf("Edge") > -1) {
-                browserName = "Edge";
-                browserVersion = userAgent.match(/Edge\/([0-9.]+)/)[1];
-            } else if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) {
-                browserName = "Opera";
-                browserVersion = userAgent.match(/(Opera|OPR)\/([0-9.]+)/)[2];
-            } else {
-                browserName = "Unknown";
-                browserVersion = "Unknown";
-            }
-            
-            document.getElementById('browser-name').textContent = browserName;
-            document.getElementById('browser-version').textContent = browserVersion;
-            document.getElementById('cookies-status').textContent = navigator.cookieEnabled ? "Enabled" : "Disabled";
-            document.getElementById('screen-resolution').textContent = `${window.screen.width}x${window.screen.height}`;
-        }
-
-        function scanFingerprint() {
-            // Generate a simple device ID (not a real fingerprint)
-            const deviceId = 'dev-' + Math.random().toString(36).substr(2, 9);
-            document.getElementById('device-id').textContent = deviceId;
-            
-            // Get OS info
-            const userAgent = navigator.userAgent;
-            let os = "Unknown OS";
-            
-            if (userAgent.indexOf("Windows") > -1) {
-                os = "Windows";
-            } else if (userAgent.indexOf("Mac") > -1) {
-                os = "MacOS";
-            } else if (userAgent.indexOf("Linux") > -1) {
-                os = "Linux";
-            } else if (userAgent.indexOf("Android") > -1) {
-                os = "Android";
-            } else if (userAgent.indexOf("iOS") > -1) {
-                os = "iOS";
-            }
-            
-            document.getElementById('os').textContent = os;
-            document.getElementById('cpu-cores').textContent = navigator.hardwareConcurrency || "Unknown";
-            
-            // Get WebGL renderer
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            if (gl) {
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                    document.getElementById('webgl').textContent = renderer;
-                } else {
-                    document.getElementById('webgl').textContent = "WebGL available (no renderer info)";
-                }
-            } else {
-                document.getElementById('webgl').textContent = "WebGL not supported";
+        // الانتقال من الصفحة الثانية إلى الثالثة
+        function checkLogin() {
+            if (emailInput.value.toLowerCase() === 'fateh' && 
+                passwordInput.value.toLowerCase() === 'fateh') {
+                loginPage.style.display = 'none';
+                finalPage.style.display = 'flex';
             }
         }
 
-        function setupMatrix() {
-            const canvas = document.getElementById('matrix');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            // Characters - taken from the Katakana range
-            const chars = "01";
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            
-            // Create an array of drops
-            const drops = [];
-            for (let i = 0; i < columns; i++) {
-                drops[i] = Math.random() * -100; // Random starting position
-            }
-            
-            // Drawing the characters
-            function draw() {
-                // Black background with opacity
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#f00'; // Red color
-                ctx.font = fontSize + 'px monospace';
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    const x = i * fontSize;
-                    const y = drops[i] * fontSize;
-                    
-                    ctx.fillText(text, x, y);
-                    
-                    // Reset drops to top when they reach bottom
-                    if (y > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    
-                    // Move drops down
-                    drops[i]++;
-                }
-            }
-            
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+        emailInput.addEventListener('input', checkLogin);
+        passwordInput.addEventListener('input', checkLogin);
+
+        // إعادة حجم الثلج عند تغيير حجم النافذة
+        window.addEventListener('resize', function() {
+            const snowflakes = document.querySelectorAll('.snowflake');
+            snowflakes.forEach(snowflake => {
+                snowflake.style.left = `${Math.random() * window.innerWidth}px`;
             });
-            
-            // Animation loop
-            setInterval(draw, 50);
-        }
+        });
     </script>
 </body>
+</html></body>
 </html>
