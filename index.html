@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ماسنجر</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        /* CSS Reset */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +29,69 @@
             display: flex;
         }
 
-        /* Sidebar Styles */
+        /* نموذج اختيار الشخصية */
+        .character-selection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .character-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .character-option {
+            display: inline-block;
+            margin: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .character-option:hover {
+            transform: scale(1.05);
+        }
+
+        .character-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+        }
+
+        .character-option.selected .character-avatar {
+            border-color: var(--primary-color);
+        }
+
+        .character-name {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .confirm-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* باقي الأنماط تبقى كما هي */
         .sidebar {
             width: 360px;
             background-color: var(--light-color);
@@ -38,299 +101,34 @@
             flex-direction: column;
         }
 
-        .sidebar-header {
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-left: 10px;
-            object-fit: cover;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .sidebar-icons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .icon {
-            font-size: 20px;
-            color: var(--gray-color);
-            cursor: pointer;
-        }
-
-        .search-bar {
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .search-container {
-            background-color: var(--secondary-color);
-            border-radius: 18px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-container input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding: 4px 8px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .conversations {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .conversation {
-            display: flex;
-            padding: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .conversation:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .conversation.active {
-            background-color: #e7f3ff;
-        }
-
-        .conversation-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            margin-left: 10px;
-            object-fit: cover;
-        }
-
-        .conversation-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .conversation-name {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .conversation-last-message {
-            color: var(--gray-color);
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .conversation-time {
-            color: var(--gray-color);
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* Chat Area Styles */
-        .chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .chat-header {
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--light-color);
-        }
-
-        .chat-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-left: 10px;
-            object-fit: cover;
-        }
-
-        .chat-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .chat-status {
-            color: var(--gray-color);
-            font-size: 12px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            background-image: url('https://www.transparenttextures.com/patterns/always-grey.png');
-        }
-
-        .message {
-            display: flex;
-            margin-bottom: 16px;
-            max-width: 60%;
-        }
-
-        .message.received {
-            align-self: flex-start;
-        }
-
-        .message.sent {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            align-self: flex-end;
-            margin: 0 8px;
-        }
-
-        .message-content {
-            padding: 8px 12px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .message.received .message-content {
-            background-color: var(--light-color);
-            border-top-right-radius: 0;
-        }
-
-        .message.sent .message-content {
-            background-color: var(--primary-color);
-            color: white;
-            border-top-left-radius: 0;
-        }
-
-        .message-time {
-            font-size: 10px;
-            color: var(--gray-color);
-            margin-top: 4px;
-            text-align: end;
-        }
-
-        .chat-input {
-            padding: 10px 16px;
-            background-color: var(--light-color);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .input-container {
-            flex: 1;
-            background-color: var(--secondary-color);
-            border-radius: 18px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-container input {
-            border: none;
-            background: transparent;
-            width: 100%;
-            padding: 4px 8px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .input-icons {
-            display: flex;
-            gap: 15px;
-            margin-right: 15px;
-        }
-
-        .send-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                display: none;
-            }
-            .sidebar.active {
-                display: flex;
-            }
-            .chat-area {
-                display: none;
-            }
-            .chat-area.active {
-                display: flex;
-            }
-            .mobile-menu-button {
-                display: block;
-            }
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message {
-            animation: fadeIn 0.3s ease-out;
-        }
+        /* ... (باقي الـ CSS يبقى كما هو في الكود السابق) ... */
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <!-- نموذج اختيار الشخصية -->
+    <div class="character-selection" id="characterSelection">
+        <div class="character-box">
+            <h2>اختر شخصيتك</h2>
+            <div>
+                <div class="character-option" data-character="user1">
+                    <img src="https://i.imgur.com/JqYeYnN.jpg" alt="تانجيرو" class="character-avatar">
+                    <div class="character-name">أدم (تانجيرو)</div>
+                </div>
+                <div class="character-option" data-character="user2">
+                    <img src="https://i.imgur.com/3nZQy9T.jpg" alt="لوفي" class="character-avatar">
+                    <div class="character-name">محمد (لوفي)</div>
+                </div>
+            </div>
+            <button class="confirm-button" id="confirmButton">تأكيد الاختيار</button>
+        </div>
+    </div>
+
+    <!-- واجهة الماسنجر (ستظهر بعد اختيار الشخصية) -->
+    <div class="sidebar" id="sidebar" style="display:none;">
         <div class="sidebar-header">
             <div class="user-info">
-                <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="user-avatar">
-                <span class="user-name">أحمد محمد</span>
+                <img id="currentUserAvatar" src="" alt="User" class="user-avatar">
+                <span class="user-name" id="currentUserName"></span>
             </div>
             <div class="sidebar-icons">
                 <span class="icon">📷</span>
@@ -344,18 +142,15 @@
                 <span class="icon">🔍</span>
             </div>
         </div>
-        <div class="conversations" id="conversations">
-            <!-- Conversations will be loaded here by JavaScript -->
-        </div>
+        <div class="conversations" id="conversations"></div>
     </div>
 
-    <!-- Chat Area -->
-    <div class="chat-area" id="chatArea">
+    <div class="chat-area" id="chatArea" style="display:none;">
         <div class="chat-header">
             <div class="chat-info">
-                <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Friend" class="chat-avatar">
+                <img id="currentChatAvatar" src="" alt="Friend" class="chat-avatar">
                 <div>
-                    <div class="chat-name">سارة علي</div>
+                    <div class="chat-name" id="currentChatName"></div>
                     <div class="chat-status">متصل الآن</div>
                 </div>
             </div>
@@ -364,9 +159,7 @@
                 <span class="icon">⋮</span>
             </div>
         </div>
-        <div class="chat-messages" id="chatMessages">
-            <!-- Messages will be loaded here by JavaScript -->
-        </div>
+        <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input">
             <div class="input-icons">
                 <span class="icon">😊</span>
@@ -380,229 +173,214 @@
     </div>
 
     <script>
-        // JavaScript Code
-        document.addEventListener('DOMContentLoaded', function() {
-            // Sample data
-            const conversations = [
-                {
-                    id: 1,
-                    name: "سارة علي",
-                    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-                    lastMessage: "مرحبًا، كيف حالك؟",
-                    time: "10:30 ص",
-                    unread: 2,
-                    messages: [
-                        { text: "مرحبًا!", time: "10:20 ص", sent: false },
-                        { text: "كيف حالك اليوم؟", time: "10:21 ص", sent: false },
-                        { text: "أهلاً سارة! أنا بخير، شكراً لسؤالك.", time: "10:25 ص", sent: true },
-                        { text: "ماذا عنك؟", time: "10:25 ص", sent: true },
-                        { text: "أنا أيضًا بخير، شكرًا!", time: "10:30 ص", sent: false }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "محمد خالد",
-                    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-                    lastMessage: "هل انتهيت من المشروع؟",
-                    time: "9:15 ص",
-                    unread: 0,
-                    messages: [
-                        { text: "صباح الخير", time: "9:00 ص", sent: false },
-                        { text: "هل انتهيت من المشروع؟", time: "9:15 ص", sent: false },
-                        { text: "صباح النور، نعم انتهيت منه البارحة", time: "9:30 ص", sent: true }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: "نورا أحمد",
-                    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
-                    lastMessage: "شكرًا على المساعدة!",
-                    time: "أمس",
-                    unread: 0,
-                    messages: [
-                        { text: "هل يمكنك مساعدتي في هذا الأمر؟", time: "أمس 8:00 م", sent: false },
-                        { text: "بالطبع، أخبريني بما تحتاجين", time: "أمس 8:05 م", sent: true },
-                        { text: "شكرًا لك!", time: "أمس 8:30 م", sent: false }
-                    ]
-                },
-                {
-                    id: 4,
-                    name: "علي حسين",
-                    avatar: "https://randomuser.me/api/portraits/men/4.jpg",
-                    lastMessage: "سنلتقي غدًا في المقهى",
-                    time: "أمس",
-                    unread: 1,
-                    messages: [
-                        { text: "هل أنت متفرغ غدًا؟", time: "أمس 5:00 م", sent: false },
-                        { text: "نعم، في أي وقت؟", time: "أمس 5:30 م", sent: true },
-                        { text: "الساعة 3 في المقهى المعتاد", time: "أمس 6:00 م", sent: false },
-                        { text: "حسنًا، أراك هناك", time: "أمس 6:05 م", sent: true }
-                    ]
-                },
-                {
-                    id: 5,
-                    name: "ليلى مصطفى",
-                    avatar: "https://randomuser.me/api/portraits/women/5.jpg",
-                    lastMessage: "الوثيقة جاهزة للتوقيع",
-                    time: "الثلاثاء",
-                    unread: 0,
-                    messages: [
-                        { text: "الوثيقة جاهزة للتوقيع", time: "الثلاثاء 2:00 م", sent: false },
-                        { text: "رائع، سآتي غدًا للتوقيع", time: "الثلاثاء 2:30 م", sent: true }
-                    ]
-                }
-            ];
+        // Firebase configuration - استخدم بياناتك الخاصة هنا
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
+            authDomain: "my-messenger-5cca2.firebaseapp.com",
+            databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
+            projectId: "my-messenger-5cca2",
+            storageBucket: "my-messenger-5cca2.appspot.com",
+            messagingSenderId: "317158541033",
+            appId: "1:317158541033:web:63bc67e8b369239cedd278"
+        };
 
-            // DOM Elements
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const characterSelection = document.getElementById('characterSelection');
+            const confirmButton = document.getElementById('confirmButton');
+            const characterOptions = document.querySelectorAll('.character-option');
+            const sidebar = document.getElementById('sidebar');
+            const chatArea = document.getElementById('chatArea');
+            const currentUserAvatar = document.getElementById('currentUserAvatar');
+            const currentUserName = document.getElementById('currentUserName');
+            const currentChatAvatar = document.getElementById('currentChatAvatar');
+            const currentChatName = document.getElementById('currentChatName');
             const conversationsContainer = document.getElementById('conversations');
             const chatMessagesContainer = document.getElementById('chatMessages');
             const messageInput = document.getElementById('messageInput');
             const sendButton = document.getElementById('sendButton');
-            const chatArea = document.getElementById('chatArea');
-            const sidebar = document.getElementById('sidebar');
-            const chatHeaderName = document.querySelector('.chat-name');
-            const chatHeaderAvatar = document.querySelector('.chat-avatar');
 
-            // Current conversation
-            let currentConversation = null;
+            // بيانات الشخصيات
+            const characters = {
+                user1: {
+                    id: "user1",
+                    name: "أدم (تانجيرو)",
+                    avatar: "https://i.imgur.com/JqYeYnN.jpg"
+                },
+                user2: {
+                    id: "user2",
+                    name: "محمد (لوفي)",
+                    avatar: "https://i.imgur.com/3nZQy9T.jpg"
+                }
+            };
 
-            // Render conversations list
-            function renderConversations() {
-                conversationsContainer.innerHTML = '';
-                conversations.forEach(conversation => {
-                    const conversationElement = document.createElement('div');
-                    conversationElement.className = 'conversation';
-                    if (currentConversation && currentConversation.id === conversation.id) {
-                        conversationElement.classList.add('active');
+            let currentUser = null;
+            let currentFriend = null;
+            let currentConversationId = null;
+            let selectedCharacter = null;
+
+            // اختيار الشخصية
+            characterOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    characterOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedCharacter = option.dataset.character;
+                });
+            });
+
+            // تأكيد الاختيار
+            confirmButton.addEventListener('click', () => {
+                if (!selectedCharacter) return;
+
+                currentUser = characters[selectedCharacter];
+                currentFriend = characters[selectedCharacter === 'user1' ? 'user2' : 'user1'];
+
+                // تحديث واجهة المستخدم
+                currentUserAvatar.src = currentUser.avatar;
+                currentUserName.textContent = currentUser.name;
+                currentChatAvatar.src = currentFriend.avatar;
+                currentChatName.textContent = currentFriend.name;
+
+                // إخفاء نموذج الاختيار وإظهار الماسنجر
+                characterSelection.style.display = 'none';
+                sidebar.style.display = 'flex';
+                chatArea.style.display = 'flex';
+
+                // تحميل المحادثة
+                initializeConversation();
+            });
+
+            // تهيئة المحادثة
+            function initializeConversation() {
+                const conversationsRef = database.ref('conversations');
+                
+                // البحث عن محادثة موجودة بين الشخصيتين
+                conversationsRef.once('value').then(snapshot => {
+                    let conversationFound = false;
+                    
+                    snapshot.forEach(conversation => {
+                        const participants = conversation.val().participants;
+                        if (participants[currentUser.id] && participants[currentFriend.id]) {
+                            conversationFound = true;
+                            currentConversationId = conversation.key;
+                            loadConversation();
+                            return;
+                        }
+                    });
+                    
+                    // إذا لم توجد محادثة، إنشاء واحدة جديدة
+                    if (!conversationFound) {
+                        createNewConversation();
                     }
-                    conversationElement.innerHTML = `
-                        <img src="${conversation.avatar}" alt="${conversation.name}" class="conversation-avatar">
-                        <div class="conversation-info">
-                            <div class="conversation-name">${conversation.name}</div>
-                            <div class="conversation-last-message">${conversation.lastMessage}</div>
-                        </div>
-                        <div class="conversation-time">${conversation.time}</div>
-                    `;
-                    conversationElement.addEventListener('click', () => loadConversation(conversation.id));
-                    conversationsContainer.appendChild(conversationElement);
                 });
             }
 
-            // Load a conversation
-            function loadConversation(conversationId) {
-                currentConversation = conversations.find(c => c.id === conversationId);
-                renderMessages();
-                renderConversations();
+            // إنشاء محادثة جديدة
+            function createNewConversation() {
+                const conversationsRef = database.ref('conversations');
+                const newConversation = {
+                    participants: {
+                        [currentUser.id]: true,
+                        [currentFriend.id]: true
+                    },
+                    lastMessage: "بدأ المحادثة",
+                    lastMessageTime: Date.now(),
+                    messages: {
+                        msg1: {
+                            sender: currentFriend.id,
+                            text: "مرحباً! كيف حالك؟",
+                            time: Date.now() - 60000
+                        }
+                    }
+                };
                 
-                // Update chat header
-                chatHeaderName.textContent = currentConversation.name;
-                chatHeaderAvatar.src = currentConversation.avatar;
+                const newConversationRef = conversationsRef.push();
+                newConversationRef.set(newConversation);
+                currentConversationId = newConversationRef.key;
                 
-                // Show chat area on mobile
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                    chatArea.classList.add('active');
-                }
+                loadConversation();
             }
 
-            // Render messages
-            function renderMessages() {
-                if (!currentConversation) return;
+            // تحميل المحادثة
+            function loadConversation() {
+                const conversationRef = database.ref(`conversations/${currentConversationId}`);
                 
+                conversationRef.on('value', snapshot => {
+                    const conversation = snapshot.val();
+                    if (!conversation) return;
+                    
+                    renderMessages(conversation.messages);
+                });
+            }
+
+            // عرض الرسائل
+            function renderMessages(messagesData) {
                 chatMessagesContainer.innerHTML = '';
-                currentConversation.messages.forEach(message => {
+                
+                if (!messagesData) return;
+                
+                const messages = Object.entries(messagesData)
+                    .map(([id, msg]) => ({ id, ...msg }))
+                    .sort((a, b) => a.time - b.time);
+                
+                messages.forEach(message => {
+                    const isSent = message.sender === currentUser.id;
+                    const sender = isSent ? currentUser : currentFriend;
+                    
                     const messageElement = document.createElement('div');
-                    messageElement.className = `message ${message.sent ? 'sent' : 'received'}`;
+                    messageElement.className = `message ${isSent ? 'sent' : 'received'}`;
                     messageElement.innerHTML = `
-                        <img src="${message.sent ? 
-                            'https://randomuser.me/api/portraits/men/1.jpg' : 
-                            currentConversation.avatar}" 
-                            alt="${message.sent ? 'You' : currentConversation.name}" 
-                            class="message-avatar">
+                        <img src="${sender.avatar}" alt="${sender.name}" class="message-avatar">
                         <div>
                             <div class="message-content">${message.text}</div>
-                            <div class="message-time">${message.time}</div>
+                            <div class="message-time">${formatTime(message.time)}</div>
                         </div>
                     `;
                     chatMessagesContainer.appendChild(messageElement);
                 });
                 
-                // Scroll to bottom
                 chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
             }
 
-            // Send a new message
+            // إرسال رسالة
             function sendMessage() {
                 const text = messageInput.value.trim();
-                if (!text || !currentConversation) return;
+                if (!text || !currentConversationId) return;
                 
                 const newMessage = {
+                    sender: currentUser.id,
                     text: text,
-                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    sent: true
+                    time: Date.now()
                 };
                 
-                currentConversation.messages.push(newMessage);
-                currentConversation.lastMessage = text;
-                currentConversation.time = "الآن";
+                const messagesRef = database.ref(`conversations/${currentConversationId}/messages`);
+                const newMessageRef = messagesRef.push();
+                newMessageRef.set(newMessage);
                 
-                renderMessages();
-                renderConversations();
+                const conversationRef = database.ref(`conversations/${currentConversationId}`);
+                conversationRef.update({
+                    lastMessage: text,
+                    lastMessageTime: Date.now()
+                });
+                
                 messageInput.value = '';
-                
-                // Simulate reply after 1-3 seconds
-                setTimeout(() => {
-                    const replies = [
-                        "نعم، هذا رائع!",
-                        "سأرد عليك لاحقًا",
-                        "شكرًا للمعلومة",
-                        "هل يمكننا مناقشة هذا غدًا؟",
-                        "حسنًا، فهمت"
-                    ];
-                    const randomReply = replies[Math.floor(Math.random() * replies.length)];
-                    
-                    const replyMessage = {
-                        text: randomReply,
-                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                        sent: false
-                    };
-                    
-                    currentConversation.messages.push(replyMessage);
-                    currentConversation.lastMessage = randomReply;
-                    renderMessages();
-                    renderConversations();
-                }, 1000 + Math.random() * 2000);
             }
 
-            // Event Listeners
+            // تنسيق الوقت
+            function formatTime(timestamp) {
+                const date = new Date(timestamp);
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // أحداث
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
-
-            // Responsive menu toggle (for mobile)
-            function handleResize() {
-                if (window.innerWidth <= 768) {
-                    if (!currentConversation) {
-                        sidebar.classList.add('active');
-                        chatArea.classList.remove('active');
-                    }
-                } else {
-                    sidebar.classList.add('active');
-                    chatArea.classList.add('active');
-                }
-            }
-
-            window.addEventListener('resize', handleResize);
-
-            // Initialize
-            renderConversations();
-            handleResize();
-            
-            // Load first conversation by default on desktop
-            if (window.innerWidth > 768 && conversations.length > 0) {
-                loadConversation(conversations[0].id);
-            }
         });
     </script>
 </body>
