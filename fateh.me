@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات Ftouh الاحترافية</title>
+    <style>
+        /* أنماط CSS */
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #000000;
+            --accent-color: #00bcd4;
+            --text-color: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-color), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-btn.active {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .nav-btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        .content-section {
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-out;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* أنماط قسم الملفات */
+        .file-upload-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 188, 212, 0.2);
+            border: 2px dashed var(--accent-color);
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-btn:hover {
+            background: rgba(0, 188, 212, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .permission-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .permission-box {
+            background: linear-gradient(145deg, #1a237e, #000000);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            animation: scaleUp 0.3s ease-out forwards;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .permission-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .permission-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .permission-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .allow-btn {
+            background: var(--accent-color);
+            color: black;
+        }
+        
+        .deny-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .permission-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* أنماط عرض الملفات */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            aspect-ratio: 1;
+        }
+        
+        .file-item:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .file-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .file-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        /* أنماط أقسام المسح */
+        .scan-results {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .scan-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .scan-item:last-child {
+            border-bottom: none;
+        }
+        
+        .scan-label {
+            color: var(--accent-color);
+        }
+        
+        .scan-value {
+            font-weight: bold;
+        }
+        
+        .scan-btn {
+            background: var(--accent-color);
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+        }
+        
+        .scan-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+        }
+        
+        /* أنماط الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleUp {
+            from { transform: scale(0.9); }
+            to { transform: scale(1); }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+        
+        /* تذييل الصفحة */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* تأثيرات الحركة عند التمرير */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>أدوات Ftouh الاحترافية</h1>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-section="browser-scanner">فحص المتصفح</button>
+                <button class="nav-btn" data-section="wifi-scanner">فحص الواي فاي</button>
+                <button class="nav-btn" data-section="files-manager">الملفات</button>
+            </nav>
+        </header>
+        
+        <!-- قسم فحص المتصفح -->
+        <section id="browser-scanner" class="content-section active">
+            <h2 class="section-title">فحص المتصفح</h2>
+            <div class="scan-results animate-on-scroll">
+                <div class="scan-item">
+                    <span class="scan-label">نوع المتصفح:</span>
+                    <span class="scan-value" id="browser-type">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">نظام التشغيل:</span>
+                    <span class="scan-value" id="os-type">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">الدقة:</span>
+                    <span class="scan-value" id="screen-resolution">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">اللغة:</span>
+                    <span class="scan-value" id="browser-language">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">تفعيل الجافا سكريبت:</span>
+                    <span class="scan-value" id="javascript-status">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">عدد أنوية المعالج:</span>
+                    <span class="scan-value" id="cpu-cores">جارِ الكشف...</span>
+                </div>
+            </div>
+            <button class="scan-btn animate-on-scroll" id="deep-scan-btn">فحص متعمق</button>
+        </section>
+        
+        <!-- قسم فحص الواي فاي -->
+        <section id="wifi-scanner" class="content-section">
+            <h2 class="section-title">فحص شبكة الواي فاي</h2>
+            <div class="scan-results animate-on-scroll">
+                <div class="scan-item">
+                    <span class="scan-label">حالة الاتصال:</span>
+                    <span class="scan-value" id="wifi-status">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">قوة الإشارة:</span>
+                    <span class="scan-value" id="wifi-strength">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">عنوان IP:</span>
+                    <span class="scan-value" id="ip-address">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">سرعة التحميل:</span>
+                    <span class="scan-value" id="download-speed">جارِ الكشف...</span>
+                </div>
+                <div class="scan-item">
+                    <span class="scan-label">سرعة الرفع:</span>
+                    <span class="scan-value" id="upload-speed">جارِ الكشف...</span>
+                </div>
+            </div>
+            <button class="scan-btn animate-on-scroll" id="wifi-scan-btn">بدء الفحص</button>
+        </section>
+        
+        <!-- قسم الملفات -->
+        <section id="files-manager" class="content-section">
+            <h2 class="section-title">مدير الملفات</h2>
+            <label for="file-upload" class="file-upload-btn animate-on-scroll">
+                <i class="fas fa-cloud-upload-alt"></i> انقر لاختيار الملفات أو الصور
+            </label>
+            <input type="file" id="file-upload" multiple style="display: none;">
+            
+            <div class="files-grid" id="files-container">
+                <!-- الملفات المرفوعة ستظهر هنا -->
+            </div>
+        </section>
+        
+        <!-- نافذة طلب الإذن -->
+        <div class="permission-modal" id="permission-modal">
+            <div class="permission-box">
+                <h3>هل يمكن لفتح الدخول إلى ملفاتك؟</h3>
+                <p>هذا الموقع يحتاج إلى إذن للوصول إلى ملفاتك لعرضها في قسم الملفات.</p>
+                <div class="permission-btns">
+                    <button class="permission-btn allow-btn" id="allow-btn">سماح</button>
+                    <button class="permission-btn deny-btn" id="deny-btn">رفض</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="animate-on-scroll">
+            <p>جميع الحقوق محفوظة &copy; <span id="current-year"></span> Ftouh</p>
+        </footer>
+    </div>
+
+    <script>
+        // كود JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            const fileUploadBtn = document.querySelector('.file-upload-btn');
+            const fileUploadInput = document.getElementById('file-upload');
+            const permissionModal = document.getElementById('permission-modal');
+            const allowBtn = document.getElementById('allow-btn');
+            const denyBtn = document.getElementById('deny-btn');
+            const filesContainer = document.getElementById('files-container');
+            const deepScanBtn = document.getElementById('deep-scan-btn');
+            const wifiScanBtn = document.getElementById('wifi-scan-btn');
+            
+            // تحقق من عناصر الرسوم المتحركة عند التمرير
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+            
+            // تغيير الأقسام
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // إزالة النشاط من جميع الأزرار
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // إضافة النشاط للزر المحدد
+                    this.classList.add('active');
+                    
+                    // إخفاء جميع الأقسام
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    
+                    // إظهار القسم المحدد
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // تأثير الحركة
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // فحص المتصفح
+            function detectBrowser() {
+                const userAgent = navigator.userAgent;
+                let browserName;
+                
+                if (userAgent.match(/chrome|chromium|crios/i)) {
+                    browserName = "Chrome";
+                } else if (userAgent.match(/firefox|fxios/i)) {
+                    browserName = "Firefox";
+                } else if (userAgent.match(/safari/i)) {
+                    browserName = "Safari";
+                } else if (userAgent.match(/opr\//i)) {
+                    browserName = "Opera";
+                } else if (userAgent.match(/edg/i)) {
+                    browserName = "Edge";
+                } else if (userAgent.match(/android/i)) {
+                    browserName = "Android Browser";
+                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
+                    browserName = "iOS Browser";
+                } else {
+                    browserName = "متصفح غير معروف";
+                }
+                
+                document.getElementById('browser-type').textContent = browserName;
+            }
+            
+            function detectOS() {
+                const userAgent = navigator.userAgent;
+                let osName;
+                
+                if (userAgent.match(/windows/i)) {
+                    osName = "Windows";
+                } else if (userAgent.match(/macintosh|mac os x/i)) {
+                    osName = "MacOS";
+                } else if (userAgent.match(/linux/i)) {
+                    osName = "Linux";
+                } else if (userAgent.match(/android/i)) {
+                    osName = "Android";
+                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
+                    osName = "iOS";
+                } else {
+                    osName = "نظام غير معروف";
+                }
+                
+                document.getElementById('os-type').textContent = osName;
+            }
+            
+            function detectScreenResolution() {
+                const width = window.screen.width;
+                const height = window.screen.height;
+                document.getElementById('screen-resolution').textContent = `${width} × ${height}`;
+            }
+            
+            function detectBrowserLanguage() {
+                const language = navigator.language || navigator.userLanguage;
+                document.getElementById('browser-language').textContent = language;
+            }
+            
+            function detectJavaScriptStatus() {
+                document.getElementById('javascript-status').textContent = "مفعّل";
+            }
+            
+            function detectCPUCores() {
+                const cores = navigator.hardwareConcurrency || "غير معروف";
+                document.getElementById('cpu-cores').textContent = cores;
+            }
+            
+            // فحص الواي فاي (محاكاة)
+            function scanWifi() {
+                document.getElementById('wifi-status').textContent = "متصل";
+                document.getElementById('wifi-strength').textContent = "قوي (80%)";
+                
+                // محاكاة عنوان IP
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('ip-address').textContent = data.ip;
+                    })
+                    .catch(() => {
+                        document.getElementById('ip-address').textContent = "غير متاح";
+                    });
+                
+                // محاكاة اختبار السرعة
+                simulateSpeedTest();
+            }
+            
+            function simulateSpeedTest() {
+                document.getElementById('download-speed').textContent = "جارِ القياس...";
+                document.getElementById('upload-speed').textContent = "جارِ القياس...";
+                
+                setTimeout(() => {
+                    const downloadSpeed = (Math.random() * 50 + 10).toFixed(2);
+                    const uploadSpeed = (Math.random() * 20 + 5).toFixed(2);
+                    
+                    document.getElementById('download-speed').textContent = `${downloadSpeed} Mbps`;
+                    document.getElementById('upload-speed').textContent = `${uploadSpeed} Mbps`;
+                }, 2000);
+            }
+            
+            // إدارة الملفات
+            fileUploadBtn.addEventListener('click', function() {
+                // عرض نافذة طلب الإذن
+                permissionModal.style.display = 'flex';
+            });
+            
+            allowBtn.addEventListener('click', function() {
+                permissionModal.style.display = 'none';
+                fileUploadInput.click();
+            });
+            
+            denyBtn.addEventListener('click', function() {
+                permissionModal.style.display = 'none';
+                alert('تم رفض الوصول إلى الملفات');
+            });
+            
+            fileUploadInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                
+                if (files.length > 0) {
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        
+                        if (file.type.match('image.*')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const fileItem = document.createElement('div');
+                                fileItem.className = 'file-item';
+                                
+                                fileItem.innerHTML = `
+                                    <img src="${e.target.result}" alt="${file.name}">
+                                    <div class="file-info">${file.name}</div>
+                                `;
+                                
+                                filesContainer.appendChild(fileItem);
+                                
+                                // تأثير الحركة عند الإضافة
+                                fileItem.style.opacity = '0';
+                                fileItem.style.transform = 'scale(0.8)';
+                                
+                                setTimeout(() => {
+                                    fileItem.style.opacity = '1';
+                                    fileItem.style.transform = 'scale(1)';
+                                }, 100);
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        } else {
+                            const fileItem = document.createElement('div');
+                            fileItem.className = 'file-item';
+                            
+                            fileItem.innerHTML = `
+                                <div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:#1a237e;">
+                                    <i class="fas fa-file" style="font-size:3rem;"></i>
+                                </div>
+                                <div class="file-info">${file.name}</div>
+                            `;
+                            
+                            filesContainer.appendChild(fileItem);
+                            
+                            // تأثير الحركة عند الإضافة
+                            fileItem.style.opacity = '0';
+                            fileItem.style.transform = 'scale(0.8)';
+                            
+                            setTimeout(() => {
+                                fileItem.style.opacity = '1';
+                                fileItem.style.transform = 'scale(1)';
+                            }, 100);
+                        }
+                    }
+                }
+            });
+            
+            // فحص عميق للمتصفح
+            deepScanBtn.addEventListener('click', function() {
+                this.textContent = "جارِ الفحص...";
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    detectBrowser();
+                    detectOS();
+                    detectScreenResolution();
+                    detectBrowserLanguage();
+                    detectJavaScriptStatus();
+                    detectCPUCores();
+                    
+                    this.textContent = "تم الفحص بنجاح";
+                    setTimeout(() => {
+                        this.textContent = "فحص متعمق";
+                        this.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+            
+            // فحص الواي فاي
+            wifiScanBtn.addEventListener('click', function() {
+                this.textContent = "جارِ الفحص...";
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    scanWifi();
+                    
+                    this.textContent = "تم الفحص بنجاح";
+                    setTimeout(() => {
+                        this.textContent = "بدء الفحص";
+                        this.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+            
+            // تحقق من العناصر عند التمرير
+            function checkAnimation() {
+                animateElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('show');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkAnimation);
+            checkAnimation(); // تحقق مرة أولى عند التحميل
+            
+            // تعيين سنة حقوق النشر
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // تشغيل الفحوصات الأولية
+            detectBrowser();
+            detectOS();
+            detectScreenResolution();
+            detectBrowserLanguage();
+            detectJavaScriptStatus();
+            detectCPUCores();
+        });
+    </script>
+</body>
+</html>
