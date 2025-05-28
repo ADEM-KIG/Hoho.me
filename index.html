@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أدوات Ftouh الاحترافية</title>
+    <title>Ftouh Tools</title>
     <style>
         /* أنماط CSS */
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
         
         :root {
             --primary-color: #1a237e;
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         
         body {
@@ -91,24 +91,6 @@
             font-weight: bold;
         }
         
-        .nav-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-        
-        .nav-btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-        
         .content-section {
             display: none;
             background: rgba(0, 0, 0, 0.5);
@@ -133,7 +115,6 @@
             text-align: center;
         }
         
-        /* أنماط قسم الملفات */
         .file-upload-btn {
             display: block;
             width: 100%;
@@ -184,6 +165,7 @@
         .permission-box h3 {
             margin-bottom: 20px;
             font-size: 1.5rem;
+            color: #ff5252;
         }
         
         .permission-btns {
@@ -204,8 +186,8 @@
         }
         
         .allow-btn {
-            background: var(--accent-color);
-            color: black;
+            background: #ff5252;
+            color: white;
         }
         
         .deny-btn {
@@ -213,12 +195,6 @@
             color: white;
         }
         
-        .permission-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* أنماط عرض الملفات */
         .files-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -258,7 +234,6 @@
             text-align: center;
         }
         
-        /* أنماط أقسام المسح */
         .scan-results {
             margin-top: 20px;
             background: rgba(0, 0, 0, 0.3);
@@ -271,18 +246,6 @@
             justify-content: space-between;
             padding: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .scan-item:last-child {
-            border-bottom: none;
-        }
-        
-        .scan-label {
-            color: var(--accent-color);
-        }
-        
-        .scan-value {
-            font-weight: bold;
         }
         
         .scan-btn {
@@ -300,12 +263,6 @@
             width: 100%;
         }
         
-        .scan-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
-        }
-        
-        /* أنماط الحركة */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -327,22 +284,6 @@
             to { transform: scale(1); }
         }
         
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(25, 25);
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(40, 40);
-            }
-        }
-        
-        /* تذييل الصفحة */
         footer {
             text-align: center;
             margin-top: 40px;
@@ -350,127 +291,86 @@
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.6);
         }
-        
-        /* تأثيرات الحركة عند التمرير */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-        
-        .animate-on-scroll.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo">
-                <h1>أدوات Ftouh الاحترافية</h1>
+                <h1>Ftouh Tools</h1>
             </div>
             <nav>
-                <button class="nav-btn active" data-section="browser-scanner">فحص المتصفح</button>
-                <button class="nav-btn" data-section="wifi-scanner">فحص الواي فاي</button>
-                <button class="nav-btn" data-section="files-manager">الملفات</button>
+                <button class="nav-btn active" data-section="browser-scanner">Scan Browser</button>
+                <button class="nav-btn" data-section="wifi-scanner">WiFi Scanner</button>
+                <button class="nav-btn" data-section="files-manager">Files</button>
             </nav>
         </header>
         
-        <!-- قسم فحص المتصفح -->
         <section id="browser-scanner" class="content-section active">
-            <h2 class="section-title">فحص المتصفح</h2>
-            <div class="scan-results animate-on-scroll">
+            <h2 class="section-title">Browser Scanner</h2>
+            <div class="scan-results">
                 <div class="scan-item">
-                    <span class="scan-label">نوع المتصفح:</span>
-                    <span class="scan-value" id="browser-type">جارِ الكشف...</span>
+                    <span class="scan-label">Browser:</span>
+                    <span class="scan-value" id="browser-type">Detecting...</span>
                 </div>
                 <div class="scan-item">
-                    <span class="scan-label">نظام التشغيل:</span>
-                    <span class="scan-value" id="os-type">جارِ الكشف...</span>
+                    <span class="scan-label">OS:</span>
+                    <span class="scan-value" id="os-type">Detecting...</span>
                 </div>
                 <div class="scan-item">
-                    <span class="scan-label">الدقة:</span>
-                    <span class="scan-value" id="screen-resolution">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">اللغة:</span>
-                    <span class="scan-value" id="browser-language">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">تفعيل الجافا سكريبت:</span>
-                    <span class="scan-value" id="javascript-status">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">عدد أنوية المعالج:</span>
-                    <span class="scan-value" id="cpu-cores">جارِ الكشف...</span>
+                    <span class="scan-label">Resolution:</span>
+                    <span class="scan-value" id="screen-resolution">Detecting...</span>
                 </div>
             </div>
-            <button class="scan-btn animate-on-scroll" id="deep-scan-btn">فحص متعمق</button>
+            <button class="scan-btn" id="deep-scan-btn">Deep Scan</button>
         </section>
         
-        <!-- قسم فحص الواي فاي -->
         <section id="wifi-scanner" class="content-section">
-            <h2 class="section-title">فحص شبكة الواي فاي</h2>
-            <div class="scan-results animate-on-scroll">
+            <h2 class="section-title">WiFi Scanner</h2>
+            <div class="scan-results">
                 <div class="scan-item">
-                    <span class="scan-label">حالة الاتصال:</span>
-                    <span class="scan-value" id="wifi-status">جارِ الكشف...</span>
+                    <span class="scan-label">Status:</span>
+                    <span class="scan-value" id="wifi-status">Detecting...</span>
                 </div>
                 <div class="scan-item">
-                    <span class="scan-label">قوة الإشارة:</span>
-                    <span class="scan-value" id="wifi-strength">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">عنوان IP:</span>
-                    <span class="scan-value" id="ip-address">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">سرعة التحميل:</span>
-                    <span class="scan-value" id="download-speed">جارِ الكشف...</span>
-                </div>
-                <div class="scan-item">
-                    <span class="scan-label">سرعة الرفع:</span>
-                    <span class="scan-value" id="upload-speed">جارِ الكشف...</span>
+                    <span class="scan-label">IP Address:</span>
+                    <span class="scan-value" id="ip-address">Detecting...</span>
                 </div>
             </div>
-            <button class="scan-btn animate-on-scroll" id="wifi-scan-btn">بدء الفحص</button>
+            <button class="scan-btn" id="wifi-scan-btn">Scan Network</button>
         </section>
         
-        <!-- قسم الملفات -->
         <section id="files-manager" class="content-section">
-            <h2 class="section-title">مدير الملفات</h2>
-            <label for="file-upload" class="file-upload-btn animate-on-scroll">
-                <i class="fas fa-cloud-upload-alt"></i> انقر لاختيار الملفات أو الصور
+            <h2 class="section-title">Files Manager</h2>
+            <label for="file-upload" class="file-upload-btn">
+                Click to upload files or images
             </label>
             <input type="file" id="file-upload" multiple style="display: none;">
             
             <div class="files-grid" id="files-container">
-                <!-- الملفات المرفوعة ستظهر هنا -->
+                <!-- Uploaded files will appear here -->
             </div>
         </section>
         
-        <!-- نافذة طلب الإذن -->
         <div class="permission-modal" id="permission-modal">
             <div class="permission-box">
-                <h3>هل يمكن لفتح الدخول إلى ملفاتك؟</h3>
-                <p>هذا الموقع يحتاج إلى إذن للوصول إلى ملفاتك لعرضها في قسم الملفات.</p>
+                <h3>Do you want Ftouh to catch you?</h3>
+                <p>This website needs permission to access your files to display them.</p>
                 <div class="permission-btns">
-                    <button class="permission-btn allow-btn" id="allow-btn">سماح</button>
-                    <button class="permission-btn deny-btn" id="deny-btn">رفض</button>
+                    <button class="permission-btn allow-btn" id="allow-btn">ALLOW</button>
+                    <button class="permission-btn deny-btn" id="deny-btn">DENY</button>
                 </div>
             </div>
         </div>
         
-        <footer class="animate-on-scroll">
-            <p>جميع الحقوق محفوظة &copy; <span id="current-year"></span> Ftouh</p>
+        <footer>
+            <p>Copyright &copy; <span id="current-year"></span> Ftouh. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // كود JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-            // عناصر DOM
+            // DOM elements
             const navBtns = document.querySelectorAll('.nav-btn');
             const contentSections = document.querySelectorAll('.content-section');
             const fileUploadBtn = document.querySelector('.file-upload-btn');
@@ -479,138 +379,53 @@
             const allowBtn = document.getElementById('allow-btn');
             const denyBtn = document.getElementById('deny-btn');
             const filesContainer = document.getElementById('files-container');
-            const deepScanBtn = document.getElementById('deep-scan-btn');
-            const wifiScanBtn = document.getElementById('wifi-scan-btn');
             
-            // تحقق من عناصر الرسوم المتحركة عند التمرير
-            const animateElements = document.querySelectorAll('.animate-on-scroll');
+            // Load saved files from cookies
+            function loadFilesFromCookies() {
+                const savedFiles = getCookie('ftouh_files');
+                if (savedFiles) {
+                    filesContainer.innerHTML = savedFiles;
+                }
+            }
             
-            // تغيير الأقسام
+            // Save files to cookies
+            function saveFilesToCookies() {
+                setCookie('ftouh_files', filesContainer.innerHTML, 365);
+            }
+            
+            // Cookie functions
+            function setCookie(name, value, days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + date.toUTCString();
+                document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+            }
+            
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for(let i=0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1);
+                    if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length));
+                }
+                return null;
+            }
+            
+            // Navigation
             navBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // إزالة النشاط من جميع الأزرار
                     navBtns.forEach(b => b.classList.remove('active'));
-                    
-                    // إضافة النشاط للزر المحدد
                     this.classList.add('active');
                     
-                    // إخفاء جميع الأقسام
                     contentSections.forEach(section => section.classList.remove('active'));
-                    
-                    // إظهار القسم المحدد
                     const sectionId = this.getAttribute('data-section');
                     document.getElementById(sectionId).classList.add('active');
-                    
-                    // تأثير الحركة
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 200);
                 });
             });
             
-            // فحص المتصفح
-            function detectBrowser() {
-                const userAgent = navigator.userAgent;
-                let browserName;
-                
-                if (userAgent.match(/chrome|chromium|crios/i)) {
-                    browserName = "Chrome";
-                } else if (userAgent.match(/firefox|fxios/i)) {
-                    browserName = "Firefox";
-                } else if (userAgent.match(/safari/i)) {
-                    browserName = "Safari";
-                } else if (userAgent.match(/opr\//i)) {
-                    browserName = "Opera";
-                } else if (userAgent.match(/edg/i)) {
-                    browserName = "Edge";
-                } else if (userAgent.match(/android/i)) {
-                    browserName = "Android Browser";
-                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
-                    browserName = "iOS Browser";
-                } else {
-                    browserName = "متصفح غير معروف";
-                }
-                
-                document.getElementById('browser-type').textContent = browserName;
-            }
-            
-            function detectOS() {
-                const userAgent = navigator.userAgent;
-                let osName;
-                
-                if (userAgent.match(/windows/i)) {
-                    osName = "Windows";
-                } else if (userAgent.match(/macintosh|mac os x/i)) {
-                    osName = "MacOS";
-                } else if (userAgent.match(/linux/i)) {
-                    osName = "Linux";
-                } else if (userAgent.match(/android/i)) {
-                    osName = "Android";
-                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
-                    osName = "iOS";
-                } else {
-                    osName = "نظام غير معروف";
-                }
-                
-                document.getElementById('os-type').textContent = osName;
-            }
-            
-            function detectScreenResolution() {
-                const width = window.screen.width;
-                const height = window.screen.height;
-                document.getElementById('screen-resolution').textContent = `${width} × ${height}`;
-            }
-            
-            function detectBrowserLanguage() {
-                const language = navigator.language || navigator.userLanguage;
-                document.getElementById('browser-language').textContent = language;
-            }
-            
-            function detectJavaScriptStatus() {
-                document.getElementById('javascript-status').textContent = "مفعّل";
-            }
-            
-            function detectCPUCores() {
-                const cores = navigator.hardwareConcurrency || "غير معروف";
-                document.getElementById('cpu-cores').textContent = cores;
-            }
-            
-            // فحص الواي فاي (محاكاة)
-            function scanWifi() {
-                document.getElementById('wifi-status').textContent = "متصل";
-                document.getElementById('wifi-strength').textContent = "قوي (80%)";
-                
-                // محاكاة عنوان IP
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('ip-address').textContent = data.ip;
-                    })
-                    .catch(() => {
-                        document.getElementById('ip-address').textContent = "غير متاح";
-                    });
-                
-                // محاكاة اختبار السرعة
-                simulateSpeedTest();
-            }
-            
-            function simulateSpeedTest() {
-                document.getElementById('download-speed').textContent = "جارِ القياس...";
-                document.getElementById('upload-speed').textContent = "جارِ القياس...";
-                
-                setTimeout(() => {
-                    const downloadSpeed = (Math.random() * 50 + 10).toFixed(2);
-                    const uploadSpeed = (Math.random() * 20 + 5).toFixed(2);
-                    
-                    document.getElementById('download-speed').textContent = `${downloadSpeed} Mbps`;
-                    document.getElementById('upload-speed').textContent = `${uploadSpeed} Mbps`;
-                }, 2000);
-            }
-            
-            // إدارة الملفات
+            // File upload
             fileUploadBtn.addEventListener('click', function() {
-                // عرض نافذة طلب الإذن
                 permissionModal.style.display = 'flex';
             });
             
@@ -621,7 +436,7 @@
             
             denyBtn.addEventListener('click', function() {
                 permissionModal.style.display = 'none';
-                alert('تم رفض الوصول إلى الملفات');
+                alert('Access to files was denied');
             });
             
             fileUploadInput.addEventListener('change', function(e) {
@@ -644,15 +459,7 @@
                                 `;
                                 
                                 filesContainer.appendChild(fileItem);
-                                
-                                // تأثير الحركة عند الإضافة
-                                fileItem.style.opacity = '0';
-                                fileItem.style.transform = 'scale(0.8)';
-                                
-                                setTimeout(() => {
-                                    fileItem.style.opacity = '1';
-                                    fileItem.style.transform = 'scale(1)';
-                                }, 100);
+                                saveFilesToCookies();
                             };
                             
                             reader.readAsDataURL(file);
@@ -662,88 +469,108 @@
                             
                             fileItem.innerHTML = `
                                 <div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; background:#1a237e;">
-                                    <i class="fas fa-file" style="font-size:3rem;"></i>
+                                    <div style="font-size:3rem;">📄</div>
                                 </div>
                                 <div class="file-info">${file.name}</div>
                             `;
                             
                             filesContainer.appendChild(fileItem);
-                            
-                            // تأثير الحركة عند الإضافة
-                            fileItem.style.opacity = '0';
-                            fileItem.style.transform = 'scale(0.8)';
-                            
-                            setTimeout(() => {
-                                fileItem.style.opacity = '1';
-                                fileItem.style.transform = 'scale(1)';
-                            }, 100);
+                            saveFilesToCookies();
                         }
                     }
                 }
             });
             
-            // فحص عميق للمتصفح
-            deepScanBtn.addEventListener('click', function() {
-                this.textContent = "جارِ الفحص...";
-                this.disabled = true;
+            // Browser detection
+            function detectBrowser() {
+                const userAgent = navigator.userAgent;
+                let browserName;
                 
+                if (userAgent.match(/chrome|chromium|crios/i)) {
+                    browserName = "Chrome";
+                } else if (userAgent.match(/firefox|fxios/i)) {
+                    browserName = "Firefox";
+                } else if (userAgent.match(/safari/i)) {
+                    browserName = "Safari";
+                } else if (userAgent.match(/opr\//i)) {
+                    browserName = "Opera";
+                } else if (userAgent.match(/edg/i)) {
+                    browserName = "Edge";
+                } else {
+                    browserName = "Unknown";
+                }
+                
+                document.getElementById('browser-type').textContent = browserName;
+            }
+            
+            function detectOS() {
+                const userAgent = navigator.userAgent;
+                let osName;
+                
+                if (userAgent.match(/windows/i)) {
+                    osName = "Windows";
+                } else if (userAgent.match(/macintosh|mac os x/i)) {
+                    osName = "MacOS";
+                } else if (userAgent.match(/linux/i)) {
+                    osName = "Linux";
+                } else if (userAgent.match(/android/i)) {
+                    osName = "Android";
+                } else if (userAgent.match(/iphone|ipad|ipod/i)) {
+                    osName = "iOS";
+                } else {
+                    osName = "Unknown";
+                }
+                
+                document.getElementById('os-type').textContent = osName;
+            }
+            
+            function detectScreenResolution() {
+                const width = window.screen.width;
+                const height = window.screen.height;
+                document.getElementById('screen-resolution').textContent = `${width} × ${height}`;
+            }
+            
+            // WiFi scan (simulated)
+            function scanWifi() {
+                document.getElementById('wifi-status').textContent = "Connected";
+                
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('ip-address').textContent = data.ip;
+                    })
+                    .catch(() => {
+                        document.getElementById('ip-address').textContent = "Unknown";
+                    });
+            }
+            
+            // Set current year
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Initialize
+            detectBrowser();
+            detectOS();
+            detectScreenResolution();
+            loadFilesFromCookies();
+            
+            // Event listeners for scan buttons
+            document.getElementById('deep-scan-btn').addEventListener('click', function() {
+                this.textContent = "Scanning...";
                 setTimeout(() => {
                     detectBrowser();
                     detectOS();
                     detectScreenResolution();
-                    detectBrowserLanguage();
-                    detectJavaScriptStatus();
-                    detectCPUCores();
-                    
-                    this.textContent = "تم الفحص بنجاح";
-                    setTimeout(() => {
-                        this.textContent = "فحص متعمق";
-                        this.disabled = false;
-                    }, 2000);
+                    this.textContent = "Scan Complete";
                 }, 1500);
             });
             
-            // فحص الواي فاي
-            wifiScanBtn.addEventListener('click', function() {
-                this.textContent = "جارِ الفحص...";
-                this.disabled = true;
-                
+            document.getElementById('wifi-scan-btn').addEventListener('click', function() {
+                this.textContent = "Scanning...";
                 setTimeout(() => {
                     scanWifi();
-                    
-                    this.textContent = "تم الفحص بنجاح";
-                    setTimeout(() => {
-                        this.textContent = "بدء الفحص";
-                        this.disabled = false;
-                    }, 2000);
+                    this.textContent = "Scan Complete";
                 }, 1500);
             });
-            
-            // تحقق من العناصر عند التمرير
-            function checkAnimation() {
-                animateElements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
-                    
-                    if (elementTop < windowHeight - 100) {
-                        element.classList.add('show');
-                    }
-                });
-            }
-            
-            window.addEventListener('scroll', checkAnimation);
-            checkAnimation(); // تحقق مرة أولى عند التحميل
-            
-            // تعيين سنة حقوق النشر
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            
-            // تشغيل الفحوصات الأولية
-            detectBrowser();
-            detectOS();
-            detectScreenResolution();
-            detectBrowserLanguage();
-            detectJavaScriptStatus();
-            detectCPUCores();
         });
     </script>
 </body>
