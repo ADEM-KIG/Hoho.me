@@ -1,143 +1,78 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FToUH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FToUH الكاميرا</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <style>
-        /* CSS - الجزء الأول */
+        /* التصميم للهواتف فقط */
         :root {
-            --dark-blue: #000033;
-            --blood-blue: #3300cc;
-            --neon-blue: #00ccff;
-            --dark: #000000;
+            --primary: #ff3366;
+            --secondary: #000022;
+            --accent: #00ccff;
+            --text: #ffffff;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--dark);
-            color: white;
-            overflow: hidden;
+            background-color: var(--secondary);
+            color: var(--text);
             height: 100vh;
-            position: relative;
-        }
-
-        /* تأثير النقاط الزرقاء المتساقطة */
-        .snowfall {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .snowflake {
-            position: absolute;
-            background-color: var(--neon-blue);
-            border-radius: 50%;
-            filter: blur(1px);
-            animation: falling linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes falling {
-            0% {
-                transform: translateY(-10px) rotate(0deg);
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-            }
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+            touch-action: manipulation;
         }
 
         /* الشريط العلوي */
-        .header {
-            position: relative;
-            z-index: 10;
-            padding: 20px;
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(to right, #000000, #220033);
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(51,0,204,0.5) 100%);
-            border-bottom: 2px solid var(--blood-blue);
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--primary);
         }
 
-        .logo {
-            font-size: 2.5rem;
+        .app-title {
+            font-size: 1.8rem;
             font-weight: bold;
-            color: var(--blood-blue);
-            text-shadow: 0 0 10px var(--neon-blue), 
-                         0 0 20px var(--neon-blue),
-                         0 0 30px var(--neon-blue);
-            animation: pulse 2s infinite alternate;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
         }
 
-        @keyframes pulse {
-            0% {
-                text-shadow: 0 0 10px var(--neon-blue);
-            }
-            100% {
-                text-shadow: 0 0 20px var(--neon-blue), 
-                            0 0 40px var(--neon-blue),
-                            0 0 60px var(--neon-blue);
-            }
-        }
-
-        /* زر Ya Mibon */
         .camera-btn {
-            background: linear-gradient(45deg, var(--blood-blue), var(--neon-blue));
+            background: linear-gradient(45deg, var(--primary), #ff0066);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1.2rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            z-index: 5;
-            box-shadow: 0 0 15px var(--neon-blue);
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
             transition: all 0.3s;
         }
 
-        .camera-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px var(--neon-blue);
-        }
-
-        .camera-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                transparent, transparent, transparent,
-                rgba(0, 204, 255, 0.1), transparent, transparent
-            );
-            transform: rotate(30deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                left: -50%;
-            }
-            100% {
-                left: 150%;
-            }
+        .camera-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(255, 51, 102, 0.4);
         }
 
         /* نافذة الإذن */
@@ -151,11 +86,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 200;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s;
-            backdrop-filter: blur(10px);
+            transition: opacity 0.3s;
+            backdrop-filter: blur(5px);
+            padding: 20px;
         }
 
         .permission-modal.active {
@@ -164,172 +100,283 @@
         }
 
         .permission-box {
-            background: linear-gradient(135deg, rgba(0,0,51,0.8), rgba(0,0,0,0.9));
-            padding: 30px;
+            background: #110033;
+            border: 1px solid var(--primary);
             border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            border: 2px solid var(--blood-blue);
-            box-shadow: 0 0 30px var(--neon-blue);
-            transform: scale(0.8);
-            transition: transform 0.5s;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s;
         }
 
         .permission-modal.active .permission-box {
             transform: scale(1);
         }
 
-        .permission-box::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(
-                45deg,
-                var(--blood-blue),
-                var(--neon-blue),
-                var(--blood-blue)
-            );
-            z-index: -1;
-            border-radius: 20px;
-            animation: borderGlow 3s linear infinite;
-            background-size: 400%;
-        }
-
-        @keyframes borderGlow {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         .permission-text {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
             line-height: 1.6;
         }
 
         .permission-btns {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .permission-btn {
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 1.1rem;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
             font-weight: bold;
+            border: none;
             cursor: pointer;
             transition: all 0.3s;
-            border: none;
+            flex: 1;
         }
 
         .allow-btn {
-            background: linear-gradient(45deg, var(--neon-blue), var(--blood-blue));
+            background: linear-gradient(45deg, var(--primary), #ff0066);
             color: white;
-            box-shadow: 0 0 15px var(--neon-blue);
         }
 
         .deny-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .allow-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px var(--neon-blue);
-        }
-
-        .deny-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* منطقة عرض الصورة */
+        /* منطقة الكاميرا */
         .camera-container {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 200;
-            width: 90%;
-            max-width: 600px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            z-index: 150;
         }
 
-        .camera-video {
+        .camera-view {
             width: 100%;
-            border-radius: 15px;
-            border: 3px solid var(--blood-blue);
-            box-shadow: 0 0 30px var(--neon-blue);
+            max-width: 500px;
+            height: 70vh;
+            object-fit: cover;
             display: none;
         }
 
         .captured-image {
             width: 100%;
-            border-radius: 15px;
-            border: 3px solid var(--blood-blue);
-            box-shadow: 0 0 30px var(--neon-blue);
+            max-width: 500px;
+            height: 70vh;
+            object-fit: contain;
             display: none;
+            background-color: #000;
         }
 
-        .gallery {
+        .camera-controls {
             position: fixed;
             bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            z-index: 160;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* معرض الصور */
+        .gallery-container {
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
-            padding: 20px;
+            height: 100%;
+            background-color: var(--secondary);
+            z-index: 180;
+            display: none;
+            flex-direction: column;
+            padding-top: 70px;
+            overflow-y: auto;
+        }
+
+        .gallery-header {
             display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            z-index: 50;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(to right, #000000, #220033);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 190;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .gallery-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .close-gallery {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding: 10px;
+            margin-top: 10px;
         }
 
         .gallery-item {
-            min-width: 100px;
-            height: 100px;
-            border-radius: 10px;
-            border: 2px solid var(--blood-blue);
+            width: 100%;
+            aspect-ratio: 1;
             object-fit: cover;
-            transition: all 0.3s;
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--neon-blue);
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
         }
 
-        .gallery-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 0 20px var(--neon-blue);
+        .gallery-item:active {
+            transform: scale(0.95);
         }
 
-        /* تأثيرات GSAP إضافية */
-        .particle {
-            position: absolute;
-            background-color: var(--neon-blue);
+        .gallery-empty {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* تحليل الصورة */
+        .image-analysis {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            z-index: 170;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .analysis-title {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .analysis-result {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* القائمة الرئيسية */
+        .main-menu {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            gap: 15px;
+            z-index: 90;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-btn {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:active {
+            background: var(--primary);
+            transform: scale(0.9);
+        }
+
+        /* التأثيرات */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- تأثير النقاط الزرقاء -->
-    <div class="snowfall" id="snowfall"></div>
-
     <!-- الشريط العلوي -->
-    <div class="header">
-        <div class="logo">FToUH</div>
+    <div class="app-header">
+        <div class="app-title">FToUH</div>
         <button class="camera-btn" id="cameraBtn">ya mibon</button>
     </div>
 
@@ -337,7 +384,7 @@
     <div class="permission-modal" id="permissionModal">
         <div class="permission-box">
             <div class="permission-text">
-                هل تسمح ل Fateh بأخذ إذن الوصول إلى الكاميرا؟
+                هل تسمح ل Fateh بالوصول إلى الكاميرا؟
                 <br>
                 سيتم استخدامها لالتقاط صورة واحدة فقط
             </div>
@@ -350,252 +397,293 @@
 
     <!-- منطقة الكاميرا -->
     <div class="camera-container" id="cameraContainer">
-        <video class="camera-video" id="cameraVideo" autoplay playsinline></video>
+        <video class="camera-view" id="cameraView" autoplay playsinline></video>
+        <img class="captured-image" id="capturedImage">
         <canvas id="cameraCanvas" style="display:none;"></canvas>
-        <img class="captured-image" id="capturedImage" alt="الصورة الملتقطة">
+        
+        <div class="camera-controls">
+            <button class="control-btn" id="retakeBtn" style="display:none;">
+                <i class="fas fa-redo"></i>
+            </button>
+            <button class="control-btn pulse" id="captureBtn">
+                <i class="fas fa-camera"></i>
+            </button>
+            <button class="control-btn" id="saveBtn" style="display:none;">
+                <i class="fas fa-save"></i>
+            </button>
+        </div>
+        
+        <div class="image-analysis" id="imageAnalysis">
+            <div class="analysis-title">تحليل الصورة:</div>
+            <div class="analysis-result" id="analysisResult">جاري تحليل الصورة...</div>
+        </div>
     </div>
 
     <!-- معرض الصور -->
-    <div class="gallery" id="gallery"></div>
+    <div class="gallery-container" id="galleryContainer">
+        <div class="gallery-header">
+            <div class="gallery-title">معرض الصور</div>
+            <button class="close-gallery" id="closeGallery">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- الصور تظهر هنا تلقائياً -->
+        </div>
+        
+        <div class="gallery-empty" id="galleryEmpty" style="display:none;">
+            <i class="fas fa-images" style="font-size:3rem; margin-bottom:15px;"></i>
+            <div>لا توجد صور في المعرض بعد</div>
+        </div>
+    </div>
 
-    <!-- JavaScript -->
+    <!-- القائمة الرئيسية -->
+    <div class="main-menu">
+        <button class="menu-btn" id="galleryBtn">
+            <i class="fas fa-images"></i>
+        </button>
+        <button class="menu-btn" id="homeBtn">
+            <i class="fas fa-home"></i>
+        </button>
+    </div>
+
+    <!-- Font Awesome للايقونات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- TensorFlow.js للتعرف على الصور -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+
+    <!-- الكود الرئيسي -->
     <script>
-        // Firebase configuration - استبدل بقيمك الخاصة
+        // تهيئة Firebase - استبدل بمعلومات مشروعك
         const firebaseConfig = {
-            apiKey: "AIzaSyABC123YOUR_API_KEY",
-            authDomain: "your-project.firebaseapp.com",
-            databaseURL: "https://your-project.firebaseio.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "1:YOUR_APP_ID"
+            apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
+            authDomain: "my-messenger-5cca2.firebaseapp.com",
+            databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
+            projectId: "my-messenger-5cca2",
+            storageBucket: "my-messenger-5cca2.appspot.com",
+            messagingSenderId: "317158541033",
+            appId: "1:317158541033:web:63bc67e8b369239cedd278"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
         document.addEventListener('DOMContentLoaded', function() {
-            // عناصر DOM
+            // العناصر
             const cameraBtn = document.getElementById('cameraBtn');
             const permissionModal = document.getElementById('permissionModal');
             const allowBtn = document.getElementById('allowBtn');
             const denyBtn = document.getElementById('denyBtn');
             const cameraContainer = document.getElementById('cameraContainer');
-            const cameraVideo = document.getElementById('cameraVideo');
-            const cameraCanvas = document.getElementById('cameraCanvas');
+            const cameraView = document.getElementById('cameraView');
             const capturedImage = document.getElementById('capturedImage');
-            const gallery = document.getElementById('gallery');
-            const snowfall = document.getElementById('snowfall');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const captureBtn = document.getElementById('captureBtn');
+            const retakeBtn = document.getElementById('retakeBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const imageAnalysis = document.getElementById('imageAnalysis');
+            const analysisResult = document.getElementById('analysisResult');
+            const galleryContainer = document.getElementById('galleryContainer');
+            const galleryGrid = document.getElementById('galleryGrid');
+            const galleryEmpty = document.getElementById('galleryEmpty');
+            const galleryBtn = document.getElementById('galleryBtn');
+            const closeGallery = document.getElementById('closeGallery');
+            const homeBtn = document.getElementById('homeBtn');
 
-            // إنشاء تأثير النقاط الزرقاء
-            function createSnowfall() {
-                const snowflakeCount = 100;
-                
-                for (let i = 0; i < snowflakeCount; i++) {
-                    const snowflake = document.createElement('div');
-                    snowflake.classList.add('snowflake');
-                    
-                    // أحجام وأوقات عشوائية
-                    const size = Math.random() * 5 + 2;
-                    const left = Math.random() * 100;
-                    const animationDuration = Math.random() * 10 + 5;
-                    const animationDelay = Math.random() * 10;
-                    const opacity = Math.random() * 0.7 + 0.3;
-                    
-                    snowflake.style.width = `${size}px`;
-                    snowflake.style.height = `${size}px`;
-                    snowflake.style.left = `${left}%`;
-                    snowflake.style.animationDuration = `${animationDuration}s`;
-                    snowflake.style.animationDelay = `${animationDelay}s`;
-                    snowflake.style.opacity = opacity;
-                    
-                    snowfall.appendChild(snowflake);
-                }
+            // متغيرات
+            let stream = null;
+            let currentImageUrl = null;
+            let model = null;
+
+            // تحميل نموذج التعرف على الصور
+            async function loadModel() {
+                model = await mobilenet.load();
+                console.log('Model loaded');
             }
 
-            // تأثيرات GSAP عند التحميل
-            function initAnimations() {
-                // تأثير اهتزاز للزر
-                gsap.to(cameraBtn, {
-                    y: -5,
-                    duration: 1,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: "sine.inOut"
-                });
-
-                // تأثير نبض للشعار
-                gsap.to(".logo", {
-                    scale: 1.05,
-                    duration: 2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: "power1.inOut"
-                });
-            }
-
-            // طلب إذن الكاميرا
+            // فتح الكاميرا
             cameraBtn.addEventListener('click', () => {
                 permissionModal.classList.add('active');
-                
-                // تأثير GSAP للنافذة
-                gsap.from(".permission-box", {
-                    scale: 0.5,
-                    opacity: 0,
-                    duration: 0.5,
-                    ease: "back.out(1.7)"
-                });
             });
 
-            // السماح بالوصول إلى الكاميرا
+            // السماح بالوصول للكاميرا
             allowBtn.addEventListener('click', async () => {
                 permissionModal.classList.remove('active');
                 
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    cameraContainer.style.display = 'block';
-                    cameraVideo.style.display = 'block';
-                    cameraVideo.srcObject = stream;
-                    
-                    // عرض تأثير GSAP للكاميرا
-                    gsap.from(cameraContainer, {
-                        scale: 0.8,
-                        opacity: 0,
-                        duration: 0.7,
-                        ease: "elastic.out(1, 0.5)"
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1920 },
+                            height: { ideal: 1080 }
+                        } 
                     });
-                    
-                    // بعد 3 ثوانٍ، التقاط صورة تلقائياً
-                    setTimeout(captureImage, 3000);
-                    
+                    cameraContainer.style.display = 'flex';
+                    cameraView.style.display = 'block';
+                    cameraView.srcObject = stream;
                 } catch (error) {
-                    console.error("Error accessing camera:", error);
-                    alert("حدث خطأ في الوصول إلى الكاميرا");
+                    console.error('Camera error:', error);
+                    alert('حدث خطأ في فتح الكاميرا');
                 }
             });
 
-            // رفض الوصول إلى الكاميرا
+            // رفض الوصول للكاميرا
             denyBtn.addEventListener('click', () => {
                 permissionModal.classList.remove('active');
-                
-                // تأثير GSAP للرفض
-                gsap.to(".permission-box", {
-                    x: 50,
-                    opacity: 0,
-                    duration: 0.5,
-                    ease: "back.in(1.7)",
-                    onComplete: () => {
-                        permissionModal.classList.remove('active');
-                        gsap.set(".permission-box", { x: 0, opacity: 1 });
-                    }
-                });
             });
 
             // التقاط صورة
-            function captureImage() {
+            captureBtn.addEventListener('click', () => {
+                if (!stream) return;
+                
                 const context = cameraCanvas.getContext('2d');
-                cameraCanvas.width = cameraVideo.videoWidth;
-                cameraCanvas.height = cameraVideo.videoHeight;
-                context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+                cameraCanvas.width = cameraView.videoWidth;
+                cameraCanvas.height = cameraView.videoHeight;
+                context.drawImage(cameraView, 0, 0, cameraCanvas.width, cameraCanvas.height);
                 
-                const imageDataUrl = cameraCanvas.toDataURL('image/png');
-                capturedImage.src = imageDataUrl;
-                cameraVideo.style.display = 'none';
+                currentImageUrl = cameraCanvas.toDataURL('image/jpeg', 0.8);
+                capturedImage.src = currentImageUrl;
+                cameraView.style.display = 'none';
                 capturedImage.style.display = 'block';
+                captureBtn.style.display = 'none';
+                retakeBtn.style.display = 'flex';
+                saveBtn.style.display = 'flex';
+                imageAnalysis.style.display = 'flex';
                 
-                // إيقاف بث الكاميرا
-                cameraVideo.srcObject.getTracks().forEach(track => track.stop());
+                // تحليل الصورة
+                analyzeImage(cameraCanvas);
+            });
+
+            // إعادة التقاط
+            retakeBtn.addEventListener('click', () => {
+                capturedImage.style.display = 'none';
+                cameraView.style.display = 'block';
+                captureBtn.style.display = 'flex';
+                retakeBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+                imageAnalysis.style.display = 'none';
+            });
+
+            // حفظ الصورة
+            saveBtn.addEventListener('click', () => {
+                if (!currentImageUrl) return;
                 
-                // حفظ الصورة في Firebase
-                saveImageToDatabase(imageDataUrl);
-                
-                // تأثير GSAP للصورة الملتقطة
-                gsap.from(capturedImage, {
-                    scale: 0.5,
-                    rotation: 360,
-                    duration: 1.5,
-                    ease: "elastic.out(1, 0.5)"
+                const timestamp = Date.now();
+                database.ref('gallery/' + timestamp).set({
+                    imageUrl: currentImageUrl,
+                    timestamp: timestamp,
+                    analysis: analysisResult.innerText
+                }).then(() => {
+                    alert('تم حفظ الصورة في المعرض');
+                    closeCamera();
                 });
-                
-                // إنشاء جسيمات متطايرة
-                createParticles();
+            });
+
+            // إغلاق الكاميرا
+            function closeCamera() {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                }
+                cameraContainer.style.display = 'none';
+                cameraView.style.display = 'none';
+                capturedImage.style.display = 'none';
+                captureBtn.style.display = 'flex';
+                retakeBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+                imageAnalysis.style.display = 'none';
             }
 
-            // حفظ الصورة في قاعدة البيانات
-            function saveImageToDatabase(imageUrl) {
-                const timestamp = new Date().getTime();
-                database.ref('captured-images/' + timestamp).set({
-                    imageUrl: imageUrl,
-                    timestamp: timestamp
-                });
+            // تحليل الصورة باستخدام TensorFlow.js
+            async function analyzeImage(imageElement) {
+                if (!model) {
+                    analysisResult.innerText = 'النموذج غير جاهز بعد';
+                    return;
+                }
+                
+                analysisResult.innerText = 'جاري تحليل الصورة...';
+                
+                try {
+                    const predictions = await model.classify(imageElement);
+                    let result = '';
+                    
+                    predictions.forEach((pred, index) => {
+                        if (index < 3) { // عرض أفضل 3 تنبؤات فقط
+                            result += `${Math.round(pred.probability * 100)}% ${pred.className}\n`;
+                        }
+                    });
+                    
+                    analysisResult.innerText = result;
+                } catch (error) {
+                    console.error('Analysis error:', error);
+                    analysisResult.innerText = 'فشل في تحليل الصورة';
+                }
             }
 
-            // تحميل الصور من قاعدة البيانات
-            function loadImagesFromDatabase() {
-                database.ref('captured-images').on('value', (snapshot) => {
-                    gallery.innerHTML = '';
+            // فتح المعرض
+            galleryBtn.addEventListener('click', () => {
+                galleryContainer.style.display = 'flex';
+                loadGallery();
+            });
+
+            // إغلاق المعرض
+            closeGallery.addEventListener('click', () => {
+                galleryContainer.style.display = 'none';
+            });
+
+            // العودة للصفحة الرئيسية
+            homeBtn.addEventListener('click', () => {
+                galleryContainer.style.display = 'none';
+                closeCamera();
+            });
+
+            // تحميل المعرض من Firebase
+            function loadGallery() {
+                database.ref('gallery').on('value', (snapshot) => {
                     const images = snapshot.val();
+                    galleryGrid.innerHTML = '';
                     
                     if (images) {
-                        Object.keys(images).forEach(key => {
-                            const img = document.createElement('img');
-                            img.classList.add('gallery-item');
-                            img.src = images[key].imageUrl;
-                            gallery.appendChild(img);
-                            
-                            // تأثير GSAP لعناصر المعرض
-                            gsap.from(img, {
-                                x: 100,
-                                opacity: 0,
-                                duration: 0.7,
-                                delay: Math.random() * 0.5
-                            });
+                        galleryEmpty.style.display = 'none';
+                        
+                        Object.entries(images).sort((a, b) => b[1].timestamp - a[1].timestamp).forEach(([key, img]) => {
+                            const imgElement = document.createElement('img');
+                            imgElement.className = 'gallery-item';
+                            imgElement.src = img.imageUrl;
+                            imgElement.onclick = () => showImageDetails(img);
+                            galleryGrid.appendChild(imgElement);
                         });
+                    } else {
+                        galleryEmpty.style.display = 'flex';
                     }
                 });
             }
 
-            // إنشاء جسيمات متطايرة
-            function createParticles() {
-                const particleCount = 50;
-                
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    
-                    // تحديد موقع الجسيمات حول الصورة
-                    const size = Math.random() * 15 + 5;
-                    const x = capturedImage.offsetLeft + Math.random() * capturedImage.offsetWidth;
-                    const y = capturedImage.offsetTop + Math.random() * capturedImage.offsetHeight;
-                    const color = `hsl(${Math.random() * 60 + 200}, 100%, 50%)`;
-                    
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    particle.style.left = `${x}px`;
-                    particle.style.top = `${y}px`;
-                    particle.style.backgroundColor = color;
-                    
-                    document.body.appendChild(particle);
-                    
-                    // تحريك الجسيمات باستخدام GSAP
-                    gsap.to(particle, {
-                        x: (Math.random() - 0.5) * 500,
-                        y: (Math.random() - 0.5) * 500,
-                        opacity: 0,
-                        scale: 0,
-                        duration: Math.random() * 2 + 1,
-                        onComplete: () => {
-                            particle.remove();
-                        }
-                    });
-                }
+            // عرض تفاصيل الصورة
+            function showImageDetails(img) {
+                capturedImage.src = img.imageUrl;
+                cameraContainer.style.display = 'flex';
+                capturedImage.style.display = 'block';
+                imageAnalysis.style.display = 'flex';
+                analysisResult.innerText = img.analysis || 'لا توجد معلومات تحليل';
+                retakeBtn.style.display = 'none';
+                saveBtn.style.display = 'none';
+                captureBtn.style.display = 'none';
             }
 
             // تهيئة التطبيق
-            createSnowfall();
-            initAnimations();
-            loadImagesFromDatabase();
+            loadModel();
+            loadGallery();
+
+            // إغلاق الكاميرا عند الخروج من الصفحة
+            window.addEventListener('beforeunload', () => {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+            });
         });
     </script>
 </body>
