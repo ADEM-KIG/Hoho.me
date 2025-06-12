@@ -1,85 +1,368 @@
-<!DOCTYPE html>
-<html class="no_js" id="facebook" lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="default" id="meta_referrer" name="referrer"/>
-  <script>
-   window._cstart=+new Date();
-  </script>
-  <script>
-   function envFlush(a){function b(c){for(var d in a)c[d]=a[d]}if(window.requireLazy)window.requireLazy(["Env"],b);else{window.Env=window.Env||{};b(window.Env)}}envFlush({"ajaxpipe_token":"AXjFcONcptkVVB91","timeslice_heartbeat_config":{"pollIntervalMs":33,"idleGapThresholdMs":60,"ignoredTimesliceNames":{"requestAnimationFrame":true,"Event listenHandler mousemove":true,"Event listenHandler mouseover":true,"Event listenHandler mouseout":true,"Event listenHandler scroll":true},"isHeartbeatEnabled":true,"isArtilleryOn":false},"shouldLogCounters":true,"timeslice_categories":{"react_render":true,"reflow":true},"sample_continuation_stacktraces":true,"dom_mutation_flag":true,"timesliceBufferSize":5000});
-  </script>
-  <style>
-  </style>
-  <script>
-   __DEV__=0;CavalryLogger=window.CavalryLogger||function(a){this.lid=a;this.transition=false;this.metric_collected=false;this.is_detailed_profiler=false;this.instrumentation_started=false;this.pagelet_metrics={};this.events={};this.ongoing_watch={};this.values={t_cstart:window._cstart};this.piggy_values={};this.bootloader_metrics={};this.resource_to_pagelet_mapping={};this.e2eLogged=false;if(this.initializeInstrumentation)this.initializeInstrumentation()};CavalryLogger.prototype.setIsDetailedProfiler=function(a){this.is_detailed_profiler=a;return this};CavalryLogger.prototype.setTTIEvent=function(a){this.tti_event=a;return this};CavalryLogger.prototype.setValue=function(a,b,c,d){var e=d?this.piggy_values:this.values;if(typeof e[a]=="undefined"||c)e[a]=b;return this};CavalryLogger.prototype.getLastTtiValue=function(){return this.lastTtiValue};CavalryLogger.prototype.setTimeStamp=CavalryLogger.prototype.setTimeStamp||function(a,b,c,d){this.mark(a);var e=this.values.t_cstart||this.values.t_start,f=d?e+d:CavalryLogger.now();this.setValue(a,f,b,c);if(this.tti_event&&a==this.tti_event){this.lastTtiValue=f;this.setTimeStamp("t_tti",b)}return this};CavalryLogger.prototype.mark=typeof console==="object"&&console.timeStamp?function(a){console.timeStamp(a)}:function(){};CavalryLogger.prototype.addPiggyback=function(a,b){this.piggy_values[a]=b;return this};CavalryLogger.instances={};CavalryLogger.id=0;CavalryLogger.perfNubMarkup="";CavalryLogger.disableArtilleryOnUntilOffLogging=false;CavalryLogger.getInstance=function(a){if(typeof a=="undefined")a=CavalryLogger.id;if(!CavalryLogger.instances[a])CavalryLogger.instances[a]=new CavalryLogger(a);return CavalryLogger.instances[a]};CavalryLogger.setPageID=function(a){if(CavalryLogger.id===0){var b=CavalryLogger.getInstance();CavalryLogger.instances[a]=b;CavalryLogger.instances[a].lid=a;delete CavalryLogger.instances[0]}CavalryLogger.id=a};CavalryLogger.setPerfNubMarkup=function(a){CavalryLogger.perfNubMarkup=a};CavalryLogger.now=function(){if(window.performance&&performance.timing&&performance.timing.navigationStart&&performance.now)return performance.now()+performance.timing.navigationStart;return new Date().getTime()};CavalryLogger.prototype.measureResources=function(){};CavalryLogger.prototype.profileEarlyResources=function(){};CavalryLogger.getBootloaderMetricsFromAllLoggers=function(){};CavalryLogger.start_js=function(){};CavalryLogger.done_js=function(){};CavalryLogger.getInstance().setTTIEvent("t_domcontent");CavalryLogger.prototype.measureResources=function(a,b){if(!this.log_resources)return;var c="bootload/"+a.name;if(this.bootloader_metrics[c]!==undefined||this.ongoing_watch[c]!==undefined)return;var d=CavalryLogger.now();this.ongoing_watch[c]=d;if(!("start_"+c in this.bootloader_metrics))this.bootloader_metrics["start_"+c]=d;if(b&&!("tag_"+c in this.bootloader_metrics))this.bootloader_metrics["tag_"+c]=b;if(a.type==="js"){var e="js_exec/"+a.name;this.ongoing_watch[e]=d}};CavalryLogger.prototype.stopWatch=function(a){if(this.ongoing_watch[a]){var b=CavalryLogger.now(),c=b-this.ongoing_watch[a];this.bootloader_metrics[a]=c;var d=this.piggy_values;if(a.indexOf("bootload")===0){if(!d.t_resource_download)d.t_resource_download=0;if(!d.resources_downloaded)d.resources_downloaded=0;d.t_resource_download+=c;d.resources_downloaded+=1;if(d["tag_"+a]=="_EF_")d.t_pagelet_cssload_early_resources=b}delete this.ongoing_watch[a]}return this};CavalryLogger.getBootloaderMetricsFromAllLoggers=function(){var a={};Object.values(window.CavalryLogger.instances).forEach(function(b){if(b.bootloader_metrics)Object.assign(a,b.bootloader_metrics)});return a};CavalryLogger.start_js=function(a){for(var b=0;b<a.length;++b)CavalryLogger.getInstance().stopWatch("js_exec/"+a[b])};CavalryLogger.done_js=function(a){for(var b=0;b<a.length;++b)CavalryLogger.getInstance().stopWatch("bootload/"+a[b])};CavalryLogger.prototype.profileEarlyResources=function(a){for(var b=0;b<a.length;b++)this.measureResources({name:a[b][0],type:a[b][1]?"js":""},"_EF_")};CavalryLogger.getInstance().log_resources=true;CavalryLogger.getInstance().setIsDetailedProfiler(true);window.CavalryLogger&&CavalryLogger.getInstance().setTimeStamp("t_start");
-  </script>
-  <noscript>
-   <meta content="0; URL=/?_fb_noscript=1" http-equiv="refresh"/>
-  </noscript>
-  <title id="pageTitle">
-   Facebook – log in or sign up
-  </title>
-  <meta content="Facebook" property="og:site_name"/>
-  <meta content="https://www.facebook.com/" property="og:url"/>
-  <meta content="https://www.facebook.com/images/fb_icon_325x325.png" property="og:image"/>
-  <meta content="en_GB" property="og:locale"/>
-  <meta content="www" property="og:locale:alternate"/>
-  <meta content="es_LA" property="og:locale:alternate"/>
-  <meta content="es_ES" property="og:locale:alternate"/>
-  <meta content="fr_FR" property="og:locale:alternate"/>
-  <meta content="it_IT" property="og:locale:alternate"/>
-  <meta content="id_ID" property="og:locale:alternate"/>
-  <meta content="th_TH" property="og:locale:alternate"/>
-  <meta content="vi_VN" property="og:locale:alternate"/>
-  <meta content="ko_KR" property="og:locale:alternate"/>
-  <meta content="ja_JP" property="og:locale:alternate"/>
-  <script type="application/ld+json">
-   {"\u0040context":"http:\/\/schema.org","\u0040type":"WebSite","name":"Facebook","url":"https:\/\/www.facebook.com\/"}
-  </script>
-  <link href="/osd.xml" rel="search" title="Facebook" type="application/opensearchdescription+xml"/>
-  <link href="https://www.facebook.com/" rel="canonical"/>
-  <link href="https://m.facebook.com/" media="only screen and (max-width: 640px)" rel="alternate"/>
-  <link href="https://m.facebook.com/" media="handheld" rel="alternate"/>
-  <link href="https://www.facebook.com/" hreflang="x-default" rel="alternate"/>
-  <link href="https://www.facebook.com/" hreflang="en" rel="alternate"/>
-  <link href="https://ar-ar.facebook.com/" hreflang="ar" rel="alternate"/>
-  <link href="https://bg-bg.facebook.com/" hreflang="bg" rel="alternate"/>
-  <link href="https://bs-ba.facebook.com/" hreflang="bs" rel="alternate"/>
-  <link href="https://ca-es.facebook.com/" hreflang="ca" rel="alternate"/>
-  <link href="https://da-dk.facebook.com/" hreflang="da" rel="alternate"/>
-  <link href="https://el-gr.facebook.com/" hreflang="el" rel="alternate"/>
-  <link href="https://es-la.facebook.com/" hreflang="es" rel="alternate"/>
-  <link href="https://es-es.facebook.com/" hreflang="es-es" rel="alternate"/>
-  <link href="https://fa-ir.facebook.com/" hreflang="fa" rel="alternate"/>
-  <link href="https://fi-fi.facebook.com/" hreflang="fi" rel="alternate"/>
-  <link href="https://fr-fr.facebook.com/" hreflang="fr" rel="alternate"/>
-  <link href="https://fr-ca.facebook.com/" hreflang="fr-ca" rel="alternate"/>
-  <link href="https://hi-in.facebook.com/" hreflang="hi" rel="alternate"/>
-  <link href="https://hr-hr.facebook.com/" hreflang="hr" rel="alternate"/>
-  <link href="https://id-id.facebook.com/" hreflang="id" rel="alternate"/>
-  <link href="https://it-it.facebook.com/" hreflang="it" rel="alternate"/>
-  <link href="https://ko-kr.facebook.com/" hreflang="ko" rel="alternate"/>
-  <link href="https://mk-mk.facebook.com/" hreflang="mk" rel="alternate"/>
-  <link href="https://ms-my.facebook.com/" hreflang="ms" rel="alternate"/>
-  <link href="https://pl-pl.facebook.com/" hreflang="pl" rel="alternate"/>
-  <link href="https://pt-br.facebook.com/" hreflang="pt" rel="alternate"/>
-  <link href="https://pt-pt.facebook.com/" hreflang="pt-pt" rel="alternate"/>
-  <link href="https://ro-ro.facebook.com/" hreflang="ro" rel="alternate"/>
-  <link href="https://sl-si.facebook.com/" hreflang="sl" rel="alternate"/>
-  <link href="https://sr-rs.facebook.com/" hreflang="sr" rel="alternate"/>
-  <link href="https://th-th.facebook.com/" hreflang="th" rel="alternate"/>
-  <link href="https://vi-vn.facebook.com/" hreflang="vi" rel="alternate"/>
-  <meta content="Create an account or log in to Facebook. Connect with friends, family and other people you know. Share photos and videos, send messages and get updates." name="description"/>
-  <meta content="noodp,noydir" name="robots"/>
-  <link href="https://static.xx.fbcdn.net/rsrc.php/yV/r/hzMapiNYYpW.ico" rel="shortcut icon"/>
-  <link crossorigin="anonymous" data-bootloader-hash="pMs8M" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yl/l/0,cross/PVhtQLNtDhn.css" rel="stylesheet" type="text/css"/>
-  <link crossorigin="anonymous" data-bootloader-hash="xbDCc" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yW/l/0,cross/6CxgI0lW3ld.css" rel="stylesheet" type="text/css"/>
-  <link crossorigin="anonymous" data-bootloader-hash="5DaBN" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/y3/l/0,cross/KHTaZMBRZER.css" rel="stylesheet" type="text/css"/>
-  <link crossorigin="anonymous" data-bootloader-hash="epf4K" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/y_/l/0,cross/69NJtRAXGrF.css" rel="stylesheet" type="text/css"/>
-  <link crossorigin="anonymous" data-bootloader-hash="vYii4" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yf/l/0,cross/ARP-NPVroNY.css" rel="stylesheet" type="text/css"/>
-  <link crossorigin="anonymous" data-bootloader-hash="zhLnf" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yQ/l/0,cross/78vzG7yg2Yd.css" rel="stylesheet" type="text/css"/>
-  <script crossorigin="anonymous" data-bootloader-hash="sQHx2" src="https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/m9qVA8qTlRh.js">
-  </script>
-  <script>
-   requireLazy(["ix"],function(ix){ix.add({"125923":{"sprited":true,"spriteCssClass":"sx_5cf302","spriteMapCssClass":"sp_r7wV3Pi6lls"},"393092":{"sprited":true,"spriteCssClass":"sx_026bce","spriteMapCssClass":"sp_f8AllOQPUW-"},"363738":{"sprited":true,"spriteCssClass":"sx_a4083a","spriteMapCssClass":"sp_GotyM2C9a0K"},"86853":{"sprited":true,"spriteCssClass":"sx_aba4e0","spriteMapCssClass":"sp_RSOCoXWruMl"},"86854":{"sprited":true,"spriteCssClass":"sx_2a5613","spriteMapCssClass":"sp_RSOCoXWruMl"},"86857":{"sprited":true,"spriteCssClass":"sx_0d7128","spriteMapCssClass":"sp_RSOCoXWruMl"},"28005":{"sprited":true,"spriteCssClass":"sx_57174c","spriteMapCssClass":"sp_GotyM2C9a0K"},"94375":{"sprited":true,"spriteCssClass":"sx_80f360","spriteMapCssClass":"sp_2hgHz3Orewa"},"94376":{"sprited":true,"spriteCssClass":"sx_ca5d5e","spriteMapCssClass":"sp_2hgHz3Orewa"},"114555":{"sprited":true,"spriteCssClass":"sx_794878","spriteMapCssClass":"sp_QnBZoPF5RpH"},"114570":{"sprited":true,"spriteCssClass":"sx_1f1008","spriteMapCssClass":"sp_QnBZoPF5RpH"},"115129":{"sprited":true,"spriteCssClass":"sx_14d8d0","spriteMapCssClass":"sp_d0NYpM4xxw4"},"95526":{"sprited":true,"spriteCssClass":"sx_279fff","spriteMapCssClass":"sp_kNrgsTUhXan"},"95528":{"sprited":true,"spriteCssClass":"sx_bf689f","spriteMapCssClass":"sp_kNrgsTUhXan"},"95529":{"sprited":true,"spriteCssClass":"sx_4ea062","spriteMapCssClass":"sp_kNrgsTUhXan"},"95530":{"sprited":true,"spriteCssClass":"sx_52453e","spriteMapCssClass":"sp_kNrgsTUhXan"},"95531":{"sprited":true,"spriteCssClass":"sx_9a0c05","spriteMapCssClass":"sp_kNrgsTUhXan"},"95532":{"sprited":true,"spriteCssClass":"sx_a16683","spriteMapCssClass":"sp_kNrgsTUhXan"},"95533":{"sprited":true,"spriteCssClass":"sx_6ea8eb","spriteMapCssClass":"sp_kNrgsTUhXan"},"26967":{"sprited":true,"spriteCssClass":"sx_f9607c","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95502":{"sprited":true,"spriteCssClass":"sx_2afad7","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95501":{"sprited":true,"spriteCssClass":"sx_43ac56","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95513":{"sprited":true,"spriteCssClass":"sx_58bd5d","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95512":{"sprited":true,"spriteCssClass":"sx_aa637d","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95519":{"sprited":true,"spriteCssClass":"sx_ea127f","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95518":{"sprited":true,"spriteCssClass":"sx_162a28","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95522":{"sprited":true,"spriteCssClass":"sx_3486fa","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95521":{"sprited":true,"spriteCssClass":"sx_233692","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95538":{"sprited":true,"spriteCssClass":"sx_ce4d03","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95537":{"sprited":true,"spriteCssClass":"sx_0fe3f9","spriteMapCssClass":"sp_8hWF1fuTs1A"},"122203":{"sprited":true,"spriteCssClass":"sx_08e90f","spriteMapCssClass":"sp_kNrgsTUhXan"},"122574":{"sprited":true,"spriteCssClass":"sx_bfb06a","spriteMapCssClass":"sp_kNrgsTUhXan"},"123107":{"sprited":true,"spriteCssClass":"sx_a21117","spriteMapCssClass":"sp_kNrgsTUhXan"},"123137":{"sprited":true,"spriteCssClass":"sx_1675f0","spriteMapCssClass":"sp_f8AllOQPUW-"},"123230":{"sprited":true,"spriteCssClass":"sx_cc2b1b","spriteMapCssClass":"sp_QnBZoPF5RpH"},"123502":{"sprited":true,"spriteCssClass":"sx_8b4345","spriteMapCssClass":"sp_kNrgsTUhXan"},"81849":{"sprited":true,"spriteCssClass":"sx_c4db18","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"86988":{"sprited":true,"spriteCssClass":"sx_f739ef","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"40052":{"sprited":true,"spriteCssClass":"sx_62a652","spriteMapCssClass":"sp_fM-mz8spZ1b"},"404223":{"sprited":true,"spriteCssClass":"sx_559898","spriteMapCssClass":"sp_kNrgsTUhXan"},"87068":{"sprited":true,"spriteCssClass":"sx_bbde11","spriteMapCssClass":"sp_kNrgsTUhXan"},"82423":{"sprited":true,"spriteCssClass":"sx_0a01f0","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"94348":{"sprited":true,"spriteCssClass":"sx_1d065f","spriteMapCssClass":"sp_kNrgsTUhXan"},"86936":{"sprited":true,"spriteCssClass":"sx_894fc2","spriteMapCssClass":"sp_2hgHz3Orewa"},"86852":{"sprited":true,"spriteCssClass":"sx_8e84d9","spriteMapCssClass":"sp_RSOCoXWruMl"},"86924":{"sprited":true,"spriteCssClass":"sx_73f9e6","spriteMapCssClass":"sp_RSOCoXWruMl"},"86933":{"sprited":true,"spriteCssClass":"sx_37c952","spriteMapCssClass":"sp_RSOCoXWruMl"},"141787":{"sprited":true,"spriteCssClass":"sx_b3814e","spriteMapCssClass":"sp_RSOCoXWruMl"},"86994":{"sprited":true,"spriteCssClass":"sx_703aef","spriteMapCssClass":"sp_4u97HTpjmDY"},"86995":{"sprited":true,"spriteCssClass":"sx_f8f7b0","spriteMapCssClass":"sp_4u97HTpjmDY"},"86996":{"sprited":true,"spriteCssClass":"sx_0ec513","spriteMapCssClass":"sp_4u97HTpjmDY"},"86997":{"sprited":true,"spriteCssClass":"sx_72c5ab","spriteMapCssClass":"sp_4u97HTpjmDY"},"86998":{"sprited":true,"spriteCssClass":"sx_c0ea02","spriteMapCssClass":"sp_4u97HTpjmDY"},"86999":{"sprited":true,"spriteCssClass":"sx_bdea9a","spriteMapCssClass":"sp_4u97HTpjmDY"},"87000":{"sprited":true,"spriteCssClass":"sx_0f91b2","spriteMapCssClass":"sp_4u97HTpjmDY"},"27983":{"sprited":true,"spriteCssClass":"sx_2cfade","spriteMapCssClass":"sp_2hgHz3Orewa"},"418439":{"sprited":true,"spriteCssClass":"sx_17a0da","spriteMapCssClass":"sp_ORFAUUnlMRQ"},"417657":{"sprited":true,"spriteCssClass":"sx_930c07","spriteMapCssClass":"sp_SzJnzoJcS66"},"417661":{"sprited":true,"spriteCssClass":"sx_884718","spriteMapCssClass":"sp_SzJnzoJcS66"},"417687":{"sprited":true,"spriteCssClass":"sx_39b566","spriteMapCssClass":"sp_SzJnzoJcS66"},"417688":{"sprited":true,"spriteCssClass":"sx_1289dc","spriteMapCssClass":"sp_SzJnzoJcS66"},"478169":{"sprited":true,"spriteCssClass":"sx_7e5542","spriteMapCssClass":"sp_SzJnzoJcS66"},"478170":{"sprited":true,"spriteCssClass":"sx_f03652","spriteMapCssClass":"sp_SzJnzoJcS66"},"478171":{"sprited":true,"spriteCssClass":"sx_5a0231","spriteMapCssClass":"sp_SzJnzoJcS66"},"478172":{"sprited":true,"spriteCssClass":"sx_7992bf","spriteMapCssClass":"sp_SzJnzoJcS66"},"478173":{"sprited":true,"spriteCssClass":"sx_127916","spriteMapCssClass":"sp_SzJnzoJcS66"},"478174":{"sprited":true,"spriteCssClass":"sx_baffba","spriteMapCssClass":"sp_SzJnzoJcS66"},"478175":{"sprited":true,"spriteCssClass":"sx_aff475","spriteMapCssClass":"sp_SzJnzoJcS66"},"478176":{"sprited":true,"spriteCssClass":"sx_fab8d6","spriteMapCssClass":"sp_SzJnzoJcS66"},"462971":{"sprited":true,"spriteCssClass":"sx_d5a1c9","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"443962":{"sprited":true,"spriteCssClass":"sx_37958f","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462975":{"sprited":true,"spriteCssClass":"sx_31e278","spriteMapCssClass":"sp_SzJnzoJcS66"},"462980":{"sprited":true,"spriteCssClass":"sx_f46284","spriteMapCssClass":"sp_SzJnzoJcS66"},"462983":{"sprited":true,"spriteCssClass":"sx_83656c","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462984":{"sprited":true,"spriteCssClass":"sx_141e8c","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462985":{"sprited":true,"spriteCssClass":"sx_155c2e","spriteMapCssClass":"sp_SzJnzoJcS66"},"462987":{"sprited":true,"spriteCssClass":"sx_499715","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462988":{"sprited":true,"spriteCssClass":"sx_646327","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462989":{"sprited":true,"spriteCssClass":"sx_3ef98e","spriteMapCssClass":"sp_SzJnzoJcS66"},"462990":{"sprited":true,"spriteCssClass":"sx_ee121a","spriteMapCssClass":"sp_SzJnzoJcS66"},"462991":{"sprited":true,"spriteCssClass":"sx_965051","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462993":{"sprited":true,"spriteCssClass":"sx_972d77","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462994":{"sprited":true,"spriteCssClass":"sx_e859c1","spriteMapCssClass":"sp_SzJnzoJcS66"},"462996":{"sprited":true,"spriteCssClass":"sx_2e747a","spriteMapCssClass":"sp_SzJnzoJcS66"},"463003":{"sprited":true,"spriteCssClass":"sx_7cd81b","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"463005":{"sprited":true,"spriteCssClass":"sx_68e090","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"463006":{"sprited":true,"spriteCssClass":"sx_b4bc86","spriteMapCssClass":"sp_SzJnzoJcS66"},"463008":{"sprited":true,"spriteCssClass":"sx_2b10cb","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462853":{"sprited":true,"spriteCssClass":"sx_c9fedc","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"374088":{"sprited":true,"spriteCssClass":"sx_719cc4","spriteMapCssClass":"sp_3KyKHfsXkXg"},"462854":{"sprited":true,"spriteCssClass":"sx_836094","spriteMapCssClass":"sp_SzJnzoJcS66"},"431972":{"sprited":true,"spriteCssClass":"sx_27e35d","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"115425":{"sprited":true,"spriteCssClass":"sx_908741","spriteMapCssClass":"sp_mgqR7YhuvQB"},"351970":{"sprited":true,"spriteCssClass":"sx_461c40","spriteMapCssClass":"sp_njNl31OK_hs"},"351971":{"sprited":true,"spriteCssClass":"sx_3c0c3c","spriteMapCssClass":"sp_njNl31OK_hs"},"351972":{"sprited":true,"spriteCssClass":"sx_6e4d23","spriteMapCssClass":"sp_njNl31OK_hs"},"351973":{"sprited":true,"spriteCssClass":"sx_d62e78","spriteMapCssClass":"sp_njNl31OK_hs"},"88862":{"sprited":true,"spriteCssClass":"sx_aac9c2","spriteMapCssClass":"sp_rffDRF6oCJ5"},"88874":{"sprited":true,"spriteCssClass":"sx_e079a9","spriteMapCssClass":"sp_rffDRF6oCJ5"},"101301":{"sprited":true,"spriteCssClass":"sx_25d84a","spriteMapCssClass":"sp_1fk8N66jlZ3"},"101305":{"sprited":true,"spriteCssClass":"sx_4b27b7","spriteMapCssClass":"sp_1fk8N66jlZ3"},"101343":{"sprited":true,"spriteCssClass":"sx_b433ee","spriteMapCssClass":"sp_1fk8N66jlZ3"},"112977":{"sprited":true,"spriteCssClass":"sx_61f5e2","spriteMapCssClass":"sp_ZZI9gH5UbZh"},"94368":{"sprited":tr
+<html class="wbloks_11">
+ <head> 
+  <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1">
+  <link href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yi/r/4Kv5U5b1o3f.png" rel="shortcut icon" sizes="196x196">
+  <meta name="referrer" content="origin-when-crossorigin" id="meta_referrer">
+  <script nonce="">__DEV__=0;;
+
+_btldr={};;
+
+(function(){function a(a){return a.parentElement!==document.body&&a.parentElement!==document.head}function b(a){return a.nodeName==="SCRIPT"||a.nodeName==="LINK"&&((a=c(a))==null?void 0:a.asyncCss)}function c(a){return!(a.dataset instanceof window.DOMStringMap)?null:a.dataset}function d(d){var e;try{if(d.nodeType!==Node.ELEMENT_NODE)return}catch(a){return}if(a(d)||!b(d))return;var f=(e=c(d))==null?void 0:e.bootloaderHash;if(f!=null&&f!==""){var g=null,h=function(){window._btldr[f]=1,g==null?void 0:g()};g=function(){d.removeEventListener("load",h),d.removeEventListener("error",h)};d.addEventListener("load",h);d.addEventListener("error",h)}}Array.from(document.querySelectorAll('script,link[data-async-css="1"]')).forEach(function(a){return d(a)});var e=new MutationObserver(function(a,b){a.forEach(function(a){a.type==="childList"&&Array.from(a.addedNodes).forEach(function(a){d(a)})})});e.observe(document.getElementsByTagName("html")[0],{attributes:!1,childList:!0,subtree:!0})})();</script> 
+  <link type="text/css" rel="stylesheet" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yU/l/0,cross/8LmiXDyZ1wv.css" data-bootloader-hash="UmhY4qq" crossorigin="anonymous"> 
+  <link type="text/css" rel="stylesheet" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yz/l/0,cross/b8bT8K6wJb8.css" data-bootloader-hash="N5iOgIK" crossorigin="anonymous"> 
+  <link type="text/css" rel="stylesheet" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yw/l/0,cross/NdI56imvkTb.css" data-bootloader-hash="IfFc0rO" crossorigin="anonymous"> 
+  <link type="text/css" rel="stylesheet" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yD/l/0,cross/iefM3DM1uXw.css" data-bootloader-hash="TsMfpTo" crossorigin="anonymous"> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4i9kX4/ys/l/ar_AR/7gDqcsK-xn7.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yG/r/6vnkzZ5RiQo.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yl/r/y6bfdcPBV8Q.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/ya/r/_hwR1gTjJji.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yW/r/rhZUiD8hJ72.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yX/r/R7paD7vUTA2.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yh/r/qkqnWEiZRwq.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yi/r/Yl8SWs88400.js" as="script" crossorigin="anonymous" nonce=""> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/y4/r/qWcrjYEbn81.js" as="script" crossorigin="anonymous" nonce=""> 
+  <title>فيسبوك - تسجيل الدخول أو الاشتراك</title>
+  <meta name="theme-color" content="#FFFFFF">
+  <link type="text/css" rel="stylesheet" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/y8/l/0,cross/ylfay5Mi_4U.css" data-bootloader-hash="vd3OqOk" crossorigin="anonymous"> 
+  <meta http-equiv="origin-trial" data-feature="getInstalledRelatedApps" data-expires="2017-12-04" content="AvpndGzuAwLY463N1HvHrsK3WE5yU5g6Fehz7Vl7bomqhPI/nYGOjVg3TI0jq5tQ5dP3kDSd1HXVtKMQyZPRxAAAAABleyJvcmlnaW4iOiJodHRwczovL2ZhY2Vib29rLmNvbTo0NDMiLCJmZWF0dXJlIjoiSW5zdGFsbGVkQXBwIiwiZXhwaXJ5IjoxNTEyNDI3NDA0LCJpc1N1YmRvbWFpbiI6dHJ1ZX0="> 
+  <link rel="canonical" href="https://www.facebook.com/?locale=ar_AR">
+  <meta name="description" content="يمكنك إنشاء حساب أو تسجيل الدخول إلى فيسبوك والتواصل مع الأصدقاء وأفراد العائلة والأشخاص الآخرين الذين تعرفهم. استمتع بمشاركة الصور ومقاطع الفيديو وإرسال...">
+  <link rel="alternate" media="only screen and (max-width: 640px)" href="https://m.facebook.com/">
+  <link rel="alternate" media="handheld" href="https://m.facebook.com/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="فيسبوك - تسجيل الدخول أو الاشتراك">
+  <meta property="og:description" content="يمكنك إنشاء حساب أو تسجيل الدخول إلى فيسبوك والتواصل مع الأصدقاء وأفراد العائلة والأشخاص الآخرين الذين تعرفهم. استمتع بمشاركة الصور ومقاطع الفيديو وإرسال الرسائل والحصول على التحديثات.">
+  <meta property="og:url" content="https://www.facebook.com/?locale=ar_AR">
+  <meta property="og:locale" content="ar_AR">
+  <meta name="referrer" content="origin-when-crossorigin" id="meta_referrer">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="فيسبوك - تسجيل الدخول أو الاشتراك">
+  <meta name="twitter:description" content="يمكنك إنشاء حساب أو تسجيل الدخول إلى فيسبوك والتواصل مع الأصدقاء وأفراد العائلة والأشخاص الآخرين الذين تعرفهم. استمتع بمشاركة الصور ومقاطع الفيديو وإرسال الرسائل والحصول على التحديثات.">
+  <link rel="manifest" id="MANIFEST_LINK" href="/data/manifest/?is_workplace_mobile_pwa_dogfooding=0" crossorigin="use-credentials">
+  <style type="text/css" data-styled="true"></style>
+  <link href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4ii6o4/yn/l/ar_AR/xfnc0csOT44.js" rel="preload" as="script" crossorigin="anonymous"> 
+  <link href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/y9/r/ie38mp0O07P.js" rel="preload" as="script" crossorigin="anonymous"> 
+  <link href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yT/r/a-6U4rhzbaB.js" rel="preload" as="script" crossorigin="anonymous"> 
+  <link href="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yO/r/_tJ17sGyxOX.js" rel="preload" as="script" crossorigin="anonymous"> 
+ </head>
+ <body tabindex="0" class="touch x2 android rtl _fzu _50-3 iframe acw portrait"> 
+  <div id="viewport" data-kaios-focus-transparent="1">
+   <h1 style="display:block;height:0;overflow:hidden;position:absolute;width:0;padding:0">فيسبوك</h1>
+   <div id="page">
+    <div class="_129_" id="header-notices"></div>
+    <div class="_ao4r acw" id="root" role="main" data-sigil="context-layer-root content-pane">
+     <div class="_7om2">
+      <div class="_4g34">
+       <iframe data-testid="sem_pixel_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" height="1" width="1" src="https://www.fbsbx.com/paid_ads_pixel/iframe/?tag_ids%5B0%5D=AW-1032622309&amp;labels%5B0%5D=6c_qCJOa36MaEOWhsuwD&amp;sub_categories_ints=-5707957657942219787&amp;funnel_id=58d6aca4-d1e9-4d78-82cd-feb374260055&amp;caller=bloks&amp;sem_pixel_category=33&amp;is_remarketing&amp;__cci=FQAREiIVABn1gwECGiQuQEZISkxOUFJYXF5gYmRqbHR4eoIBhAGGAYgBlAGcAZ4BoAGkAaoBuAHOAd4B4AHiAeoB7AHuAfAB9AH%2BAYAChgKWApoCoAIEBgoMDhASFhgcHiAiJigqLDAyNjg6PKgCsgJCRGZucHa%2BAnyOAZABwgKSAZYBmAGaAaIByAKmAroCqAGsAa4BsAGyAbQBzgK6Ab4BwAHCAcoCxgHIAcoBzAHMAtAB1AHYAeQB6AH4AfoB%2FAGKAsYCjAKOApACmAKiAlRWcoABigGMARgObS5mYWNlYm9vay5jb20A.ARZ1o7j_U193bnkVE4a2kbcA1ZORzJCRnvKJi0RSPVph444g" sandbox="allow-same-origin allow-scripts"></iframe>
+       <div id="2599ea0b-b976-4dc4-afab-f18fa1ca1b0a" data-referrer="2599ea0b-b976-4dc4-afab-f18fa1ca1b0a"> 
+        <style type="text/css" nonce=""></style>
+        <div id="root_0_0_M1">
+         <div style="width: 100%; height: 100%;">
+          <div class="wbloks_64 wbloks_65 wbloks_97 wbloks_100" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif; direction: rtl; text-align: right;">
+           <div class="wbloks_1 wbloks_102 wbloks_101">
+            <div class="wbloks_1" style="display: block; flex: 1 1 100%; overflow: hidden;">
+             <div class="wbloks_111">
+              <div class="wbloks_112">
+               <div class="wbloks_113">
+                <div class="wbloks_114">
+                 <div class="wbloks_115"></div>
+                </div>
+                <div class="wbloks_116" style="background-color: rgb(255, 255, 255);"></div>
+               </div>
+               <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-grow: 1; justify-content: inherit; flex-direction: column;">
+                <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding: 10px 12px; background: rgb(255, 255, 255);">
+                 <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; align-items: center;">
+                  <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 24px; height: 24px;">
+                   <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 24px; height: 24px; align-items: center; justify-content: center;">
+                    <img data-bloks-name="bk.components.Image" alt="" class="wbloks_1" src="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yn/r/cfRxlxHyz-N.png" style="mask-image: url(&quot;https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yn/r/cfRxlxHyz-N.png&quot;); mask-size: cover; background-color: rgb(0, 100, 224); object-position: 10000px 10000px; object-fit: cover; overflow: hidden;">
+                   </div>
+                  </div>
+                  <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; padding-left: 8px; padding-right: 10px; flex-grow: 1; cursor: pointer; -webkit-tap-highlight-color: transparent; flex-direction: column; justify-content: center;">
+                   <span data-bloks-name="bk.components.Text" style="font-weight: 400; padding: unset; line-height: 1.3; font-size: 13px; font-family: &quot;Optimistic Text Normal&quot;; color: rgb(23, 99, 207); white-space: pre-wrap; overflow-wrap: break-word;">احصل على فيسبوك لهاتف Android واستمتع بتصفّح أسرع.</span>
+                  </div>
+                 </div>
+                </div>
+                <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none;">
+                 <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; flex-grow: 1;">
+                  <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; height: 0.5px; flex-grow: 1; background: rgb(201, 204, 209);"></div>
+                 </div>
+                </div>
+               </div>
+               <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; height: 4px;">
+                <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; top: 0px; position: absolute; flex-grow: 1;"></div>
+               </div>
+               <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; height: 100%; align-items: center; flex-direction: column;">
+                <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; height: 100%; max-width: 2160px; flex-shrink: 0; flex-direction: column;">
+                 <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; height: 100%; flex-direction: column;">
+                  <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; height: 100%; flex-direction: column;">
+                   <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-grow: 1; width: 100%; height: 100%; flex-direction: column;">
+                    <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; height: 100%; flex-direction: column;">
+                     <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; padding: 8px 16px 14px; height: 100%; flex-direction: column;">
+                      <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; height: 100%; align-items: center; flex-direction: column; justify-content: center;">
+                       <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none;"></div>
+                       <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; height: 100%; padding-bottom: 0px; width: 100%; cursor: pointer; -webkit-tap-highlight-color: transparent; flex-direction: column; justify-content: space-between;">
+                        <div data-bloks-name="bk.components.Flexbox" tabindex="0" role="button" aria-label="العربية" class="wbloks_1" style="pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; align-items: center; justify-content: center;">
+                         <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.43; display: block; text-align: start; overflow: hidden;">
+                          <div style="font-size: 13px; padding-top: 0px; padding-bottom: 3.905px; transform: translateY(calc(0.065em));">
+                           <div class="wbloks_121" style="font-size: 13px; max-height: 1.71462e+20px; word-break: break-word;">
+                            <div class="wbloks_122" dir="auto">
+                             <span data-bloks-name="bk.components.TextSpan" style="color: rgb(70, 90, 105); font-weight: 400; display: inline; font-size: 13px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">العربية</span>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                        </div>
+                        <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; margin-top: 0px; margin-bottom: 20px; flex-grow: 1; flex-shrink: 100; align-items: center; justify-content: center;">
+                         <img data-bloks-name="bk.components.Image" role="heading" alt="فيسبوك من Meta" class="wbloks_1" src="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/y6/r/UbJC5lwxeBU.png" style="max-height: 60px; min-height: 0px; object-fit: contain; overflow: hidden;">
+                        </div>
+                        <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-direction: column; justify-content: flex-start;">
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; justify-content: center;">
+                          <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; background: rgba(0, 0, 0, 0); flex-direction: column;">
+                           <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; flex-direction: column; justify-content: center;">
+                            <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; padding: 10px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; background: rgb(255, 255, 255); border: 1px solid rgb(203, 210, 217); border-radius: 12px; align-items: center; flex-direction: row;">
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; position: absolute; padding-left: 0px; align-items: center; flex-direction: row;">
+                              <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.3; display: block; overflow: hidden;">
+                               <div class="wbloks_120" style="display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; word-break: break-word; max-height: 999999px;">
+                                <span data-bloks-name="bk.components.TextSpan" style="color: rgb(103, 120, 138); font-weight: 400; display: inline; font-size: 16px; font-family: &quot;Optimistic Text Medium&quot;; white-space: pre-wrap; overflow-wrap: break-word;">رقم الهاتف المحمول أو البريد الإلكتروني</span>
+                               </div>
+                              </div>
+                             </div>
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-grow: 1; flex-direction: column;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; visibility: hidden; flex-direction: row;">
+                               <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.3; display: block; overflow: hidden;">
+                                <div style="font-size: 13px; padding-top: 0.75px; padding-bottom: 0.75px;">
+                                 <div class="wbloks_120" style="display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; word-break: break-word; max-height: 999999px;">
+                                  <span data-bloks-name="bk.components.TextSpan" style="color: rgb(70, 90, 105); font-weight: 400; display: inline; font-size: 13px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">رقم الهاتف المحمول أو البريد الإلكتروني</span>
+                                 </div>
+                                </div>
+                               </div>
+                              </div>
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; min-height: 22px; align-items: flex-start; flex-direction: row;">
+                               <input dir="auto" data-bloks-name="bk.components.TextInput" id="m_login_email" aria-label="رقم الهاتف المحمول أو البريد الإلكتروني" autocapitalize="off" autocomplete="on" autocorrect="off" class="wbloks_1 wbloks_66" placeholder="" type="email" value="" name="email" style="background: transparent; color: rgb(28, 43, 51); font-family: &quot;Optimistic Text Medium&quot;; font-size: 16px; line-height: 1.3;">
+                              </div>
+                             </div>
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; flex-shrink: 0; margin-right: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; visibility: hidden; flex-direction: row;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 24px; height: 24px;">
+                               <img data-bloks-name="bk.components.Image" alt="" class="wbloks_1" src="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yz/r/pVaihuQQsy8.png" style="mask-image: url(&quot;https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yz/r/pVaihuQQsy8.png&quot;); mask-size: cover; background-color: rgb(70, 90, 105); object-position: 10000px 10000px; object-fit: cover; overflow: hidden;">
+                              </div>
+                             </div>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; margin-top: 12px; justify-content: center;">
+                          <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; background: rgba(0, 0, 0, 0); flex-direction: column;">
+                           <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 100%; flex-direction: column; justify-content: center;">
+                            <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; padding: 10px 16px; cursor: pointer; -webkit-tap-highlight-color: transparent; background: rgb(255, 255, 255); border: 1px solid rgb(203, 210, 217); border-radius: 12px; align-items: center; flex-direction: row;">
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; position: absolute; padding-left: 0px; align-items: center; flex-direction: row;">
+                              <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.3; display: block; overflow: hidden;">
+                               <div class="wbloks_120" style="display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; word-break: break-word; max-height: 999999px;">
+                                <span data-bloks-name="bk.components.TextSpan" style="color: rgb(103, 120, 138); font-weight: 400; display: inline; font-size: 16px; font-family: &quot;Optimistic Text Medium&quot;; white-space: pre-wrap; overflow-wrap: break-word;">كلمة السر</span>
+                               </div>
+                              </div>
+                             </div>
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-grow: 1; flex-direction: column;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; visibility: hidden; flex-direction: row;">
+                               <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.3; display: block; overflow: hidden;">
+                                <div style="font-size: 13px; padding-top: 0.75px; padding-bottom: 0.75px;">
+                                 <div class="wbloks_120" style="display: -webkit-box; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; word-break: break-word; max-height: 999999px;">
+                                  <span data-bloks-name="bk.components.TextSpan" style="color: rgb(70, 90, 105); font-weight: 400; display: inline; font-size: 13px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">كلمة السر</span>
+                                 </div>
+                                </div>
+                               </div>
+                              </div>
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; min-height: 22px; align-items: flex-start; flex-direction: row;">
+                               <input dir="auto" data-bloks-name="bk.components.TextInput" id="m_login_password" aria-label="كلمة السر" autocapitalize="off" autocomplete="on" autocorrect="off" class="wbloks_1 wbloks_66" placeholder="" type="password" value="" name="pass" style="background: transparent; color: rgb(28, 43, 51); font-family: &quot;Optimistic Text Medium&quot;; font-size: 16px; line-height: 1.3;">
+                              </div>
+                             </div>
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: auto; flex-shrink: 0; margin-right: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; visibility: hidden; flex-direction: row;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; width: 24px; height: 24px;">
+                               <img data-bloks-name="bk.components.Image" alt="" class="wbloks_1" src="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yX/r/JU2JvzCINIm.png" style="mask-image: url(&quot;https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yX/r/JU2JvzCINIm.png&quot;); mask-size: cover; background-color: rgb(70, 90, 105); object-position: 10000px 10000px; object-fit: cover; overflow: hidden;">
+                              </div>
+                             </div>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; margin-top: 12px; align-items: stretch; flex-direction: column; justify-content: center;">
+                          <div class="wbloks_1" style="flex-grow: 1; cursor: pointer; pointer-events: auto;">
+                           <div data-bloks-name="bk.components.ViewTransformsExtension" class="wbloks_1" style="height: 100%; width: 100%; transform: scaleX(1) scaleY(1); opacity: 1; pointer-events: inherit;" data-bloks-visibility-state="entered">
+                            <div data-bloks-name="bk.components.Flexbox" tabindex="0" role="button" aria-label="تسجيل الدخول" data-anchor-id="replay" class="wbloks_1" style="pointer-events: inherit; height: 100%; width: 100%; border-radius: 22px;">
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; height: 44px; min-width: 44px; flex-grow: 1; padding-right: 20px; padding-left: 20px; background: rgb(0, 100, 224); border: 0px solid rgb(28, 43, 51); border-radius: 22px; align-items: center; flex-direction: row; justify-content: center;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; align-items: center; flex-direction: row; justify-content: center;">
+                               <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.248; display: block; text-align: start; overflow: hidden;">
+                                <div style="font-size: 16px; padding-top: 1.416px; padding-bottom: 1.416px;">
+                                 <div class="wbloks_121" style="font-size: 16px; max-height: 19.968px; word-break: break-all;">
+                                  <div class="wbloks_122" dir="auto">
+                                   <span data-bloks-name="bk.components.TextSpan" style="color: rgb(255, 255, 255); font-weight: 500; display: inline; font-size: 16px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">تسجيل الدخول</span>
+                                  </div>
+                                 </div>
+                                </div>
+                               </div>
+                              </div>
+                             </div>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding-top: 12px; padding-bottom: 0px; align-items: center; flex-direction: column; justify-content: center;">
+                          <div class="wbloks_1" style="flex-grow: 1; cursor: pointer; pointer-events: auto;">
+                           <div data-bloks-name="bk.components.ViewTransformsExtension" class="wbloks_1" style="height: 100%; width: 100%; opacity: 1; pointer-events: inherit;" data-bloks-visibility-state="entered">
+                            <div data-bloks-name="bk.components.Flexbox" tabindex="0" role="button" aria-label="هل نسيت كلمة السر؟" data-anchor-id="replay" class="wbloks_1" style="pointer-events: inherit; height: 100%; width: 100%;">
+                             <div class="wbloks_1" style="height: 36px; padding-right: 16px; padding-left: 16px;">
+                              <div data-bloks-name="bk.components.ViewTransformsExtension" class="wbloks_1" style="height: 100%; width: 100%; opacity: 1; pointer-events: inherit;" data-bloks-visibility-state="entered">
+                               <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: inherit; height: 100%; width: 100%; align-items: center; flex-direction: row; justify-content: center;">
+                                <div class="wbloks_1">
+                                 <div data-bloks-name="bk.components.ViewTransformsExtension" class="wbloks_1" style="height: 100%; width: 100%; opacity: 1; pointer-events: inherit;" data-bloks-visibility-state="entered">
+                                  <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: inherit; height: 100%; width: 100%; flex-direction: row;">
+                                   <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.248; display: block; text-align: start; overflow: hidden;">
+                                    <div style="font-size: 16px; padding-top: 2.416px; padding-bottom: 4.416px;">
+                                     <div class="wbloks_121" style="font-size: 16px; max-height: 19.968px; word-break: break-all;">
+                                      <div class="wbloks_122" dir="auto">
+                                       <span data-bloks-name="bk.components.TextSpan" style="color: rgb(28, 43, 51); font-weight: 500; display: inline; font-size: 16px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">هل نسيت كلمة السر؟</span>
+                                      </div>
+                                     </div>
+                                    </div>
+                                   </div>
+                                  </div>
+                                 </div>
+                                </div>
+                               </div>
+                              </div>
+                             </div>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                        </div>
+                        <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; flex-grow: 1; flex-shrink: 1e+06; padding-bottom: 0px; flex-direction: column; justify-content: flex-end;">
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; align-items: center; flex-direction: row; justify-content: center;">
+                          <div class="wbloks_1" style="flex-grow: 1; cursor: pointer; pointer-events: auto;">
+                           <div data-bloks-name="bk.components.ViewTransformsExtension" class="wbloks_1" style="height: 100%; width: 100%; transform: scaleX(1) scaleY(1); opacity: 1; pointer-events: inherit;" data-bloks-visibility-state="entered">
+                            <div data-bloks-name="bk.components.Flexbox" tabindex="0" role="button" aria-label="إنشاء حساب جديد" data-anchor-id="replay" class="wbloks_1" style="pointer-events: inherit; height: 100%; width: 100%; border-radius: 22px;">
+                             <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; height: 44px; min-width: 44px; flex-grow: 1; padding-right: 20px; padding-left: 20px; background: rgba(255, 255, 255, 0); border: 1px solid rgb(0, 100, 224); border-radius: 22px; align-items: center; flex-direction: row; justify-content: center;">
+                              <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; opacity: 1; align-items: center; flex-direction: row; justify-content: center;">
+                               <div data-bloks-name="bk.components.RichText" dir="auto" class="wbloks_1" style="line-height: 1.248; display: block; text-align: start; overflow: hidden;">
+                                <div style="font-size: 16px; padding-top: 1.416px; padding-bottom: 1.416px;">
+                                 <div class="wbloks_121" style="font-size: 16px; max-height: 19.968px; word-break: break-all;">
+                                  <div class="wbloks_122" dir="auto">
+                                   <span data-bloks-name="bk.components.TextSpan" style="color: rgb(0, 100, 224); font-weight: 500; display: inline; font-size: 16px; font-family: &quot;Optimistic Text Normal&quot;; white-space: pre-wrap; overflow-wrap: break-word;">إنشاء حساب جديد</span>
+                                  </div>
+                                 </div>
+                                </div>
+                               </div>
+                              </div>
+                             </div>
+                            </div>
+                           </div>
+                          </div>
+                         </div>
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding-top: 20px; padding-bottom: 20px; align-items: center; justify-content: center;">
+                          <div class="wbloks_1" style="height: 12px; aspect-ratio: 5 / 1;">
+                           <div data-bloks-name="bk.components.AspectRatio" class="wbloks_117" style="aspect-ratio: 5 / 1;">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="1" width="5" class="wbloks_119"></svg>
+                           </div>
+                           <div data-bloks-name="bk.components.AspectRatio" class="wbloks_118">
+                            <img data-bloks-name="bk.components.Image" alt="شعار Meta" class="wbloks_1" src="https://z-m-static.xx.fbcdn.net/rsrc.php/v4/yV/r/Y1oMjgd9pE3.png" style="height: 100%; width: 100%; pointer-events: inherit; object-fit: contain; overflow: hidden;">
+                           </div>
+                          </div>
+                         </div>
+                         <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; align-items: center; flex-direction: column; justify-content: center;">
+                          <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none;">
+                           <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding-left: 4px; padding-right: 4px; padding-bottom: 4px;">
+                            <span data-bloks-name="bk.components.TextSpan" role="link" tabindex="0" style="pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; color: rgb(99, 120, 138); display: inline; font-size: 10px; white-space: pre-wrap; overflow-wrap: break-word;">حول</span>
+                           </div>
+                           <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding-left: 4px; padding-right: 4px; padding-bottom: 4px;">
+                            <span data-bloks-name="bk.components.TextSpan" role="link" tabindex="0" style="pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; color: rgb(99, 120, 138); display: inline; font-size: 10px; white-space: pre-wrap; overflow-wrap: break-word;">مساعدة</span>
+                           </div>
+                           <div data-bloks-name="bk.components.Flexbox" class="wbloks_1" style="pointer-events: none; padding-left: 4px; padding-right: 4px; padding-bottom: 4px;">
+                            <span data-bloks-name="bk.components.TextSpan" role="link" tabindex="0" style="pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; color: rgb(99, 120, 138); display: inline; font-size: 10px; white-space: pre-wrap; overflow-wrap: break-word;">المزيد</span>
+                           </div>
+                          </div>
+                         </div>
+                        </div>
+                       </div>
+                      </div>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div role="alert" aria-atomic="true" name="WebBloksToastPresenter" class="wbloks_104">
+            <div class="wbloks_105">
+             <div class="wbloks_106 wbloks_107" style="transition: transform ease-out;"></div>
+            </div>
+            <div class="wbloks_108">
+             <div class="wbloks_109 wbloks_110" style="transition: opacity ease-out;"></div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div style="display:none"></div>
+     <span><img src="https://facebook.com/security/hsts-pixel.gif" width="0" height="0" style="display:none"></span>
+    </div>
+    <div class=""></div>
+    <div class="viewportArea _2v9s" style="display:none" id="u_0_3_Sg" data-sigil="marea">
+     <div class="_5vsg" id="u_0_4_qG" style="max-height: 180px;"></div>
+     <div class="_5vsh" id="u_0_5_OO" style="max-height: 344px;"></div>
+     <div class="_5v5d fcg">
+      <div class="_2so _2sq _2ss img _50cg" data-animtype="1" data-sigil="m-loading-indicator-animate m-loading-indicator-root"></div>جارٍ التحميل...
+     </div>
+    </div>
+    <div class="viewportArea aclb" id="mErrorView" style="display:none" data-sigil="marea">
+     <div class="container">
+      <div class="image"></div>
+      <div class="message" data-sigil="error-message"></div>
+      <a class="link" data-sigil="MPageError:retry">إعادة المحاولة</a>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="static_templates">
+   <div class="mDialog" id="modalDialog" style="display:none" data-sigil=" context-layer-root" data-autoid="autoid_1">
+    <div class="_52z5 _451a mFuturePageHeader _1uh1 firstStep titled" id="mDialogHeader">
+     <div class="_7om2 _52we">
+      <div class="_5s61">
+       <div class="_52z7">
+        <button type="submit" value="إلغاء" class="cancelButton btn btnD bgb mfss touchable" id="u_0_7_ti" data-sigil="dialog-cancel-button">إلغاء</button>
+        <button type="submit" value="عودة" class="backButton btn btnI bgb mfss touchable iconOnly" aria-label="عودة" id="u_0_8_JS" data-sigil="dialog-back-button"><i class="img sp_zlv7wdqwrrT_2x sx_01e5f1" style="margin-top: 2px;"></i></button>
+       </div>
+      </div>
+      <div class="_4g34">
+       <div class="_52z6">
+        <div class="_50l4 mfsl fcw" id="m-future-page-header-title" role="heading" tabindex="0" data-sigil="m-dialog-header-title dialog-title">
+         جارٍ التحميل...
+        </div>
+       </div>
+      </div>
+      <div class="_5s61">
+       <div class="_52z8" id="modalDialogHeaderButtons"></div>
+      </div>
+     </div>
+    </div>
+    <div class="modalDialogView" id="modalDialogView"></div>
+    <div class="_5v5d _5v5e fcg" id="dialogSpinner">
+     <div class="_2so _2sq _2ss img _50cg" data-animtype="1" id="u_0_6_Um" data-sigil="m-loading-indicator-animate m-loading-indicator-root"></div>جارٍ التحميل...
+    </div>
+   </div>
+  </div> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yU/l/0,cross/8LmiXDyZ1wv.css" as="style" crossorigin="anonymous"> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yz/l/0,cross/b8bT8K6wJb8.css" as="style" crossorigin="anonymous"> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yw/l/0,cross/NdI56imvkTb.css" as="style" crossorigin="anonymous"> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/yD/l/0,cross/iefM3DM1uXw.css" as="style" crossorigin="anonymous"> 
+  <link rel="preload" href="https://z-m-static.xx.fbcdn.net/rsrc.php/v5/y8/l/0,cross/ylfay5Mi_4U.css" as="style" crossorigin="anonymous"> 
+  <div class="hidden_elem"></div> 
+  <div class="AdBox Ad advert post-ads"></div>
+  <div class="ob-hover"></div>
+ </body>
+</html>
