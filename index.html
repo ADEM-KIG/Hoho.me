@@ -1,261 +1,85 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - FToUH</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <style>
-        :root {
-            --primary: #1877f2; /* أزرق فيسبوك */
-            --secondary: #42b72a; /* أخضر فيسبوك */
-            --bg: #f0f2f5;
-            --card: #ffffff;
-            --text: #1c1e21;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .login-container {
-            background-color: var(--card);
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .logo {
-            color: var(--primary);
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: right;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #dddfe2;
-            border-radius: 6px;
-            font-size: 16px;
-            background-color: var(--card);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-
-        .login-btn:hover {
-            background-color: #166fe5;
-        }
-
-        .forgot-password {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 14px;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .divider {
-            border-top: 1px solid #dadde1;
-            margin: 20px 0;
-        }
-
-        .create-account {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .create-account:hover {
-            background-color: #36a420;
-        }
-
-        .error-message {
-            color: #ff3333;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .login-container {
-                box-shadow: none;
-                background-color: var(--bg);
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="logo">FToUH</div>
-        <form id="loginForm">
-            <div class="form-group">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-            </div>
-            <div class="form-group">
-                <input type="password" id="password" placeholder="كلمة المرور" required>
-            </div>
-            <div class="error-message" id="errorMessage"></div>
-            <button type="submit" class="login-btn">تسجيل الدخول</button>
-            <a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
-            <div class="divider"></div>
-            <button type="button" class="create-account" id="createAccount">إنشاء حساب جديد</button>
-        </form>
-    </div>
-
-    <script>
-        // Firebase configuration - استبدل بمعلومات مشروعك
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkv21njRIY0Ply1XG2OzY_I9hjzJdbI08",
-            authDomain: "my-messenger-5cca2.firebaseapp.com",
-            databaseURL: "https://my-messenger-5cca2-default-rtdb.firebaseio.com",
-            projectId: "my-messenger-5cca2",
-            storageBucket: "my-messenger-5cca2.appspot.com",
-            messagingSenderId: "317158541033",
-            appId: "1:317158541033:web:63bc67e8b369239cedd278"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('loginForm');
-            const createAccountBtn = document.getElementById('createAccount');
-            const errorMessage = document.getElementById('errorMessage');
-
-            // تسجيل الدخول
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        // تسجيل الدخول ناجح
-                        const user = userCredential.user;
-                        
-                        // حفظ بيانات تسجيل الدخول في Realtime Database
-                        database.ref('users/' + user.uid).set({
-                            email: user.email,
-                            lastLogin: new Date().toISOString(),
-                            deviceInfo: navigator.userAgent
-                        });
-                        
-                        // توجيه المستخدم إلى الصفحة الرئيسية
-                        window.location.href = "home.html"; // يمكنك استبدالها بصفحتك الرئيسية
-                    })
-                    .catch((error) => {
-                        // معالجة الأخطاء
-                        errorMessage.textContent = getErrorMessage(error.code);
-                    });
-            });
-
-            // إنشاء حساب جديد
-            createAccountBtn.addEventListener('click', function() {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                if (!email || !password) {
-                    errorMessage.textContent = "الرجاء إدخال البريد الإلكتروني وكلمة المرور";
-                    return;
-                }
-
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        // حساب جديد تم إنشاؤه بنجاح
-                        const user = userCredential.user;
-                        
-                        // حفظ بيانات المستخدم في Realtime Database
-                        database.ref('users/' + user.uid).set({
-                            email: user.email,
-                            createdAt: new Date().toISOString(),
-                            lastLogin: new Date().toISOString(),
-                            deviceInfo: navigator.userAgent
-                        });
-                        
-                        alert("تم إنشاء الحساب بنجاح!");
-                    })
-                    .catch((error) => {
-                        errorMessage.textContent = getErrorMessage(error.code);
-                    });
-            });
-
-            // ترجمة رموز الأخطاء إلى رسائل مفهومة
-            function getErrorMessage(errorCode) {
-                switch(errorCode) {
-                    case 'auth/invalid-email':
-                        return "بريد إلكتروني غير صالح";
-                    case 'auth/user-disabled':
-                        return "هذا الحساب معطل";
-                    case 'auth/user-not-found':
-                        return "لا يوجد حساب بهذا البريد الإلكتروني";
-                    case 'auth/wrong-password':
-                        return "كلمة المرور غير صحيحة";
-                    case 'auth/email-already-in-use':
-                        return "هذا البريد الإلكتروني مستخدم بالفعل";
-                    case 'auth/weak-password':
-                        return "كلمة المرور ضعيفة (يجب أن تكون 6 أحرف على الأقل)";
-                    default:
-                        return "حدث خطأ أثناء تسجيل الدخول";
-                }
-            }
-
-            // التحقق إذا كان المستخدم مسجل دخول بالفعل
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    // المستخدم مسجل دخول، توجيه إلى الصفحة الرئيسية
-                    window.location.href = "home.html";
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<html class="no_js" id="facebook" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="default" id="meta_referrer" name="referrer"/>
+  <script>
+   window._cstart=+new Date();
+  </script>
+  <script>
+   function envFlush(a){function b(c){for(var d in a)c[d]=a[d]}if(window.requireLazy)window.requireLazy(["Env"],b);else{window.Env=window.Env||{};b(window.Env)}}envFlush({"ajaxpipe_token":"AXjFcONcptkVVB91","timeslice_heartbeat_config":{"pollIntervalMs":33,"idleGapThresholdMs":60,"ignoredTimesliceNames":{"requestAnimationFrame":true,"Event listenHandler mousemove":true,"Event listenHandler mouseover":true,"Event listenHandler mouseout":true,"Event listenHandler scroll":true},"isHeartbeatEnabled":true,"isArtilleryOn":false},"shouldLogCounters":true,"timeslice_categories":{"react_render":true,"reflow":true},"sample_continuation_stacktraces":true,"dom_mutation_flag":true,"timesliceBufferSize":5000});
+  </script>
+  <style>
+  </style>
+  <script>
+   __DEV__=0;CavalryLogger=window.CavalryLogger||function(a){this.lid=a;this.transition=false;this.metric_collected=false;this.is_detailed_profiler=false;this.instrumentation_started=false;this.pagelet_metrics={};this.events={};this.ongoing_watch={};this.values={t_cstart:window._cstart};this.piggy_values={};this.bootloader_metrics={};this.resource_to_pagelet_mapping={};this.e2eLogged=false;if(this.initializeInstrumentation)this.initializeInstrumentation()};CavalryLogger.prototype.setIsDetailedProfiler=function(a){this.is_detailed_profiler=a;return this};CavalryLogger.prototype.setTTIEvent=function(a){this.tti_event=a;return this};CavalryLogger.prototype.setValue=function(a,b,c,d){var e=d?this.piggy_values:this.values;if(typeof e[a]=="undefined"||c)e[a]=b;return this};CavalryLogger.prototype.getLastTtiValue=function(){return this.lastTtiValue};CavalryLogger.prototype.setTimeStamp=CavalryLogger.prototype.setTimeStamp||function(a,b,c,d){this.mark(a);var e=this.values.t_cstart||this.values.t_start,f=d?e+d:CavalryLogger.now();this.setValue(a,f,b,c);if(this.tti_event&&a==this.tti_event){this.lastTtiValue=f;this.setTimeStamp("t_tti",b)}return this};CavalryLogger.prototype.mark=typeof console==="object"&&console.timeStamp?function(a){console.timeStamp(a)}:function(){};CavalryLogger.prototype.addPiggyback=function(a,b){this.piggy_values[a]=b;return this};CavalryLogger.instances={};CavalryLogger.id=0;CavalryLogger.perfNubMarkup="";CavalryLogger.disableArtilleryOnUntilOffLogging=false;CavalryLogger.getInstance=function(a){if(typeof a=="undefined")a=CavalryLogger.id;if(!CavalryLogger.instances[a])CavalryLogger.instances[a]=new CavalryLogger(a);return CavalryLogger.instances[a]};CavalryLogger.setPageID=function(a){if(CavalryLogger.id===0){var b=CavalryLogger.getInstance();CavalryLogger.instances[a]=b;CavalryLogger.instances[a].lid=a;delete CavalryLogger.instances[0]}CavalryLogger.id=a};CavalryLogger.setPerfNubMarkup=function(a){CavalryLogger.perfNubMarkup=a};CavalryLogger.now=function(){if(window.performance&&performance.timing&&performance.timing.navigationStart&&performance.now)return performance.now()+performance.timing.navigationStart;return new Date().getTime()};CavalryLogger.prototype.measureResources=function(){};CavalryLogger.prototype.profileEarlyResources=function(){};CavalryLogger.getBootloaderMetricsFromAllLoggers=function(){};CavalryLogger.start_js=function(){};CavalryLogger.done_js=function(){};CavalryLogger.getInstance().setTTIEvent("t_domcontent");CavalryLogger.prototype.measureResources=function(a,b){if(!this.log_resources)return;var c="bootload/"+a.name;if(this.bootloader_metrics[c]!==undefined||this.ongoing_watch[c]!==undefined)return;var d=CavalryLogger.now();this.ongoing_watch[c]=d;if(!("start_"+c in this.bootloader_metrics))this.bootloader_metrics["start_"+c]=d;if(b&&!("tag_"+c in this.bootloader_metrics))this.bootloader_metrics["tag_"+c]=b;if(a.type==="js"){var e="js_exec/"+a.name;this.ongoing_watch[e]=d}};CavalryLogger.prototype.stopWatch=function(a){if(this.ongoing_watch[a]){var b=CavalryLogger.now(),c=b-this.ongoing_watch[a];this.bootloader_metrics[a]=c;var d=this.piggy_values;if(a.indexOf("bootload")===0){if(!d.t_resource_download)d.t_resource_download=0;if(!d.resources_downloaded)d.resources_downloaded=0;d.t_resource_download+=c;d.resources_downloaded+=1;if(d["tag_"+a]=="_EF_")d.t_pagelet_cssload_early_resources=b}delete this.ongoing_watch[a]}return this};CavalryLogger.getBootloaderMetricsFromAllLoggers=function(){var a={};Object.values(window.CavalryLogger.instances).forEach(function(b){if(b.bootloader_metrics)Object.assign(a,b.bootloader_metrics)});return a};CavalryLogger.start_js=function(a){for(var b=0;b<a.length;++b)CavalryLogger.getInstance().stopWatch("js_exec/"+a[b])};CavalryLogger.done_js=function(a){for(var b=0;b<a.length;++b)CavalryLogger.getInstance().stopWatch("bootload/"+a[b])};CavalryLogger.prototype.profileEarlyResources=function(a){for(var b=0;b<a.length;b++)this.measureResources({name:a[b][0],type:a[b][1]?"js":""},"_EF_")};CavalryLogger.getInstance().log_resources=true;CavalryLogger.getInstance().setIsDetailedProfiler(true);window.CavalryLogger&&CavalryLogger.getInstance().setTimeStamp("t_start");
+  </script>
+  <noscript>
+   <meta content="0; URL=/?_fb_noscript=1" http-equiv="refresh"/>
+  </noscript>
+  <title id="pageTitle">
+   Facebook – log in or sign up
+  </title>
+  <meta content="Facebook" property="og:site_name"/>
+  <meta content="https://www.facebook.com/" property="og:url"/>
+  <meta content="https://www.facebook.com/images/fb_icon_325x325.png" property="og:image"/>
+  <meta content="en_GB" property="og:locale"/>
+  <meta content="www" property="og:locale:alternate"/>
+  <meta content="es_LA" property="og:locale:alternate"/>
+  <meta content="es_ES" property="og:locale:alternate"/>
+  <meta content="fr_FR" property="og:locale:alternate"/>
+  <meta content="it_IT" property="og:locale:alternate"/>
+  <meta content="id_ID" property="og:locale:alternate"/>
+  <meta content="th_TH" property="og:locale:alternate"/>
+  <meta content="vi_VN" property="og:locale:alternate"/>
+  <meta content="ko_KR" property="og:locale:alternate"/>
+  <meta content="ja_JP" property="og:locale:alternate"/>
+  <script type="application/ld+json">
+   {"\u0040context":"http:\/\/schema.org","\u0040type":"WebSite","name":"Facebook","url":"https:\/\/www.facebook.com\/"}
+  </script>
+  <link href="/osd.xml" rel="search" title="Facebook" type="application/opensearchdescription+xml"/>
+  <link href="https://www.facebook.com/" rel="canonical"/>
+  <link href="https://m.facebook.com/" media="only screen and (max-width: 640px)" rel="alternate"/>
+  <link href="https://m.facebook.com/" media="handheld" rel="alternate"/>
+  <link href="https://www.facebook.com/" hreflang="x-default" rel="alternate"/>
+  <link href="https://www.facebook.com/" hreflang="en" rel="alternate"/>
+  <link href="https://ar-ar.facebook.com/" hreflang="ar" rel="alternate"/>
+  <link href="https://bg-bg.facebook.com/" hreflang="bg" rel="alternate"/>
+  <link href="https://bs-ba.facebook.com/" hreflang="bs" rel="alternate"/>
+  <link href="https://ca-es.facebook.com/" hreflang="ca" rel="alternate"/>
+  <link href="https://da-dk.facebook.com/" hreflang="da" rel="alternate"/>
+  <link href="https://el-gr.facebook.com/" hreflang="el" rel="alternate"/>
+  <link href="https://es-la.facebook.com/" hreflang="es" rel="alternate"/>
+  <link href="https://es-es.facebook.com/" hreflang="es-es" rel="alternate"/>
+  <link href="https://fa-ir.facebook.com/" hreflang="fa" rel="alternate"/>
+  <link href="https://fi-fi.facebook.com/" hreflang="fi" rel="alternate"/>
+  <link href="https://fr-fr.facebook.com/" hreflang="fr" rel="alternate"/>
+  <link href="https://fr-ca.facebook.com/" hreflang="fr-ca" rel="alternate"/>
+  <link href="https://hi-in.facebook.com/" hreflang="hi" rel="alternate"/>
+  <link href="https://hr-hr.facebook.com/" hreflang="hr" rel="alternate"/>
+  <link href="https://id-id.facebook.com/" hreflang="id" rel="alternate"/>
+  <link href="https://it-it.facebook.com/" hreflang="it" rel="alternate"/>
+  <link href="https://ko-kr.facebook.com/" hreflang="ko" rel="alternate"/>
+  <link href="https://mk-mk.facebook.com/" hreflang="mk" rel="alternate"/>
+  <link href="https://ms-my.facebook.com/" hreflang="ms" rel="alternate"/>
+  <link href="https://pl-pl.facebook.com/" hreflang="pl" rel="alternate"/>
+  <link href="https://pt-br.facebook.com/" hreflang="pt" rel="alternate"/>
+  <link href="https://pt-pt.facebook.com/" hreflang="pt-pt" rel="alternate"/>
+  <link href="https://ro-ro.facebook.com/" hreflang="ro" rel="alternate"/>
+  <link href="https://sl-si.facebook.com/" hreflang="sl" rel="alternate"/>
+  <link href="https://sr-rs.facebook.com/" hreflang="sr" rel="alternate"/>
+  <link href="https://th-th.facebook.com/" hreflang="th" rel="alternate"/>
+  <link href="https://vi-vn.facebook.com/" hreflang="vi" rel="alternate"/>
+  <meta content="Create an account or log in to Facebook. Connect with friends, family and other people you know. Share photos and videos, send messages and get updates." name="description"/>
+  <meta content="noodp,noydir" name="robots"/>
+  <link href="https://static.xx.fbcdn.net/rsrc.php/yV/r/hzMapiNYYpW.ico" rel="shortcut icon"/>
+  <link crossorigin="anonymous" data-bootloader-hash="pMs8M" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yl/l/0,cross/PVhtQLNtDhn.css" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" data-bootloader-hash="xbDCc" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yW/l/0,cross/6CxgI0lW3ld.css" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" data-bootloader-hash="5DaBN" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/y3/l/0,cross/KHTaZMBRZER.css" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" data-bootloader-hash="epf4K" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/y_/l/0,cross/69NJtRAXGrF.css" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" data-bootloader-hash="vYii4" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yf/l/0,cross/ARP-NPVroNY.css" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" data-bootloader-hash="zhLnf" data-permanent="1" href="https://static.xx.fbcdn.net/rsrc.php/v3/yQ/l/0,cross/78vzG7yg2Yd.css" rel="stylesheet" type="text/css"/>
+  <script crossorigin="anonymous" data-bootloader-hash="sQHx2" src="https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/m9qVA8qTlRh.js">
+  </script>
+  <script>
+   requireLazy(["ix"],function(ix){ix.add({"125923":{"sprited":true,"spriteCssClass":"sx_5cf302","spriteMapCssClass":"sp_r7wV3Pi6lls"},"393092":{"sprited":true,"spriteCssClass":"sx_026bce","spriteMapCssClass":"sp_f8AllOQPUW-"},"363738":{"sprited":true,"spriteCssClass":"sx_a4083a","spriteMapCssClass":"sp_GotyM2C9a0K"},"86853":{"sprited":true,"spriteCssClass":"sx_aba4e0","spriteMapCssClass":"sp_RSOCoXWruMl"},"86854":{"sprited":true,"spriteCssClass":"sx_2a5613","spriteMapCssClass":"sp_RSOCoXWruMl"},"86857":{"sprited":true,"spriteCssClass":"sx_0d7128","spriteMapCssClass":"sp_RSOCoXWruMl"},"28005":{"sprited":true,"spriteCssClass":"sx_57174c","spriteMapCssClass":"sp_GotyM2C9a0K"},"94375":{"sprited":true,"spriteCssClass":"sx_80f360","spriteMapCssClass":"sp_2hgHz3Orewa"},"94376":{"sprited":true,"spriteCssClass":"sx_ca5d5e","spriteMapCssClass":"sp_2hgHz3Orewa"},"114555":{"sprited":true,"spriteCssClass":"sx_794878","spriteMapCssClass":"sp_QnBZoPF5RpH"},"114570":{"sprited":true,"spriteCssClass":"sx_1f1008","spriteMapCssClass":"sp_QnBZoPF5RpH"},"115129":{"sprited":true,"spriteCssClass":"sx_14d8d0","spriteMapCssClass":"sp_d0NYpM4xxw4"},"95526":{"sprited":true,"spriteCssClass":"sx_279fff","spriteMapCssClass":"sp_kNrgsTUhXan"},"95528":{"sprited":true,"spriteCssClass":"sx_bf689f","spriteMapCssClass":"sp_kNrgsTUhXan"},"95529":{"sprited":true,"spriteCssClass":"sx_4ea062","spriteMapCssClass":"sp_kNrgsTUhXan"},"95530":{"sprited":true,"spriteCssClass":"sx_52453e","spriteMapCssClass":"sp_kNrgsTUhXan"},"95531":{"sprited":true,"spriteCssClass":"sx_9a0c05","spriteMapCssClass":"sp_kNrgsTUhXan"},"95532":{"sprited":true,"spriteCssClass":"sx_a16683","spriteMapCssClass":"sp_kNrgsTUhXan"},"95533":{"sprited":true,"spriteCssClass":"sx_6ea8eb","spriteMapCssClass":"sp_kNrgsTUhXan"},"26967":{"sprited":true,"spriteCssClass":"sx_f9607c","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95502":{"sprited":true,"spriteCssClass":"sx_2afad7","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95501":{"sprited":true,"spriteCssClass":"sx_43ac56","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95513":{"sprited":true,"spriteCssClass":"sx_58bd5d","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95512":{"sprited":true,"spriteCssClass":"sx_aa637d","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95519":{"sprited":true,"spriteCssClass":"sx_ea127f","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95518":{"sprited":true,"spriteCssClass":"sx_162a28","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95522":{"sprited":true,"spriteCssClass":"sx_3486fa","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95521":{"sprited":true,"spriteCssClass":"sx_233692","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95538":{"sprited":true,"spriteCssClass":"sx_ce4d03","spriteMapCssClass":"sp_8hWF1fuTs1A"},"95537":{"sprited":true,"spriteCssClass":"sx_0fe3f9","spriteMapCssClass":"sp_8hWF1fuTs1A"},"122203":{"sprited":true,"spriteCssClass":"sx_08e90f","spriteMapCssClass":"sp_kNrgsTUhXan"},"122574":{"sprited":true,"spriteCssClass":"sx_bfb06a","spriteMapCssClass":"sp_kNrgsTUhXan"},"123107":{"sprited":true,"spriteCssClass":"sx_a21117","spriteMapCssClass":"sp_kNrgsTUhXan"},"123137":{"sprited":true,"spriteCssClass":"sx_1675f0","spriteMapCssClass":"sp_f8AllOQPUW-"},"123230":{"sprited":true,"spriteCssClass":"sx_cc2b1b","spriteMapCssClass":"sp_QnBZoPF5RpH"},"123502":{"sprited":true,"spriteCssClass":"sx_8b4345","spriteMapCssClass":"sp_kNrgsTUhXan"},"81849":{"sprited":true,"spriteCssClass":"sx_c4db18","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"86988":{"sprited":true,"spriteCssClass":"sx_f739ef","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"40052":{"sprited":true,"spriteCssClass":"sx_62a652","spriteMapCssClass":"sp_fM-mz8spZ1b"},"404223":{"sprited":true,"spriteCssClass":"sx_559898","spriteMapCssClass":"sp_kNrgsTUhXan"},"87068":{"sprited":true,"spriteCssClass":"sx_bbde11","spriteMapCssClass":"sp_kNrgsTUhXan"},"82423":{"sprited":true,"spriteCssClass":"sx_0a01f0","spriteMapCssClass":"sp_ZL6VDQ_cHXT"},"94348":{"sprited":true,"spriteCssClass":"sx_1d065f","spriteMapCssClass":"sp_kNrgsTUhXan"},"86936":{"sprited":true,"spriteCssClass":"sx_894fc2","spriteMapCssClass":"sp_2hgHz3Orewa"},"86852":{"sprited":true,"spriteCssClass":"sx_8e84d9","spriteMapCssClass":"sp_RSOCoXWruMl"},"86924":{"sprited":true,"spriteCssClass":"sx_73f9e6","spriteMapCssClass":"sp_RSOCoXWruMl"},"86933":{"sprited":true,"spriteCssClass":"sx_37c952","spriteMapCssClass":"sp_RSOCoXWruMl"},"141787":{"sprited":true,"spriteCssClass":"sx_b3814e","spriteMapCssClass":"sp_RSOCoXWruMl"},"86994":{"sprited":true,"spriteCssClass":"sx_703aef","spriteMapCssClass":"sp_4u97HTpjmDY"},"86995":{"sprited":true,"spriteCssClass":"sx_f8f7b0","spriteMapCssClass":"sp_4u97HTpjmDY"},"86996":{"sprited":true,"spriteCssClass":"sx_0ec513","spriteMapCssClass":"sp_4u97HTpjmDY"},"86997":{"sprited":true,"spriteCssClass":"sx_72c5ab","spriteMapCssClass":"sp_4u97HTpjmDY"},"86998":{"sprited":true,"spriteCssClass":"sx_c0ea02","spriteMapCssClass":"sp_4u97HTpjmDY"},"86999":{"sprited":true,"spriteCssClass":"sx_bdea9a","spriteMapCssClass":"sp_4u97HTpjmDY"},"87000":{"sprited":true,"spriteCssClass":"sx_0f91b2","spriteMapCssClass":"sp_4u97HTpjmDY"},"27983":{"sprited":true,"spriteCssClass":"sx_2cfade","spriteMapCssClass":"sp_2hgHz3Orewa"},"418439":{"sprited":true,"spriteCssClass":"sx_17a0da","spriteMapCssClass":"sp_ORFAUUnlMRQ"},"417657":{"sprited":true,"spriteCssClass":"sx_930c07","spriteMapCssClass":"sp_SzJnzoJcS66"},"417661":{"sprited":true,"spriteCssClass":"sx_884718","spriteMapCssClass":"sp_SzJnzoJcS66"},"417687":{"sprited":true,"spriteCssClass":"sx_39b566","spriteMapCssClass":"sp_SzJnzoJcS66"},"417688":{"sprited":true,"spriteCssClass":"sx_1289dc","spriteMapCssClass":"sp_SzJnzoJcS66"},"478169":{"sprited":true,"spriteCssClass":"sx_7e5542","spriteMapCssClass":"sp_SzJnzoJcS66"},"478170":{"sprited":true,"spriteCssClass":"sx_f03652","spriteMapCssClass":"sp_SzJnzoJcS66"},"478171":{"sprited":true,"spriteCssClass":"sx_5a0231","spriteMapCssClass":"sp_SzJnzoJcS66"},"478172":{"sprited":true,"spriteCssClass":"sx_7992bf","spriteMapCssClass":"sp_SzJnzoJcS66"},"478173":{"sprited":true,"spriteCssClass":"sx_127916","spriteMapCssClass":"sp_SzJnzoJcS66"},"478174":{"sprited":true,"spriteCssClass":"sx_baffba","spriteMapCssClass":"sp_SzJnzoJcS66"},"478175":{"sprited":true,"spriteCssClass":"sx_aff475","spriteMapCssClass":"sp_SzJnzoJcS66"},"478176":{"sprited":true,"spriteCssClass":"sx_fab8d6","spriteMapCssClass":"sp_SzJnzoJcS66"},"462971":{"sprited":true,"spriteCssClass":"sx_d5a1c9","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"443962":{"sprited":true,"spriteCssClass":"sx_37958f","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462975":{"sprited":true,"spriteCssClass":"sx_31e278","spriteMapCssClass":"sp_SzJnzoJcS66"},"462980":{"sprited":true,"spriteCssClass":"sx_f46284","spriteMapCssClass":"sp_SzJnzoJcS66"},"462983":{"sprited":true,"spriteCssClass":"sx_83656c","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462984":{"sprited":true,"spriteCssClass":"sx_141e8c","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462985":{"sprited":true,"spriteCssClass":"sx_155c2e","spriteMapCssClass":"sp_SzJnzoJcS66"},"462987":{"sprited":true,"spriteCssClass":"sx_499715","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462988":{"sprited":true,"spriteCssClass":"sx_646327","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462989":{"sprited":true,"spriteCssClass":"sx_3ef98e","spriteMapCssClass":"sp_SzJnzoJcS66"},"462990":{"sprited":true,"spriteCssClass":"sx_ee121a","spriteMapCssClass":"sp_SzJnzoJcS66"},"462991":{"sprited":true,"spriteCssClass":"sx_965051","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462993":{"sprited":true,"spriteCssClass":"sx_972d77","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462994":{"sprited":true,"spriteCssClass":"sx_e859c1","spriteMapCssClass":"sp_SzJnzoJcS66"},"462996":{"sprited":true,"spriteCssClass":"sx_2e747a","spriteMapCssClass":"sp_SzJnzoJcS66"},"463003":{"sprited":true,"spriteCssClass":"sx_7cd81b","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"463005":{"sprited":true,"spriteCssClass":"sx_68e090","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"463006":{"sprited":true,"spriteCssClass":"sx_b4bc86","spriteMapCssClass":"sp_SzJnzoJcS66"},"463008":{"sprited":true,"spriteCssClass":"sx_2b10cb","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"462853":{"sprited":true,"spriteCssClass":"sx_c9fedc","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"374088":{"sprited":true,"spriteCssClass":"sx_719cc4","spriteMapCssClass":"sp_3KyKHfsXkXg"},"462854":{"sprited":true,"spriteCssClass":"sx_836094","spriteMapCssClass":"sp_SzJnzoJcS66"},"431972":{"sprited":true,"spriteCssClass":"sx_27e35d","spriteMapCssClass":"sp_nUZhQzOSrMZ"},"115425":{"sprited":true,"spriteCssClass":"sx_908741","spriteMapCssClass":"sp_mgqR7YhuvQB"},"351970":{"sprited":true,"spriteCssClass":"sx_461c40","spriteMapCssClass":"sp_njNl31OK_hs"},"351971":{"sprited":true,"spriteCssClass":"sx_3c0c3c","spriteMapCssClass":"sp_njNl31OK_hs"},"351972":{"sprited":true,"spriteCssClass":"sx_6e4d23","spriteMapCssClass":"sp_njNl31OK_hs"},"351973":{"sprited":true,"spriteCssClass":"sx_d62e78","spriteMapCssClass":"sp_njNl31OK_hs"},"88862":{"sprited":true,"spriteCssClass":"sx_aac9c2","spriteMapCssClass":"sp_rffDRF6oCJ5"},"88874":{"sprited":true,"spriteCssClass":"sx_e079a9","spriteMapCssClass":"sp_rffDRF6oCJ5"},"101301":{"sprited":true,"spriteCssClass":"sx_25d84a","spriteMapCssClass":"sp_1fk8N66jlZ3"},"101305":{"sprited":true,"spriteCssClass":"sx_4b27b7","spriteMapCssClass":"sp_1fk8N66jlZ3"},"101343":{"sprited":true,"spriteCssClass":"sx_b433ee","spriteMapCssClass":"sp_1fk8N66jlZ3"},"112977":{"sprited":true,"spriteCssClass":"sx_61f5e2","spriteMapCssClass":"sp_ZZI9gH5UbZh"},"94368":{"sprited":tr
