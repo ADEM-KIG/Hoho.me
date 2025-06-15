@@ -1,158 +1,1277 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 مختبر الثغرات الأمنية 🔥</title>
+    <title>CyberGuard Academy | Learning & Collaboration Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta property="og:title" content="CyberGuard Academy"/>
+    <meta property="og:description" content="Welcome to our CyberGuard platform" />
+    <meta property="og:image" content="https://t4.ftcdn.net/jpg/03/08/69/75/240_F_308697506_9dsBYHXm9FwuW0qcEqimAEXUvzTwfzwe.jpg" />
+
     <style>
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a12;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #loading-logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4d4d, #7a5af5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        #loading-bar {
+            width: 300px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #loading-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff4d4d, #7a5af5);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0%; left: 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Info Modal Styles */
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 18, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a24, #2a2a3a);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-title {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .modal-body {
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--accent-color);
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-color); }
+        }
+
+        /* Main Content Styles */
+        :root {
+            --bg-color: #0a0a12;
+            --card-bg: #1a1a24;
+            --accent-color: #ff4d4d;
+            --accent-secondary: #7a5af5;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --border-radius: 12px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --success-color: #2ecc71;
+            --professional-level: #ff4d4d;
+            --intermediate-level: #f5a623;
+            --beginner-level: #2ecc71;
+            --warning-color: #ffcc00;
+            --python-color: #3776ab;
+            --javascript-color: #f7df1e;
+            --c-color: #00599c;
+            --bash-color: #4eaa25;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: #ff5555;
-            max-width: 1200px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated background elements */
+        .bg-element {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .bg-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-color);
+            top: 10%;
+            left: 5%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .bg-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-secondary);
+            bottom: 5%;
+            right: 5%;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+
+        .bg-3 {
+            width: 200px;
+            height: 200px;
+            background: #00b4ff;
+            top: 50%;
+            left: 30%;
+            animation: float 12s ease-in-out infinite 2s;
+        }
+
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
             padding: 20px;
         }
-        .vulnerability {
-            background-color: #222;
-            border: 2px dashed #ff0000;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
+
+        header {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px 20px;
+            position: relative;
+            background: linear-gradient(135deg, rgba(26, 26, 36, 0.7) 0%, rgba(32, 32, 50, 0.5) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow);
         }
-        button {
-            background-color: #ff0000;
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .info-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .info-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, rgba(255, 77, 77, 0.1) 0%, rgba(122, 90, 245, 0.1) 100%);
+            backdrop-filter: blur(5px);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+        }
+
+        .warning-box {
+            background: rgba(255, 204, 0, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .warning-box h3 {
+            color: var(--warning-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-box h3 i {
+            margin-right: 10px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 36, 0.8) 0%, rgba(32, 32, 50, 0.6) 100%);
+            backdrop-filter: blur(5px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-feature {
+            background: linear-gradient(135deg, rgba(26, 26, 36, 0.9) 0%, rgba(40, 40, 60, 0.7) 100%);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+        }
+
+        .card-feature::after {
+            background: var(--accent-secondary);
+        }
+
+        h2 {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 i {
+            margin-right: 15px;
+        }
+
+        h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        ol, ul {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+            font-size: 1.05rem;
+        }
+
+        li::before {
+            content: 'â€؛';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: rgba(255, 77, 77, 0.2);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .feature-item {
+            background: rgba(30, 30, 45, 0.6);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(40, 40, 60, 0.8);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .language-item {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .language-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .python-icon {
+            color: var(--python-color);
+        }
+
+        .javascript-icon {
+            color: var(--javascript-color);
+        }
+
+        .c-icon {
+            color: var(--c-color);
+        }
+
+        .bash-icon {
+            color: var(--bash-color);
+        }
+
+        .language-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .language-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .os-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .os-item {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .os-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .os-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .windows-icon {
+            color: #0078d7;
+        }
+
+        .linux-icon {
+            color: #fcc624;
+        }
+
+        .android-icon {
+            color: #3ddc84;
+        }
+
+        .os-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .os-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .course-category {
+            margin-bottom: 30px;
+        }
+
+        .course-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .course-item {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid var(--accent-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .course-item:hover {
+            background: rgba(40, 40, 60, 0.9);
+            transform: translateX(5px);
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(122, 90, 245, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .course-details {
+            flex-grow: 1;
+        }
+
+        .course-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .course-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .course-level {
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .level-beginner {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--beginner-level);
+        }
+
+        .level-intermediate {
+            background-color: rgba(245, 166, 35, 0.2);
+            color: var(--intermediate-level);
+        }
+
+        .level-professional {
+            background-color: rgba(255, 77, 77, 0.2);
+            color: var(--professional-level);
+        }
+
+        .job-board {
+            margin-top: 40px;
+        }
+
+        .job-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .job-item {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .job-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .job-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .job-type {
+            font-size: 0.8rem;
+            color: var(--accent-secondary);
+            margin-bottom: 10px;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(122, 90, 245, 0.1);
+        }
+
+        .job-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .apply-btn {
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
             cursor: pointer;
-            margin: 5px;
+            transition: all 0.3s ease;
         }
-        input {
-            padding: 8px;
-            margin: 5px;
+
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            background: var(--accent-color);
+        }
+
+        .discord-link {
+            background: #5865F2;
+        }
+
+        .twitter-link {
+            background: #1DA1F2;
+        }
+
+        .youtube-link {
+            background: #FF0000;
+        }
+
+        .github-link {
+            background: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 30px 20px;
+            background: rgba(15, 15, 25, 0.8);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .animated-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .animated-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .typing {
+            border-right: 2px solid var(--accent-color);
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-color); }
+        }
+
+        .server-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 40px 0;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .features-grid, .languages-grid, .os-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .server-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                margin-bottom: 20px;
+            }
+            
+            .course-list, .job-list {
+                grid-template-columns: 1fr;
+            }
+
+            .info-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>مختبر الثغرات الأمنية (GitHub Pages Edition)</h1>
-    <p>هذا الموقع يحتوي على ثغرات أمنية متعددة للتدريب فقط!</p>
-
-    <!-- 1. ثغرة XSS (Cross-Site Scripting) -->
-    <div class="vulnerability">
-        <h2>1. ثغرة XSS (حقن سكريبتات)</h2>
-        <input type="text" id="xss-input" placeholder="أدخل نصًا ضارًا">
-        <button onclick="document.getElementById('xss-output').innerHTML = document.getElementById('xss-input').value">
-            عرض النص
-        </button>
-        <div id="xss-output" style="margin-top: 10px; min-height: 50px; border: 1px solid #ff5555;"></div>
-        <p>جرب إدخال: <code>&lt;script&gt;alert('Hacked!')&lt;/script&gt;</code></p>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div id="loading-logo">Programming Bridge</div>
+        <div id="loading-bar">
+            <div id="loading-progress"></div>
+        </div>
     </div>
 
-    <!-- 2. ثغرة CSRF (محاكاة) -->
-    <div class="vulnerability">
-        <h2>2. ثغرة CSRF (طلب عبر مواقع أخرى)</h2>
-        <button onclick="fetch('https://api.example.com/change-password', { method: 'POST' })">
-            انقر هنا لتفعيل "طلب خفي"
-        </button>
-        <p>هذا يوضح كيف يمكن لموقع آخر إجراء طلبات نيابة عنك</p>
+    <!-- Info Modal -->
+    <div class="info-modal" id="infoModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-title">Important Information</h2>
+            <div class="modal-body" id="modalText"></div>
+        </div>
     </div>
 
-    <!-- 3. ثغرة Clickjacking -->
-    <div class="vulnerability">
-        <h2>3. ثغرة Clickjacking (تزوير النقرات)</h2>
-        <iframe src="https://example.com" style="opacity: 0.1; width: 100%; height: 100px;"></iframe>
-        <p>إطار غير مرئي تقريبًا يمكن وضع زر خادع فوقه</p>
+    <!-- Info Button -->
+    <div class="info-btn" id="infoBtn">
+        <i class="fas fa-info"></i>
     </div>
 
-    <!-- 4. ثغرة CORS غير الآمن -->
-    <div class="vulnerability">
-        <h2>4. ثغرة CORS (مشاركة المصادر)</h2>
-        <button onclick="fetch('https://api.example.com/data')">
-            طلب بيانات من مصدر آخر
-        </button>
-        <p>يظهر كيف يمكن للمواقع قراءة بيانات من مواقع أخرى</p>
-    </div>
+    <!-- Main Content (initially hidden) -->
+    <div id="main-content">
+        <!-- Animated background elements -->
+        <div class="bg-element bg-1"></div>
+        <div class="bg-element bg-2"></div>
+        <div class="bg-element bg-3"></div>
 
-    <!-- 5. ثغرة DOM-based XSS -->
-    <div class="vulnerability">
-        <h2>5. ثغرة DOM-based XSS</h2>
-        <button onclick="location.hash = 'javascript:alert(\'DOM XSS!\')'">
-            انقر لتفعيل الثغرة
-        </button>
-        <p>جرب إضافة <code>#javascript:alert(1)</code> لرابط الصفحة</p>
-    </div>
+        <div class="container">
+            <header>
+                <h1 id="main-title"></h1>
+                <p class="subtitle" id="subtitle"></p>
+                
+                <div class="server-stats animated-text">
+                    <div class="stat-item">
+                        <div class="stat-number" id="members-count">0</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="courses-count">0</div>
+                        <div class="stat-label">Courses Available</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="experts-count">0</div>
+                        <div class="stat-label">Cybersecurity Experts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="projects-count">0</div>
+                        <div class="stat-label">Collaborative Projects</div>
+                    </div>
+                </div>
+            </header>
 
-    <!-- 6. ثغرة HTML Injection -->
-    <div class="vulnerability">
-        <h2>6. ثغرة حقن HTML</h2>
-        <input type="text" id="html-input" placeholder="أدخل HTML ضار">
-        <button onclick="document.getElementById('html-injection').innerHTML = document.getElementById('html-input').value">
-            حقن HTML
-        </button>
-        <div id="html-injection" style="margin-top: 10px; min-height: 50px; border: 1px solid #ff5555;"></div>
-    </div>
+            <section class="welcome-message animated-text">
+                <h2><i class="fas fa-door-open"></i> Welcome to CyberGuard Academy</h2>
+                <p>Welcome to our premier cybersecurity learning and collaboration platform! Our server combines education, practical skills development, and career opportunities in one place.</p>
+                <p>With our distinctive red/black/white security-themed design, we offer a professional environment for cybersecurity enthusiasts at all levels.</p>
+                
+                <div class="warning-box animated-text">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
+                    <p>Every member will learn advanced technical concepts in depth. By joining our server, you acknowledge that you will be exposed to sophisticated cybersecurity techniques that should only be used ethically and legally. Misuse of this knowledge may have legal consequences.</p>
+                </div>
+            </section>
 
-    <!-- 7. ثغرة Local Storage التخزين المحلي -->
-    <div class="vulnerability">
-        <h2>7. ثغرة Local Storage</h2>
-        <input type="text" id="storage-input" placeholder="بيانات حساسة">
-        <button onclick="localStorage.setItem('secret', document.getElementById('storage-input').value)">
-            تخزين بيانات
-        </button>
-        <p>يمكن سرقة هذه البيانات عبر XSS</p>
-    </div>
+            <section class="features-grid">
+                <div class="feature-item animated-text">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="feature-title">Security-First</h3>
+                    <p class="feature-desc">Our server implements enterprise-grade security measures to protect our community and your data.</p>
+                </div>
+                <div class="feature-item animated-text">
+                    <div class="feature-icon"><i class="fas fa-user-graduate"></i></div>
+                    <h3 class="feature-title">Structured Learning</h3>
+                    <p class="feature-desc">Progress through our leveled curriculum from beginner to professional cybersecurity skills.</p>
+                </div>
+                <div class="feature-item animated-text">
+                    <div class="feature-icon"><i class="fas fa-bug"></i></div>
+                    <h3 class="feature-title">Ethical Labs</h3>
+                    <p class="feature-desc">Practice in our secure environments with realistic scenarios and challenges.</p>
+                </div>
+            </section>
 
-    <!-- 8. ثغرة Session Fixation (محاكاة) -->
-    <div class="vulnerability">
-        <h2>8. ثغرة Session Fixation</h2>
-        <button onclick="document.cookie = 'sessionid=malicious123; path=/'">
-            تعيين معرف جلسة ضار
-        </button>
-    </div>
+            <section class="card animated-text">
+                <h2><i class="fas fa-code"></i> Programming Languages</h2>
+                <p>Master these essential languages for cybersecurity:</p>
+                
+                <div class="languages-grid">
+                    <div class="language-item">
+                        <div class="language-icon python-icon"><i class="fab fa-python"></i></div>
+                        <div class="language-name">Python</div>
+                        <div class="language-desc">Automation, tool development, and security scripting</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-icon javascript-icon"><i class="fab fa-js"></i></div>
+                        <div class="language-name">JavaScript</div>
+                        <div class="language-desc">Web exploitation and browser security</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-icon c-icon"><i class="fas fa-copyright"></i></div>
+                        <div class="language-name">C/C++</div>
+                        <div class="language-desc">Reverse engineering and exploit development</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-icon bash-icon"><i class="fas fa-terminal"></i></div>
+                        <div class="language-name">Bash</div>
+                        <div class="language-desc">System administration and automation</div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- 9. ثغرة Open Redirect -->
-    <div class="vulnerability">
-        <h2>9. ثغرة إعادة توجيه مفتوحة</h2>
-        <a href="?redirect=https://evil.com">انقر هنا للانتقال لموقعنا الجديد</a>
-    </div>
+            <section class="card animated-text">
+                <h2><i class="fas fa-desktop"></i> Operating System Training</h2>
+                <p>Master security across different platforms with our specialized courses:</p>
+                
+                <div class="os-grid">
+                    <div class="os-item">
+                        <div class="os-icon windows-icon"><i class="fab fa-windows"></i></div>
+                        <div class="os-name">Windows Security</div>
+                        <div class="os-desc">Learn system hardening, AD security, and Windows forensics</div>
+                    </div>
+                    <div class="os-item">
+                        <div class="os-icon linux-icon"><i class="fab fa-linux"></i></div>
+                        <div class="os-name">Linux Security</div>
+                        <div class="os-desc">Master Linux hardening, kernel security, and server protection</div>
+                    </div>
+                    <div class="os-item">
+                        <div class="os-icon android-icon"><i class="fab fa-android"></i></div>
+                        <div class="os-name">Mobile Security</div>
+                        <div class="os-desc">Learn Android/iOS security, app hardening, and mobile forensics</div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- 10. ثغرة Web Messaging غير الآمن -->
-    <div class="vulnerability">
-        <h2>10. ثغرة Web Messaging</h2>
-        <button onclick="window.postMessage('secret-data', '*')">
-            إرسال بيانات حساسة
-        </button>
-        <p>يمكن لأي موقع استقبال هذه الرسائل</p>
+            <section class="card animated-text">
+                <h2><i class="fas fa-user-secret"></i> Privacy & Anonymity</h2>
+                <p>Advanced courses on protecting your digital identity:</p>
+                
+                <div class="course-list">
+                    <div class="course-item">
+                        <div class="course-icon" style="background: linear-gradient(135deg, rgba(122, 90, 245, 0.2), rgba(122, 90, 245, 0.4));">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <div class="course-details">
+                            <div class="course-name">Digital Fingerprinting</div>
+                            <div class="course-desc">Learn how systems track you and methods to obscure your identity</div>
+                            <span class="course-level level-intermediate">INTERMEDIATE</span>
+                        </div>
+                    </div>
+                    <div class="course-item">
+                        <div class="course-icon" style="background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(255, 77, 77, 0.4));">
+                            <i class="fas fa-mask"></i>
+                        </div>
+                        <div class="course-details">
+                            <div class="course-name">Advanced Anonymity</div>
+                            <div class="course-desc">Tor networks, VPN chaining, and secure communication</div>
+                            <span class="course-level level-professional">PROFESSIONAL</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card card-feature animated-text">
+                <h2><i class="fas fa-graduation-cap"></i> Cybersecurity Courses</h2>
+                <p>Our courses are categorized by difficulty level with clear progression paths:</p>
+                
+                <div class="course-category">
+                    <h3><i class="fas fa-lock-open"></i> Beginner Level</h3>
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.4));">
+                                <i class="fas fa-lock-open"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Cybersecurity Fundamentals</div>
+                                <div class="course-desc">Learn core security concepts and basic defense techniques</div>
+                                <span class="course-level level-beginner">BEGINNER</span>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.4));">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Networking Essentials</div>
+                                <div class="course-desc">Understand how networks operate and basic security measures</div>
+                                <span class="course-level level-beginner">BEGINNER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-category">
+                    <h3><i class="fas fa-lock"></i> Intermediate Level</h3>
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(245, 166, 35, 0.2), rgba(245, 166, 35, 0.4));">
+                                <i class="fas fa-user-secret"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Ethical Hacking</div>
+                                <div class="course-desc">Learn penetration testing methodologies and tools</div>
+                                <span class="course-level level-intermediate">INTERMEDIATE</span>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(245, 166, 35, 0.2), rgba(245, 166, 35, 0.4));">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Web Application Security</div>
+                                <div class="course-desc">Identify and exploit common web vulnerabilities</div>
+                                <span class="course-level level-intermediate">INTERMEDIATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-category">
+                    <h3><i class="fas fa-lock"></i> Professional Level</h3>
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(255, 77, 77, 0.4));">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Red Team Operations</div>
+                                <div class="course-desc">Advanced attack simulations and adversary emulation</div>
+                                <span class="course-level level-professional">PROFESSIONAL</span>
+                            </div>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-icon" style="background: linear-gradient(135deg, rgba(255, 77, 77, 0.2), rgba(255, 77, 77, 0.4));">
+                                <i class="fas fa-shield-virus"></i>
+                            </div>
+                            <div class="course-details">
+                                <div class="course-name">Malware Analysis</div>
+                                <div class="course-desc">Reverse engineering and analyzing malicious software</div>
+                                <span class="course-level level-professional">PROFESSIONAL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card animated-text">
+                <h2><i class="fas fa-briefcase"></i> Server Job Board</h2>
+                <p>Contribute to our server and gain real-world experience:</p>
+                
+                <div class="job-board">
+                    <div class="job-list">
+                        <div class="job-item">
+                            <div class="job-title">Security Content Creator</div>
+                            <div class="job-type">VOLUNTEER</div>
+                            <div class="job-desc">Develop educational materials and tutorials for our community</div>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                        <div class="job-item">
+                            <div class="job-title">Lab Moderator</div>
+                            <div class="job-type">VOLUNTEER</div>
+                            <div class="job-desc">Monitor and assist members in our training environments</div>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                        <div class="job-item">
+                            <div class="job-title">Pentest Team Member</div>
+                            <div class="job-type">INTERNSHIP</div>
+                            <div class="job-desc">Participate in our internal security testing projects</div>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="social-links animated-text">
+                <a href="#" class="social-link discord-link">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="#" class="social-link twitter-link">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-link youtube-link">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" class="social-link github-link">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+
+            <footer class="animated-text">
+                <p>آ© 2023 CyberGuard Academy | Cybersecurity Learning Community</p>
+                <p>All content is for educational purposes only | Ethical hacking practices enforced</p>
+                <p>Last updated: November 2023 | <span id="current-year"></span></p>
+            </footer>
+        </div>
     </div>
 
     <script>
-        // 11. ثغرة eval() خطيرة
-        function executeCode() {
-            eval(prompt('أدخل كود جافاسكريبت لتنفيذه:'));
+        // Loading screen functionality
+        window.addEventListener('load', function() {
+            // Simulate loading process
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.opacity = '0';
+                
+                // Remove loading screen after fade out
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('main-content').style.opacity = '1';
+                    
+                    // Start main content animations
+                    initMainContent();
+                }, 500);
+            }, 2500); // Show loading screen for 2.5 seconds
+        });
+
+        // Info modal functionality
+        const infoBtn = document.getElementById('infoBtn');
+        const infoModal = document.getElementById('infoModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalText = document.getElementById('modalText');
+
+        const infoMessage = `This is just a preview of what you'll learn in our academy. In reality, you'll gain much deeper knowledge, including:
+
+â€¢ Advanced identity hiding techniques (not just using ready-made tools)
+â€¢ Creating secure communication channels from scratch
+â€¢ Building your own anonymity networks
+â€¢ Methods to avoid logging and tracking at the system level
+â€¢ Digital fingerprint manipulation techniques
+â€¢ Secure operating system configurations
+
+All our courses emphasize understanding the underlying principles rather than just using pre-built tools. You'll learn how these systems work at a fundamental level, enabling you to adapt to new security challenges.`;
+
+        infoBtn.addEventListener('click', function() {
+            infoModal.style.display = 'flex';
+            typeModalText(infoMessage);
+        });
+
+        closeModal.addEventListener('click', function() {
+            infoModal.style.display = 'none';
+            modalText.innerHTML = '';
+        });
+
+        function typeModalText(text) {
+            let i = 0;
+            modalText.innerHTML = '';
+            
+            function typing() {
+                if (i < text.length) {
+                    // Handle line breaks
+                    if (text.substring(i, i+2) === '\n\n') {
+                        modalText.innerHTML += '<br><br>';
+                        i += 2;
+                    } else if (text.charAt(i) === '\n') {
+                        modalText.innerHTML += '<br>';
+                        i++;
+                    } else if (text.substring(i, i+2) === 'â€¢ ') {
+                        modalText.innerHTML += 'â€¢ ';
+                        i += 2;
+                    } else {
+                        modalText.innerHTML += text.charAt(i);
+                        i++;
+                    }
+                    
+                    // Scroll to bottom
+                    modalText.scrollTop = modalText.scrollHeight;
+                    
+                    // Random speed between 10-30ms per character
+                    const speed = Math.random() * 20 + 10;
+                    setTimeout(typing, speed);
+                } else {
+                    // Remove cursor when done
+                    modalText.classList.remove('typing-text');
+                }
+            }
+            
+            // Add cursor initially
+            modalText.classList.add('typing-text');
+            typing();
         }
 
-        // 12. ثغرة Logging الضعيفة
-        console.log('بيانات حساسة: ', localStorage.getItem('secret'));
+        function initMainContent() {
+            // Typing animation for title
+            const title = "CyberGuard Academy";
+            const subtitle = "Cybersecurity Learning & Collaboration Hub | Est. 2023";
+            const titleElement = document.getElementById('main-title');
+            const subtitleElement = document.getElementById('subtitle');
+            
+            // Animate elements on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.animated-text').forEach(el => {
+                observer.observe(el);
+            });
 
-        // 13. ثغرة Third-party Scripts
-        const script = document.createElement('script');
-        script.src = 'https://unsecure-cdn.com/library.js';
-        document.head.appendChild(script);
-    </script>
+            // Type out the title
+            let i = 0;
+            function typeTitle() {
+                if (i < title.length) {
+                    titleElement.innerHTML = title.substring(0, i + 1) + '<span class="typing"></span>';
+                    i++;
+                    setTimeout(typeTitle, 150);
+                } else {
+                    titleElement.innerHTML = title;
+                    typeSubtitle();
+                }
+            }
 
-    <!-- 14. نموذج CSRF مخفي -->
-    <form id="hidden-form" action="https://example.com/change-email" method="POST" style="display: none;">
-        <input type="hidden" name="email" value="hacker@evil.com">
-    </form>
+            // Type out the subtitle after title is done
+            let j = 0;
+            function typeSubtitle() {
+                if (j < subtitle.length) {
+                    subtitleElement.innerHTML = subtitle.substring(0, j + 1) + '<span class="typing"></span>';
+                    j++;
+                    setTimeout(typeSubtitle, 50);
+                } else {
+                    subtitleElement.innerHTML = subtitle;
+                }
+            }
 
-    <!-- 15. ثغرة WebSocket غير آمن -->
-    <script>
-        const ws = new WebSocket('wss://echo.websocket.org');
-        ws.onmessage = function(event) {
-            document.getElementById('xss-output').innerHTML = event.data;
-        };
+            // Animate statistics counting up
+            function animateCount(elementId, target, duration = 2000) {
+                const element = document.getElementById(elementId);
+                const start = 0;
+                const increment = target / (duration / 16);
+                let current = start;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        clearInterval(timer);
+                        current = target;
+                    }
+                    element.textContent = Math.floor(current);
+                }, 16);
+            }
+
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Start animations
+            typeTitle();
+            
+            setTimeout(() => {
+                animateCount('members-count', 1850);
+                animateCount('courses-count', 32);
+                animateCount('experts-count', 127);
+                animateCount('projects-count', 48);
+            }, 1000);
+        }
     </script>
 </body>
 </html>
