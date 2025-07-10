@@ -1,684 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Advanced Digital Fingerprint with Network Intelligence</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #3b82f6;
-      --primary-dark: #2563eb;
-      --primary-light: #93c5fd;
-      --background: #0f172a;
-      --card-bg: #1e293b;
-      --text: #f8fafc;
-      --text-secondary: #e2e8f0;
-      --accent: #f59e0b;
-      --success: #10b981;
-      --danger: #ef4444;
-      --border: #334155;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      background: var(--background);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      padding: 2rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 1.6;
-    }
-    
-    .container {
-      width: 100%;
-      max-width: 1200px;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      animation: fadeIn 0.8s ease-out;
-    }
-    
-    h1 {
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-    
-    .subtitle {
-      color: var(--text-secondary);
-      font-weight: 400;
-      font-size: 1.1rem;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .card {
-      background: var(--card-bg);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      animation: slideUp 0.5s ease-out;
-      height: 100%;
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-    }
-    
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .card-icon {
-      color: var(--primary);
-      font-size: 1.25rem;
-    }
-    
-    .card-title {
-      font-weight: 600;
-      font-size: 1.25rem;
-      color: var(--primary-light);
-    }
-    
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-      border-bottom: 1px dashed var(--border);
-    }
-    
-    .info-item:last-child {
-      border-bottom: none;
-    }
-    
-    .info-label {
-      font-weight: 500;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .info-icon {
-      color: var(--primary);
-      font-size: 0.9rem;
-    }
-    
-    .info-value {
-      font-family: 'Roboto Mono', monospace;
-      text-align: right;
-      color: var(--text-secondary);
-      word-break: break-word;
-      max-width: 60%;
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .badge-success {
-      background-color: rgba(16, 185, 129, 0.2);
-      color: var(--success);
-    }
-    
-    .badge-warning {
-      background-color: rgba(245, 158, 11, 0.2);
-      color: var(--accent);
-    }
-    
-    .badge-danger {
-      background-color: rgba(239, 68, 68, 0.2);
-      color: var(--danger);
-    }
-    
-    .badge-info {
-      background-color: rgba(59, 130, 246, 0.2);
-      color: var(--primary);
-    }
-    
-    .progress-container {
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 0.5rem;
-      margin-top: 0.5rem;
-      overflow: hidden;
-    }
-    
-    .progress-bar {
-      height: 6px;
-      border-radius: 0.5rem;
-      background: linear-gradient(90deg, var(--primary), var(--primary-light));
-      transition: width 1s ease-in-out;
-    }
-    
-    footer {
-      margin-top: 2rem;
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-    
-    .fingerprint-value {
-      font-size: 0.75rem;
-      user-select: all;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes slideUp {
-      from { 
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .info-value {
-        max-width: 50%;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTOUH WORKOUT 🔥</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000, #1a0033, #0a043c);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(106, 17, 203, 0.7); }
+            100% { text-shadow: 0 0 20px rgba(37, 117, 252, 0.8); }
+        }
+
+        /* Days Navigation */
+        .days-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-btn {
+            background: rgba(106, 17, 203, 0.2);
+            border: 2px solid #6a11cb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .day-btn:hover {
+            background: rgba(106, 17, 203, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .day-btn.active {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            box-shadow: 0 0 15px rgba(106, 17, 203, 0.7);
+        }
+
+        /* Workout Sections */
+        .workout-section {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 1px solid #6a11cb;
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .workout-section.active {
+            display: block;
+        }
+
+        .workout-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6a11cb;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        .exercise-list {
+            list-style: none;
+        }
+
+        .exercise-list li {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #2575fc;
+            transform: translateX(-20px);
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-list li:hover {
+            transform: translateX(0) scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideIn {
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2rem; }
+            .workout-section { padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.8rem; }
+            .day-btn { padding: 8px 15px; font-size: 0.9rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>
-        <i class="fas fa-fingerprint"></i>
-        Advanced Digital Fingerprint Scanner
-      </h1>
-      <p class="subtitle">Comprehensive device and network intelligence with real-time analysis</p>
-    </header>
-    
-    <div class="grid">
-      <!-- Network Information Card -->
-      <section class="card" aria-label="Network and Connectivity Information">
-        <div class="card-header">
-          <i class="fas fa-network-wired card-icon"></i>
-          <h2 class="card-title">Network Intelligence</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-globe info-icon"></i>
-            Public IP
-          </span>
-          <span class="info-value" id="publicIP">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-server info-icon"></i>
-            Local IP
-          </span>
-          <span class="info-value" id="localIP">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-wifi info-icon"></i>
-            Network Type
-          </span>
-          <span class="info-value" id="connectionType">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-tachometer-alt info-icon"></i>
-            Connection Speed
-          </span>
-          <span class="info-value" id="connectionSpeed">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-map-marker-alt info-icon"></i>
-            Approximate Location
-          </span>
-          <span class="info-value" id="approximateLocation">Scanning...</span>
-        </div>
-      </section>
-      
-      <!-- Device Information Card -->
-      <section class="card" aria-label="Device and System Information">
-        <div class="card-header">
-          <i class="fas fa-laptop-code card-icon"></i>
-          <h2 class="card-title">Device Profile</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-mobile-alt info-icon"></i>
-            Device Type
-          </span>
-          <span class="info-value" id="deviceType">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-robot info-icon"></i>
-            Operating System
-          </span>
-          <span class="info-value" id="os">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-window-maximize info-icon"></i>
-            Browser
-          </span>
-          <span class="info-value" id="browser">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-desktop info-icon"></i>
-            Screen Resolution
-          </span>
-          <span class="info-value" id="screen">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-language info-icon"></i>
-            Language
-          </span>
-          <span class="info-value" id="language">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-clock info-icon"></i>
-            Timezone
-          </span>
-          <span class="info-value" id="timezone">Scanning...</span>
-        </div>
-      </section>
-      
-      <!-- Hardware Specifications Card -->
-      <section class="card" aria-label="Hardware Specifications">
-        <div class="card-header">
-          <i class="fas fa-microchip card-icon"></i>
-          <h2 class="card-title">Hardware Specs</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-microchip info-icon"></i>
-            CPU Cores
-          </span>
-          <span class="info-value" id="cores">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-memory info-icon"></i>
-            RAM Capacity
-          </span>
-          <span class="info-value" id="ram">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-gamepad info-icon"></i>
-            GPU Renderer
-          </span>
-          <span class="info-value" id="gpu">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-bolt info-icon"></i>
-            Performance
-          </span>
-          <span class="info-value" id="performance">Scanning...</span>
-        </div>
-        <div class="progress-container">
-          <div class="progress-bar" id="performanceBar" style="width: 0%"></div>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-cube info-icon"></i>
-            WebAssembly
-          </span>
-          <span class="info-value" id="wasm">Scanning...</span>
-        </div>
-      </section>
-      
-      <!-- Privacy & Security Card -->
-      <section class="card" aria-label="Privacy and Security Analysis">
-        <div class="card-header">
-          <i class="fas fa-shield-alt card-icon"></i>
-          <h2 class="card-title">Security Analysis</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-user-shield info-icon"></i>
-            VPN Detection
-          </span>
-          <span class="info-value" id="vpn">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-bug info-icon"></i>
-            Vulnerability Check
-          </span>
-          <span class="info-value" id="vulnCheck">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-cookie info-icon"></i>
-            Cookies Enabled
-          </span>
-          <span class="info-value" id="cookies">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-database info-icon"></i>
-            Local Storage
-          </span>
-          <span class="info-value" id="storage">Scanning...</span>
-        </div>
-      </section>
-      
-      <!-- Permissions Card -->
-      <section class="card" aria-label="Device Permissions Status">
-        <div class="card-header">
-          <i class="fas fa-lock card-icon"></i>
-          <h2 class="card-title">Permissions</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-microphone info-icon"></i>
-            Microphone
-          </span>
-          <span class="info-value" id="micAccess">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-camera info-icon"></i>
-            Camera
-          </span>
-          <span class="info-value" id="camAccess">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-map-marked-alt info-icon"></i>
-            Location
-          </span>
-          <span class="info-value" id="geoAccess">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-bell info-icon"></i>
-            Notifications
-          </span>
-          <span class="info-value" id="notifAccess">Scanning...</span>
-        </div>
-      </section>
-      
-      <!-- Digital Fingerprint Card -->
-      <section class="card" aria-label="Digital Fingerprint Information">
-        <div class="card-header">
-          <i class="fas fa-fingerprint card-icon"></i>
-          <h2 class="card-title">Digital Fingerprint</h2>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-id-card info-icon"></i>
-            Canvas Fingerprint
-          </span>
-          <span class="info-value" id="canvasFingerprint">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-wave-square info-icon"></i>
-            Audio Fingerprint
-          </span>
-          <span class="info-value" id="audioFingerprint">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-hashtag info-icon"></i>
-            Composite Hash
-          </span>
-          <span class="info-value fingerprint-value" id="fingerprint">Scanning...</span>
-        </div>
-        
-        <div class="info-item">
-          <span class="info-label">
-            <i class="fas fa-clock info-icon"></i>
-            Scan Timestamp
-          </span>
-          <span class="info-value" id="currentTime">Scanning...</span>
-        </div>
-      </section>
+    <!-- Header -->
+    <div class="header">
+        <h1>FTOUH WORKOUT 🔥</h1>
     </div>
-    
-    <footer>
-      <p>Advanced Fingerprint Scanner v2.5 â€¢ Last updated: <span id="currentDate"></span></p>
-    </footer>
-  </div>
 
-  <script>
-    // Enhanced SHA-256 function with error handling
-    async function sha256(str) {
-      try {
-        const buffer = new TextEncoder().encode(str);
-        const hash = await crypto.subtle.digest('SHA-256', buffer);
-        return Array.from(new Uint8Array(hash))
-          .map(b => b.toString(16).padStart(2, '0'))
-          .join('');
-      } catch (error) {
-        console.error("SHA-256 Error:", error);
-        return "error-" + Math.random().toString(36).substring(2, 15);
-      }
-    }
+    <!-- Days Navigation -->
+    <div class="days-nav">
+        <button class="day-btn" data-day="monday">Monday</button>
+        <button class="day-btn" data-day="tuesday">Tuesday</button>
+        <button class="day-btn" data-day="wednesday">Wednesday</button>
+        <button class="day-btn" data-day="thursday">Thursday</button>
+        <button class="day-btn" data-day="friday">Friday</button>
+        <button class="day-btn" data-day="saturday">Saturday</button>
+    </div>
 
-    // Advanced Canvas Fingerprinting with more entropy
-    function getCanvasFingerprint() {
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Draw complex shapes and text
-        ctx.fillStyle = 'rgb(128, 0, 128)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = 'rgb(0, 255, 0)';
-        ctx.strokeRect(5, 5, canvas.width-10, canvas.height-10);
-        
-        ctx.textBaseline = 'top';
-        ctx.font = "14px 'Arial'";
-        ctx.fillStyle = 'rgb(255, 255, 0)';
-        ctx.fillText('Fingerprint@' + new Date().getFullYear(), 15, 15);
-        
-        // Add more entropy with gradients
-        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradient.addColorStop(0, 'rgba(255, 0, 0, 0.5)');
-        gradient.addColorStop(1, 'rgba(0, 0, 255, 0.5)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(10, 10, canvas.width-20, canvas.height-20);
-        
-        return sha256(canvas.toDataURL());
-      } catch (error) {
-        console.error("Canvas Fingerprint Error:", error);
-        return Promise.resolve("canvas-error");
-      }
-    }
+    <!-- Monday Workout -->
+    <div class="workout-section" id="monday">
+        <h2>Monday Workout</h2>
+        <ul class="exercise-list">
+            <li>25 × 3 Crunch</li>
+            <li>15 × 3 Leg Raises</li>
+            <li>20 × 3 Squat</li>
+            <li>15 × 3 Knee Push Up</li>
+            <li>14 × 2 Jumping Squat</li>
+        </ul>
+    </div>
 
-    // Enhanced Audio Fingerprinting
-    async function getAudioFingerprint() {
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const analyser = audioContext.createAnalyser();
-        
-        oscillator.type = 'triangle';
-        oscillator.frequency.value = 10000;
-        oscillator.connect(analyser);
-        analyser.connect(audioContext.destination);
-        oscillator.start();
-        
-        const timeDomainData = new Float32Array(analyser.fftSize);
-        analyser.getFloatTimeDomainData(timeDomainData);
-        
-        oscillator.stop(audioContext.currentTime + 0.01);
-        
-        // Wait for the audio to process
-        await new Promise(resolve => setTimeout(resolve, 50));
-        
-        return sha256(timeDomainData.join(','));
-      } catch (error) {
-        console.error("Audio Fingerprint Error:", error);
-        return "audio-error";
-      }
-    }
+    <!-- Tuesday Workout -->
+    <div class="workout-section" id="tuesday">
+        <h2>Tuesday Workout</h2>
+        <ul class="exercise-list">
+            <li>15 × 3 Crunch</li>
+            <li>20 × 2 Jumping Squat</li>
+            <li>50 × 2 Jumping Jacks</li>
+            <li>33 × 4 Butt Kick</li>
+        </ul>
+    </div>
 
-    // Improved local IP detection with WebRTC
-    function getLocalIPs() {
-      return new Promise((resolve) => {
-        const ips = new Set();
-        const RTCPeerConnection = window.RTCPeerConnection || 
-                                window.webkitRTCPeerConnection || 
-                                window.mozRTCPeerConnection;
-        
-        if (!RTCPeerConnection) {
-          resolve([]);
-          return;
-        }
-        
-        const pc = new RTCPeerConnection({ iceServers: [] });
-        pc.createDataChannel("");
-        
-        pc.createOffer()
-          .then(offer => pc.setLocalDescription(offer))
-          .catch(() => resolve([]));
-        
-        pc.onicecandidate = (event) => {
-          if (!event || !event.candidate) {
-            resolve(Array.from(ips));
-            return;
-          }
-          
-          const candidate = event.candidate.candidate;
-          const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
-          const ipMatch = candidate.match(ipRegex);
-          
-          if (ipMatch && isPrivateIP(ipMatch[1])) {
-            ips.add(ipMatch[1]);
-          }
-        };
-      });
-    }
+    <!-- Wednesday (Rest) -->
+    <div class="workout-section" id="wednesday">
+        <h2>Wednesday - Rest Day</h2>
+        <ul class="exercise-list">
+            <li>No Workout - Recover Well! 💤</li>
+        </ul>
+    </div>
 
-    function isPrivateIP(ip) {
-      return /^10\.|^192\.168\.|^172\.(1[6-9]|2\d|3[0-1])\.|^fd[0-9a-f]{2}:|^::1$|^fc00::/i.test(ip);
-    }
+    <!-- Thursday Workout -->
+    <div class="workout-section" id="thursday">
+        <h2>Thursday Workout</h2>
+        <ul class="exercise-list">
+            <li>17 × 3 Knee Push Up</li>
+            <li>30 × 2 Flutter Kicks</li>
+            <li>45 × 3 Jumping Jacks</li>
+        </ul>
+    </div>
 
-    // Enhanced public IP detection with fallback
-    async function getPublicIP() {
-      const services = [
-        "https://api.ipify.org?format=json",
-        "https://ipapi.co/json/",
-        "https://ipinfo.io/json"
-      ];
-      
-      for (const service of services) {
-        try {
-          const response = await fetch(service, { timeout: 3000 });
-          const data = await response.json();
-          return data.ip || data.ipAddress || "Unknown";
-        } catch (error) {
-          console.log(`Failed to fetch IP from ${service}`);
-          continue;
-        }
-      }
-      
-      return "Unknown (all services failed)";
-    }
+    <!-- Friday Workout -->
+    <div class="workout-section" id="friday">
+        <h2>Friday Workout</h2>
+        <ul class="exercise-list">
+            <li>25 × 3 Crunch</li>
+            <li>15 × 3 Leg Raises</li>
+            <li>15 × 3 Bicycle Crunches</li>
+            <li>30 × 2 Butt Kick</li>
+            <li>20 × 4 Jumping Jacks</li>
+        </ul>
+    </div>
 
-    // Enhanced network information
-    function getNetworkInfo() {
-      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      
-      if (!connection) {
-        return { 
-          type: 'Unknown', 
-          downlink: 'Unknown', 
-          effectiveType: 'Unknown',
-          rtt: 'Unknown'
-        };
-      }
-      
-      return {
-        type: connection.type || 'Unknown',
-        downlink: connection.downlink ? `${connection.downlink} Mbps` : 'Unknown',
-        effectiveType: connection.effectiveType || 'Unknown',
+    <!-- Saturday Workout -->
+    <div class="workout-section" id="saturday">
+        <h2>Saturday Workout</h2>
+        <ul class="exercise-list">
+            <li>13 × 2 Knee Push Up</li>
+            <li>10 × 3 Leg Raises</li>
+            <li>22 × 2 Crunch</li>
+        </ul>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dayBtns = document.querySelectorAll('.day-btn');
+            const workoutSections = document.querySelectorAll('.workout-section');
+
+            // Default: Show Monday
+            document.querySelector('[data-day="monday"]').classList.add('active');
+            document.getElementById('monday').classList.add('active');
+
+            // Switch between days
+            dayBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const day = this.getAttribute('data-day');
+
+                    // Remove active class from all buttons and sections
+                    dayBtns.forEach(btn => btn.classList.remove('active'));
+                    workoutSections.forEach(section => section.classList.remove('active'));
+
+                    // Add active class to clicked button and corresponding section
+                    this.classList.add('active');
+                    document.getElementById(day).classList.add('active');
+
+                    // Animate exercises
+                    animateExercises();
+                });
+            });
+
+            // Animate exercises on load/switch
+            function animateExercises() {
+                const activeSection = document.querySelector('.workout-section.active');
+                const exercises = activeSection.querySelectorAll('.exercise-list li');
+
+                exercises.forEach((exercise, index) => {
+                    exercise.style.animation = 'none';
+                    setTimeout(() => {
+                        exercise.style.animation = `slideIn 0.5s forwards ${index * 0.1}s`;
+                    }, 10);
+                });
+            }
+
+            // Initial animation
+            animateExercises();
+        });
+    </script>
+</body>
+</html>
