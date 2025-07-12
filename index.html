@@ -1,270 +1,508 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FTOUH WORKOUT 🔥</title>
+    <title>برنامجي الرياضي الأسبوعي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Reset */
+        :root {
+            --primary: #4a6bff;
+            --secondary: #ff6b6b;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --rest-day: #6c757d;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #000000, #1a0033, #0a043c);
+            background-color: #f5f7ff;
+            color: var(--dark);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        .header {
             text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
-        .header h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
-            animation: glow 2s infinite alternate;
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px rgba(106, 17, 203, 0.7); }
-            100% { text-shadow: 0 0 20px rgba(37, 117, 252, 0.8); }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-
-        /* Days Navigation */
-        .days-nav {
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .week-nav {
             display: flex;
             justify-content: center;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
-            gap: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
+            gap: 0.5rem;
         }
-
+        
         .day-btn {
-            background: rgba(106, 17, 203, 0.2);
-            border: 2px solid #6a11cb;
-            color: white;
-            padding: 10px 20px;
+            background-color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
             border-radius: 50px;
-            font-weight: bold;
             cursor: pointer;
+            font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-
+        
         .day-btn:hover {
-            background: rgba(106, 17, 203, 0.5);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-
+        
         .day-btn.active {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            box-shadow: 0 0 15px rgba(106, 17, 203, 0.7);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
         }
-
-        /* Workout Sections */
-        .workout-section {
-            display: none;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
+        
+        .day-btn.rest-day {
+            background-color: var(--rest-day);
+            color: white;
+        }
+        
+        .workout-container {
+            background-color: white;
             border-radius: 15px;
-            border: 1px solid #6a11cb;
-            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.2);
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: none;
             animation: fadeIn 0.5s ease;
         }
-
-        .workout-section.active {
+        
+        .workout-container.active {
             display: block;
         }
-
-        .workout-section h2 {
+        
+        .day-title {
             text-align: center;
-            margin-bottom: 20px;
-            color: #6a11cb;
-            font-size: 2rem;
-            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 0.5rem;
         }
-
-        .exercise-list {
-            list-style: none;
+        
+        .day-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
         }
-
-        .exercise-list li {
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #2575fc;
-            transform: translateX(-20px);
-            opacity: 0;
-            animation: slideIn 0.5s forwards;
+        
+        .exercises-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .exercise-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
             transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
         }
-
-        .exercise-list li:hover {
-            transform: translateX(0) scale(1.02);
-            background: rgba(255, 255, 255, 0.1);
+        
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-
-        @keyframes slideIn {
-            to { transform: translateX(0); opacity: 1; }
+        
+        .exercise-name {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 600;
         }
-
+        
+        .exercise-sets {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .exercise-desc {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .rest-day-container {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .rest-icon {
+            font-size: 4rem;
+            color: var(--rest-day);
+            margin-bottom: 1rem;
+        }
+        
+        .rest-title {
+            font-size: 2rem;
+            color: var(--rest-day);
+            margin-bottom: 1rem;
+        }
+        
+        .rest-text {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .motivation {
+            font-style: italic;
+            margin-top: 1rem;
+            color: var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: var(--dark);
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        .progress-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .progress-title {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 1s ease;
+            border-radius: 10px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* Responsive Design */
+        
         @media (max-width: 768px) {
-            .header h1 { font-size: 2.2rem; }
-            .workout-section { padding: 15px; }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.8rem; }
-            .day-btn { padding: 8px 15px; font-size: 0.9rem; }
+            .exercises-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>FTOUH WORKOUT 🔥</h1>
+    <header>
+        <h1>برنامجي الرياضي الأسبوعي</h1>
+        <p class="subtitle">كن أقوى مع هذا البرنامج المصمم خصيصاً لك</p>
+    </header>
+    
+    <div class="container">
+        <div class="progress-container">
+            <h3 class="progress-title">تقدمك هذا الأسبوع</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">0% مكتمل</p>
+        </div>
+        
+        <div class="week-nav">
+            <button class="day-btn active" data-day="monday">
+                <i class="fas fa-calendar-day"></i> الإثنين
+            </button>
+            <button class="day-btn" data-day="tuesday">
+                <i class="fas fa-calendar-day"></i> الثلاثاء
+            </button>
+            <button class="day-btn rest-day" data-day="wednesday">
+                <i class="fas fa-bed"></i> الأربعاء
+            </button>
+            <button class="day-btn" data-day="thursday">
+                <i class="fas fa-calendar-day"></i> الخميس
+            </button>
+            <button class="day-btn" data-day="friday">
+                <i class="fas fa-calendar-day"></i> الجمعة
+            </button>
+            <button class="day-btn" data-day="saturday">
+                <i class="fas fa-calendar-day"></i> السبت
+            </button>
+            <button class="day-btn rest-day" data-day="sunday">
+                <i class="fas fa-bed"></i> الأحد
+            </button>
+        </div>
+        
+        <!-- الإثنين -->
+        <div class="workout-container active" id="monday">
+            <h2 class="day-title">تمارين يوم الإثنين</h2>
+            <div class="exercises-list">
+                <div class="exercise-card">
+                    <h3 class="exercise-name">كرنش (Crunch)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 25 تكرار</p>
+                    <p class="exercise-desc">تمرين ممتاز لتقوية عضلات البطن العلوية. استلقِ على ظهرك مع ثني الركبتين وارفع الجزء العلوي من جسمك نحو ركبتيك.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">رفع الأرجل (Leg Raises)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 12 تكرار</p>
+                    <p class="exercise-desc">استلقِ على ظهرك وارفع ساقيك معاً بشكل مستقيم إلى الأعلى ثم اخفضهما ببطء. هذا التمرين يستهدف عضلات البطن السفلية.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">القفز بالرجلين (Jumping Jacks)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 4 مجموعات × 40 تكرار</p>
+                    <p class="exercise-desc">تمرين كارديو ممتاز يرفع معدل ضربات القلب ويحرق السعرات الحرارية. قفز مع فتح الرجلين والذراعين في نفس الوقت.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ركل المؤخرة (Butt Kick)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 50 تكرار</p>
+                    <p class="exercise-desc">ركض في المكان مع محاولة لمس المؤخرة بكعب القدم. يساعد على تحسين مرونة عضلات الفخذ الخلفية.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الثلاثاء -->
+        <div class="workout-container" id="tuesday">
+            <h2 class="day-title">تمارين يوم الثلاثاء</h2>
+            <div class="exercises-list">
+                <div class="exercise-card">
+                    <h3 class="exercise-name">كرنش (Crunch)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 25 تكرار</p>
+                    <p class="exercise-desc">تمرين ممتاز لتقوية عضلات البطن العلوية. استلقِ على ظهرك مع ثني الركبتين وارفع الجزء العلوي من جسمك نحو ركبتيك.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">رفع الأرجل (Leg Raises)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 12 تكرار</p>
+                    <p class="exercise-desc">استلقِ على ظهرك وارفع ساقيك معاً بشكل مستقيم إلى الأعلى ثم اخفضهما ببطء. هذا التمرين يستهدف عضلات البطن السفلية.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">القفز بالرجلين (Jumping Jacks)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 4 مجموعات × 40 تكرار</p>
+                    <p class="exercise-desc">تمرين كارديو ممتاز يرفع معدل ضربات القلب ويحرق السعرات الحرارية. قفز مع فتح الرجلين والذراعين في نفس الوقت.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ركل المؤخرة (Butt Kick)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 50 تكرار</p>
+                    <p class="exercise-desc">ركض في المكان مع محاولة لمس المؤخرة بكعب القدم. يساعد على تحسين مرونة عضلات الفخذ الخلفية.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الأربعاء -->
+        <div class="workout-container" id="wednesday">
+            <div class="rest-day-container">
+                <div class="rest-icon">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <h2 class="rest-title">يوم راحة</h2>
+                <p class="rest-text">يحتاج جسمك إلى الراحة لاستعادة الطاقة وبناء العضلات. استمتع بيوم راحة واستعد لليوم التالي بنشاط!</p>
+                <p class="motivation">"الراحة جزء لا يتجزأ من النجاح"</p>
+            </div>
+        </div>
+        
+        <!-- الخميس -->
+        <div class="workout-container" id="thursday">
+            <h2 class="day-title">تمارين يوم الخميس</h2>
+            <div class="exercises-list">
+                <div class="exercise-card">
+                    <h3 class="exercise-name">القفز بالرجلين (Jumping Jacks)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 50 تكرار</p>
+                    <p class="exercise-desc">تمرين كارديو ممتاز لتحسين الدورة الدموية وحرق السعرات الحرارية. قفز مع فتح الرجلين والذراعين في نفس الوقت.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">رفع ربلة الساق (Calf Raises)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 33 تكرار</p>
+                    <p class="exercise-desc">قف على أصابع قدميك ثم اخفض كعبيك. هذا التمرين يقوي عضلات ربلة الساق ويحسن التوازن.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">القرفصاء (Squat)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 35 تكرار</p>
+                    <p class="exercise-desc">تمرين أساسي لتقوية عضلات الفخذين والأرداف. حافظ على استقامة ظهرك أثناء النزول.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">كرنش (Crunch)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 2 مجموعات × 20 تكرار</p>
+                    <p class="exercise-desc">تمرين فعال لعضلات البطن العلوية. ركز على استخدام عضلات بطنك وليس رقبتك.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الجمعة -->
+        <div class="workout-container" id="friday">
+            <h2 class="day-title">تمارين يوم الجمعة</h2>
+            <div class="exercises-list">
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ضغط الركبتين (Knee Push Up)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 8 تكرار</p>
+                    <p class="exercise-desc">تمرين ممتاز للمبتدئين لتقوية عضلات الصدر والذراعين. اخفض جسمك ببطء مع الحفاظ على استقامة الظهر.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">قرفصاء واسعة (Wide Squat)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 27 تكرار</p>
+                    <p class="exercise-desc">افتح قدميك أكثر من عرض الكتفين لأداء القرفصاء. هذا التمرين يستهدف الأرداف والفخذين الداخليين.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ركل المؤخرة (Butt Kick)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 2 مجموعات × 40 تكرار</p>
+                    <p class="exercise-desc">ركض في المكان مع محاولة لمس المؤخرة بكعب القدم. يحسن المرونة والقدرة على التحمل.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- السبت -->
+        <div class="workout-container" id="saturday">
+            <h2 class="day-title">تمارين يوم السبت</h2>
+            <div class="exercises-list">
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ضغط الركبتين (Knee Push Up)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 8 تكرار</p>
+                    <p class="exercise-desc">تمرين ممتاز للمبتدئين لتقوية عضلات الصدر والذراعين. اخفض جسمك ببطء مع الحفاظ على استقامة الظهر.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">قرفصاء واسعة (Wide Squat)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 3 مجموعات × 27 تكرار</p>
+                    <p class="exercise-desc">افتح قدميك أكثر من عرض الكتفين لأداء القرفصاء. هذا التمرين يستهدف الأرداف والفخذين الداخليين.</p>
+                </div>
+                <div class="exercise-card">
+                    <h3 class="exercise-name">ركل المؤخرة (Butt Kick)</h3>
+                    <p class="exercise-sets"><i class="fas fa-redo"></i> 2 مجموعات × 40 تكرار</p>
+                    <p class="exercise-desc">ركض في المكان مع محاولة لمس المؤخرة بكعب القدم. يحسن المرونة والقدرة على التحمل.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الأحد -->
+        <div class="workout-container" id="sunday">
+            <div class="rest-day-container">
+                <div class="rest-icon">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <h2 class="rest-title">يوم راحة</h2>
+                <p class="rest-text">استمتع بيوم الراحة الثاني في الأسبوع. يمكنك القيام بتمارين خفيفة مثل المشي أو تمارين التمدد إذا أردت.</p>
+                <p class="motivation">"الراحة الجيدة هي أساس الأداء الممتاز"</p>
+            </div>
+        </div>
     </div>
-
-    <!-- Days Navigation -->
-    <div class="days-nav">
-        <button class="day-btn" data-day="monday">Monday</button>
-        <button class="day-btn" data-day="tuesday">Tuesday</button>
-        <button class="day-btn" data-day="wednesday">Wednesday</button>
-        <button class="day-btn" data-day="thursday">Thursday</button>
-        <button class="day-btn" data-day="friday">Friday</button>
-        <button class="day-btn" data-day="saturday">Saturday</button>
-    </div>
-
-    <!-- Monday Workout -->
-    <div class="workout-section" id="monday">
-        <h2>Monday Workout</h2>
-        <ul class="exercise-list">
-            <li>25 × 3 Crunch</li>
-            <li>15 × 3 Leg Raises</li>
-            <li>20 × 3 Squat</li>
-            <li>15 × 3 Knee Push Up</li>
-            <li>14 × 2 Jumping Squat</li>
-        </ul>
-    </div>
-
-    <!-- Tuesday Workout -->
-    <div class="workout-section" id="tuesday">
-        <h2>Tuesday Workout</h2>
-        <ul class="exercise-list">
-            <li>15 × 3 Crunch</li>
-            <li>20 × 2 Jumping Squat</li>
-            <li>50 × 2 Jumping Jacks</li>
-            <li>33 × 4 Butt Kick</li>
-        </ul>
-    </div>
-
-    <!-- Wednesday (Rest) -->
-    <div class="workout-section" id="wednesday">
-        <h2>Wednesday - Rest Day</h2>
-        <ul class="exercise-list">
-            <li>No Workout - Recover Well! 💤</li>
-        </ul>
-    </div>
-
-    <!-- Thursday Workout -->
-    <div class="workout-section" id="thursday">
-        <h2>Thursday Workout</h2>
-        <ul class="exercise-list">
-            <li>17 × 3 Knee Push Up</li>
-            <li>30 × 2 Flutter Kicks</li>
-            <li>45 × 3 Jumping Jacks</li>
-        </ul>
-    </div>
-
-    <!-- Friday Workout -->
-    <div class="workout-section" id="friday">
-        <h2>Friday Workout</h2>
-        <ul class="exercise-list">
-            <li>25 × 3 Crunch</li>
-            <li>15 × 3 Leg Raises</li>
-            <li>15 × 3 Bicycle Crunches</li>
-            <li>30 × 2 Butt Kick</li>
-            <li>20 × 4 Jumping Jacks</li>
-        </ul>
-    </div>
-
-    <!-- Saturday Workout -->
-    <div class="workout-section" id="saturday">
-        <h2>Saturday Workout</h2>
-        <ul class="exercise-list">
-            <li>13 × 2 Knee Push Up</li>
-            <li>10 × 3 Leg Raises</li>
-            <li>22 × 2 Crunch</li>
-        </ul>
-    </div>
-
-    <!-- JavaScript -->
+    
+    <footer>
+        <p>برنامج التمارين الأسبوعي &copy; 2023 | صمم بحب لمساعدتك على تحقيق أهدافك الرياضية</p>
+    </footer>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const dayBtns = document.querySelectorAll('.day-btn');
-            const workoutSections = document.querySelectorAll('.workout-section');
-
-            // Default: Show Monday
-            document.querySelector('[data-day="monday"]').classList.add('active');
-            document.getElementById('monday').classList.add('active');
-
-            // Switch between days
-            dayBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+            const dayButtons = document.querySelectorAll('.day-btn');
+            const workoutContainers = document.querySelectorAll('.workout-container');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            // حساب تقدم الأسبوع
+            function updateProgress() {
+                const today = new Date().getDay(); // 0 لأحد، 1 لاثنين، إلخ
+                let progress = 0;
+                
+                if (today >= 1 && today <= 5) { // من الاثنين إلى الجمعة
+                    progress = (today / 5) * 100;
+                } else if (today === 6) { // السبت
+                    progress = 100;
+                }
+                
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}% مكتمل`;
+            }
+            
+            updateProgress();
+            
+            // تبديل أيام الأسبوع
+            dayButtons.forEach(button => {
+                button.addEventListener('click', function() {
                     const day = this.getAttribute('data-day');
-
-                    // Remove active class from all buttons and sections
-                    dayBtns.forEach(btn => btn.classList.remove('active'));
-                    workoutSections.forEach(section => section.classList.remove('active'));
-
-                    // Add active class to clicked button and corresponding section
+                    
+                    // إزالة النشط من جميع الأزرار
+                    dayButtons.forEach(btn => btn.classList.remove('active'));
+                    // إضافة النشط للزر المحدد
                     this.classList.add('active');
+                    
+                    // إخفاء جميع حاويات التمارين
+                    workoutContainers.forEach(container => {
+                        container.classList.remove('active');
+                    });
+                    
+                    // إظهار حاوية اليوم المحدد
                     document.getElementById(day).classList.add('active');
-
-                    // Animate exercises
-                    animateExercises();
                 });
             });
-
-            // Animate exercises on load/switch
-            function animateExercises() {
-                const activeSection = document.querySelector('.workout-section.active');
-                const exercises = activeSection.querySelectorAll('.exercise-list li');
-
-                exercises.forEach((exercise, index) => {
-                    exercise.style.animation = 'none';
-                    setTimeout(() => {
-                        exercise.style.animation = `slideIn 0.5s forwards ${index * 0.1}s`;
-                    }, 10);
-                });
-            }
-
-            // Initial animation
-            animateExercises();
+            
+            // يمكنك إضافة المزيد من الوظائف هنا مثل:
+            // - تتبع التمارين المكتملة
+            // - حفظ التقدم في localStorage
+            // - إضافة مؤقت للتمارين
+            // - إضافة صور أو فيديوهات توضيحية للتمارين
         });
     </script>
 </body>
-</html>
+                    </html>
