@@ -3,589 +3,759 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع اللياقة البدنية - تمارين، مكملات، خطط</title>
+    <title>لياقتي - موقع اللياقة البدنية الشامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #e74c3c;
-            --accent: #3498db;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
+        /* الأساسيات */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
         body {
-            background-color: #f5f7fa;
+            background-color: #f9f9f9;
             color: #333;
             line-height: 1.6;
         }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--dark));
-            color: white;
-            padding: 1.5rem 0;
-            text-align: center;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
+        
         .container {
+            width: 90%;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            margin: 0 auto;
+            padding: 0 15px;
         }
-
-        .nav-tabs {
+        
+        /* الهيدر */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
             display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .tab {
-            background: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+        
+        .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: bold;
         }
-
-        .tab:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        
+        .logo i {
+            color: var(--accent);
         }
-
-        .tab.active {
-            background: var(--secondary);
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
             color: white;
-        }
-
-        .tab i {
-            font-size: 1.2rem;
-        }
-
-        .content-section {
-            display: none;
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
             position: relative;
-            padding-bottom: 0.5rem;
         }
-
-        .section-title::after {
-            content: "";
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        nav ul li a::after {
+            content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--secondary);
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
         }
-
-        .workout-days {
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* الهيرو */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            animation: fadeIn 2s ease;
+        }
+        
+        /* قسم الميزات */
+        .features {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
-
-        .day-card {
-            background: var(--light);
+        
+        .feature-card {
+            background: white;
             border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            font-size: 2.5rem;
             padding: 1.5rem;
             text-align: center;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            cursor: pointer;
         }
-
-        .day-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .day-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .day-card p {
-            color: #666;
-        }
-
-        .day-card.rest {
-            background: linear-gradient(135deg, #a8e6cf, #dcedc1);
-        }
-
-        .day-card.push {
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
-        }
-
-        .day-card.pull {
-            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
-        }
-
-        .day-card.leg {
-            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
-        }
-
-        .day-card.arms {
-            background: linear-gradient(135deg, #84fab0, #8fd3f4);
-        }
-
-        .exercises-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .exercise-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .exercise-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .exercise-img {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .exercise-info {
+        
+        .feature-content {
             padding: 1.5rem;
         }
-
-        .exercise-info h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .exercise-info p {
-            color: #666;
+        
+        .feature-content h3 {
             margin-bottom: 1rem;
-        }
-
-        .supplements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .supplement-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .supplement-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .supplement-img {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .supplement-info {
-            padding: 1.5rem;
-        }
-
-        .supplement-info h3 {
             color: var(--primary);
-            margin-bottom: 0.5rem;
         }
-
-        .supplement-price {
-            color: var(--secondary);
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
+        
+        /* قسم خطط التمرين */
+        .workout-plans {
+            padding: 5rem 0;
+            background-color: var(--light);
         }
-
-        .plans-grid {
+        
+        .plans-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
-
+        
         .plan-card {
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            position: relative;
         }
-
+        
         .plan-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+            transform: scale(1.03);
         }
-
-        .plan-img {
+        
+        .plan-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .plan-image {
             height: 200px;
             background-size: cover;
             background-position: center;
         }
-
-        .plan-info {
+        
+        .plan-content {
             padding: 1.5rem;
         }
-
-        .plan-info h3 {
+        
+        .plan-content h3 {
+            margin-bottom: 1rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
         }
-
-        .plan-info p {
+        
+        .plan-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .plan-details li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .plan-details i {
+            color: var(--success);
+        }
+        
+        /* قسم التمارين */
+        .exercises {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .exercise-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 3rem;
+        }
+        
+        .category-btn {
+            padding: 0.7rem 1.5rem;
+            background-color: var(--light);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .exercise-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .exercise-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .exercise-content {
+            padding: 1.5rem;
+        }
+        
+        .exercise-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .exercise-meta {
+            display: flex;
+            justify-content: space-between;
             color: #666;
+            font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
+        
+        /* الفوتر */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
         }
-
-        .modal.active {
-            display: flex;
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            padding: 2rem;
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
             position: relative;
-            animation: slideUp 0.5s ease;
+            padding-bottom: 0.5rem;
         }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* مؤثرات */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--secondary);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-weight: bold;
+        
+        .pulse {
+            animation: pulse 2s infinite;
         }
-
-        .modal-title {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            text-align: center;
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-
-        .modal-body {
-            line-height: 1.8;
-        }
-
-        footer {
-            background: var(--dark);
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-
+        
+        /* التجاوب */
         @media (max-width: 768px) {
-            .nav-tabs {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
                 flex-direction: column;
                 align-items: center;
-            }
-            
-            .tab {
-                width: 80%;
-            }
-            
-            .workout-days, .exercises-grid, .supplements-grid, .plans-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    <!-- الهيدر -->
     <header>
-        <div class="header-content">
-            <h1>موقع اللياقة البدنية</h1>
-            <p class="tagline">تمارين - مكملات - خطط تمرين</p>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>لياقتي</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#plans">خطط التمرين</a></li>
+                        <li><a href="#exercises">التمارين</a></li>
+                        <li><a href="#nutrition">التغذية</a></li>
+                        <li><a href="#blog">المدونة</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">تسجيل الدخول</button>
+                    <button class="btn btn-primary">اشترك الآن</button>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="nav-tabs">
-            <div class="tab active" data-tab="exercises">
-                <i class="fas fa-dumbbell"></i>
-                <span>تمارين</span>
-            </div>
-            <div class="tab" data-tab="supplements">
-                <i class="fas fa-capsules"></i>
-                <span>مكملات</span>
-            </div>
-            <div class="tab" data-tab="plans">
-                <i class="fas fa-calendar-alt"></i>
-                <span>خطط تمرين</span>
+    <!-- الهيرو -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>ابدأ رحلتك نحو لياقة أفضل</h1>
+            <p>موقعنا يوفر لك خطط تمرين مخصصة، تمارين متنوعة، ونصائح غذائية لمساعدتك في تحقيق أهدافك الرياضية</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary pulse">ابدأ الآن</button>
+                <button class="btn btn-outline">اعرف المزيد</button>
             </div>
         </div>
+    </section>
 
-        <div class="content-section active" id="exercises">
-            <h2 class="section-title">برنامج التمارين الأسبوعي</h2>
-            
-            <div class="workout-days">
-                <div class="day-card push" data-day="push">
-                    <h3>الاثنين: تمارين الدفع</h3>
-                    <p>الصدر، الكتف، الترايسبس</p>
-                </div>
-                <div class="day-card pull" data-day="pull">
-                    <h3>الثلاثاء: تمارين السحب</h3>
-                    <p>الظهر، البايسبس</p>
-                </div>
-                <div class="day-card rest" data-day="rest">
-                    <h3>الأربعاء: راحة</h3>
-                    <p>استراحة للتعافي</p>
-                </div>
-                <div class="day-card leg" data-day="leg">
-                    <h3>الخميس: تمارين الأرجل</h3>
-                    <p>القدمين، المؤخرة</p>
-                </div>
-                <div class="day-card arms" data-day="arms">
-                    <h3>الجمعة: تمارين الذراعين</h3>
-                    <p>البايسبس، الترايسبس</p>
-                </div>
+    <!-- قسم الميزات -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>لماذا تختارنا؟</h2>
+                <p>نقدم لك كل ما تحتاجه لتحقيق أهدافك الرياضية في مكان واحد</p>
             </div>
-
-            <div class="exercises-grid" id="exercises-container">
-                <!-- سيتم ملؤه بالتمارين بناءً على اليوم المحدد -->
-            </div>
-        </div>
-
-        <div class="content-section" id="supplements">
-            <h2 class="section-title">المكملات الغذائية</h2>
-            
-            <div class="supplements-grid">
-                <div class="supplement-card">
-                    <div class="supplement-img" style="background-image: url('https://images.unsplash.com/photo-1599058917765-a780eda07a3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80')"></div>
-                    <div class="supplement-info">
-                        <h3>بروتين مصل اللبن</h3>
-                        <p>مكمل بروتيني سريع الامتصاص مثالي بعد التمرين</p>
-                        <div class="supplement-price">150 ريال</div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>خطط تمرين مخصصة</h3>
+                        <p>احصل على خطط تمرين مصممة خصيصًا لأهدافك ومستوى لياقتك</p>
                     </div>
                 </div>
-                
-                <div class="supplement-card">
-                    <div class="supplement-img" style="background-image: url('https://images.unsplash.com/photo-1631549916768-4119b2e5f926?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2078&q=80')"></div>
-                    <div class="supplement-info">
-                        <h3>الكرياتين</h3>
-                        <p>يعزز القوة والكتلة العضلية</p>
-                        <div class="supplement-price">80 ريال</div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>نصائح غذائية</h3>
+                        <p>خطط غذائية متكاملة تدعم أهدافك الرياضية وتحسن أداءك</p>
                     </div>
                 </div>
-                
-                <div class="supplement-card">
-                    <div class="supplement-img" style="background-image: url('https://images.unsplash.com/photo-1623874102362-583bc6a8176d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80')"></div>
-                    <div class="supplement-info">
-                        <h3>BCAA</h3>
-                        <p>أحماض أمينية متفرعة السلسلة للتعافي</p>
-                        <div class="supplement-price">120 ريال</div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                </div>
-                
-                <div class="supplement-card">
-                    <div class="supplement-img" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0ea3ff8db41?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
-                    <div class="supplement-info">
-                        <h3>فيتامينات متعددة</h3>
-                        <p>مزيج من الفيتامينات والمعادن الأساسية</p>
-                        <div class="supplement-price">90 ريال</div>
+                    <div class="feature-content">
+                        <h3>تتبع التقدم</h3>
+                        <p>تتبع تقدمك مع إحصائيات مفصلة ورسوم بيانية توضيحية</p>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="content-section" id="plans">
-            <h2 class="section-title">خطط التمرين الشهيرة</h2>
-            
-            <div class="plans-grid">
-                <div class="plan-card" data-plan="arnold">
-                    <div class="plan-img" style="background-image: url('https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
-                    <div class="plan-info">
-                        <h3>Arnold Split</h3>
-                        <p>نظام تمرين أرنولد شوارزنيجر الشهير</p>
+    <!-- قسم خطط التمرين -->
+    <section class="workout-plans" id="plans">
+        <div class="container">
+            <div class="section-title">
+                <h2>خطط التمرين</h2>
+                <p>اختر الخطة التي تناسب أهدافك ومستوى لياقتك</p>
+            </div>
+            <div class="plans-container">
+                <div class="plan-card">
+                    <div class="plan-badge">مبتدئ</div>
+                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="plan-content">
+                        <h3>خطة اللياقة الأساسية</h3>
+                        <ul class="plan-details">
+                            <li><i class="fas fa-check"></i> 3 أيام تمرين أسبوعيًا</li>
+                            <li><i class="fas fa-check"></i> تمارين كاملة للجسم</li>
+                            <li><i class="fas fa-check"></i> مناسب للمبتدئين</li>
+                            <li><i class="fas fa-check"></i> تمارين منزلية أو في النادي</li>
+                        </ul>
+                        <button class="btn btn-primary">ابدأ الخطة</button>
                     </div>
                 </div>
-                
-                <div class="plan-card" data-plan="push-pull">
-                    <div class="plan-img" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
-                    <div class="plan-info">
-                        <h3>Push Pull Legs</h3>
-                        <p>نظام الدفع والسحب والأرجل</p>
+                <div class="plan-card">
+                    <div class="plan-badge">متوسط</div>
+                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="plan-content">
+                        <h3>خطة بناء العضلات</h3>
+                        <ul class="plan-details">
+                            <li><i class="fas fa-check"></i> 5 أيام تمرين أسبوعيًا</li>
+                            <li><i class="fas fa-check"></i> تقسيم مجموعات عضلية</li>
+                            <li><i class="fas fa-check"></i> تمارين متقدمة</li>
+                            <li><i class="fas fa-check"></i> نصائح غذائية مكثفة</li>
+                        </ul>
+                        <button class="btn btn-primary">ابدأ الخطة</button>
                     </div>
                 </div>
-                
-                <div class="plan-card" data-plan="bro-split">
-                    <div class="plan-img" style="background-image: url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
-                    <div class="plan-info">
-                        <h3>Bro Split</h3>
-                        <p>نظام تقسيم العضلات التقليدي</p>
+                <div class="plan-card">
+                    <div class="plan-badge">متقدم</div>
+                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80');"></div>
+                    <div class="plan-content">
+                        <h3>خطة التحدي الرياضي</h3>
+                        <ul class="plan-details">
+                            <li><i class="fas fa-check"></i> 6 أيام تمرين أسبوعيًا</li>
+                            <li><i class="fas fa-check"></i> تمارين مكثفة ومتقدمة</li>
+                            <li><i class="fas fa-check"></i> متابعة أسبوعية مع مدرب</li>
+                            <li><i class="fas fa-check"></i> خطة غذائية مفصلة</li>
+                        </ul>
+                        <button class="btn btn-primary">ابدأ الخطة</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Modal للخطط -->
-    <div class="modal" id="plan-modal">
-        <div class="modal-content">
-            <div class="close-modal" id="close-modal">&times;</div>
-            <h2 class="modal-title" id="modal-title">عنوان الخطة</h2>
-            <div class="modal-body" id="modal-body">
-                محتوى الخطة
+    <!-- قسم التمارين -->
+    <section class="exercises" id="exercises">
+        <div class="container">
+            <div class="section-title">
+                <h2>مكتبة التمارين</h2>
+                <p>استكشف مجموعة واسعة من التمارين مع شرح مفصل لكل تمرين</p>
+            </div>
+            <div class="exercise-categories">
+                <button class="category-btn active">الكل</button>
+                <button class="category-btn">تمارين القوة</button>
+                <button class="category-btn">تمارين الكارديو</button>
+                <button class="category-btn">تمارين المرونة</button>
+                <button class="category-btn">تمارين المنزل</button>
+            </div>
+            <div class="exercises-grid">
+                <div class="exercise-card">
+                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="exercise-content">
+                        <h3>تمرين الضغط</h3>
+                        <div class="exercise-meta">
+                            <span><i class="fas fa-dumbbell"></i> القوة</span>
+                            <span><i class="fas fa-clock"></i> 15 دقيقة</span>
+                        </div>
+                        <p>تمرين أساسي لتقوية عضلات الصدر والذراعين والكتفين</p>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="exercise-content">
+                        <h3>تمرين القرفصاء</h3>
+                        <div class="exercise-meta">
+                            <span><i class="fas fa-dumbbell"></i> القوة</span>
+                            <span><i class="fas fa-clock"></i> 20 دقيقة</span>
+                        </div>
+                        <p>تمرين أساسي لتقوية عضلات الساقين والأرداف</p>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                    <div class="exercise-content">
+                        <h3>تمرين الجري</h3>
+                        <div class="exercise-meta">
+                            <span><i class="fas fa-running"></i> الكارديو</span>
+                            <span><i class="fas fa-clock"></i> 30 دقيقة</span>
+                        </div>
+                        <p>تمرين ممتاز لتحسين اللياقة القلبية والتنفسية</p>
+                    </div>
+                </div>
+                <div class="exercise-card">
+                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1520&q=80');"></div>
+                    <div class="exercise-content">
+                        <h3>تمرين اليوغا</h3>
+                        <div class="exercise-meta">
+                            <span><i class="fas fa-spa"></i> المرونة</span>
+                            <span><i class="fas fa-clock"></i> 45 دقيقة</span>
+                        </div>
+                        <p>تمارين اليوغا لتحسين المرونة والتوازن والاسترخاء</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- الفوتر -->
     <footer>
-        <p>موقع اللياقة البدنية &copy; 2023 - جميع الحقوق محفوظة</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>لياقتي</h3>
+                    <p>موقع متكامل لللياقة البدنية يقدم خطط تمرين مخصصة، تمارين متنوعة، ونصائح غذائية لمساعدتك في تحقيق أهدافك الرياضية.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#plans">خطط التمرين</a></li>
+                        <li><a href="#exercises">التمارين</a></li>
+                        <li><a href="#nutrition">التغذية</a></li>
+                        <li><a href="#blog">المدونة</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>الدعم</h3>
+                    <ul>
+                        <li><a href="#">الأسئلة الشائعة</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                        <li><a href="#">الشروط والأحكام</a></li>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>اشترك في النشرة البريدية</h3>
+                    <p>احصل على آخر التحديثات والنصائح الرياضية مباشرة إلى بريدك الإلكتروني</p>
+                    <form>
+                        <input type="email" placeholder="بريدك الإلكتروني" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">اشترك</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 لياقتي. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
-        // بيانات التمارين
-        const exercisesData = {
-            push: [
-                { 
-                    name: "تمرين الضغط بالبار", 
-                    description: "تمرين أساسي للصدر، الكتف الأمامي والترايسبس",
-                    img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                },
-                { 
-                    name: "الضغط بالدامبلز", 
-                    description: "تمرين بديل للضغط بالبار مع نطاق حركة أكبر",
-                    img: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                },
-                { 
-                    name: "الضغط العسكري", 
-                    description: "تمرين للكتف الأمامي والجانبي",
-                    img: "https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                }
-            ],
-            pull: [
-                { 
-                    name: "الشد الأفقي", 
-                    description: "تمرين لبناء عرض الظهر",
-                    img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                },
-                { 
-                    name: "الشد العمودي", 
-                    description: "تمرين لبناء سماكة الظهر",
-                    img: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                },
-                { 
-                    name: "البار المنحني", 
-                    description: "تمرين أساسي للبايسبس",
-                    img: "https://images.unsplash.com/photo-1581009137246-d2c6c2b6a1d0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                }
-            ],
-            leg: [
-                { 
-                    name: "القرفصاء", 
-                    description: "تمرين ملكي لبناء القوة في الأرجل",
-                    img: "https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                },
-                { 
-                    name: "الضغط بالأرجل", 
-                    description: "تمرين بديل للقرفصاء مع ضغط أقل على الظهر",
-                    img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8
+        // مؤثرات تفاعلية بسيطة
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة تأثير عند التمرير
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // تطبيق المؤثر على العناصر
+            const cards = document.querySelectorAll('.feature-card, .plan-card, .exercise-card');
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s, transform 0.5s';
+                observer.observe(card);
+            });
+            
+            // تفعيل أزرار التصنيفات
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
