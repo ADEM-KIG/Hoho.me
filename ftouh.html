@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ftouh Windows 10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0078d7 0%, #106ebe 100%);
+            overflow: hidden;
+            height: 100vh;
+            color: #fff;
+        }
+
+        /* شاشة التحميل */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            color: white;
+        }
+
+        #boot-logo {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        #boot-logo .windows-logo {
+            font-size: 60px;
+            margin-left: 15px;
+        }
+
+        #boot-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #0078d7;
+            transition: width 0.5s;
+        }
+
+        #boot-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* سطح المكتب */
+        #desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            overflow: hidden;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%230078d7" width="100" height="100"/></svg>');
+            background-size: cover;
+            display: none;
+        }
+
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .desktop-icon.selected {
+            background: rgba(30, 144, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 24px;
+            color: #0078d7;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-label {
+            text-align: center;
+            font-size: 12px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        /* شريط المهام */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(42, 42, 42, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #start-button {
+            height: 32px;
+            padding: 0 15px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+
+        #start-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #start-icon {
+            font-size: 18px;
+            margin-left: 8px;
+        }
+
+        #taskbar-apps {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .taskbar-app {
+            height: 35px;
+            padding: 0 15px;
+            background: transparent;
+            border: none;
+            border-radius: 3px;
+            margin-right: 3px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            max-width: 200px;
+            overflow: hidden;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        .taskbar-app:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .taskbar-app.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid #0078d7;
+        }
+
+        .taskbar-app i {
+            margin-left: 8px;
+            font-style: normal;
+        }
+
+        #system-tray {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            height: 100%;
+        }
+
+        .tray-icon {
+            margin-right: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+        }
+
+        #clock {
+            font-size: 12px;
+            padding: 0 10px;
+            color: white;
+        }
+
+        /* قائمة ابدأ */
+        #start-menu {
+            position: fixed;
+            bottom: 40px;
+            right: 0;
+            width: 500px;
+            height: 600px;
+            background: rgba(42, 42, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 10px 0 0 10px;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        #start-header {
+            height: 200px;
+            background: linear-gradient(135deg, #0078d7 0%, #106ebe 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            color: white;
+        }
+
+        #start-user {
+            margin-left: 20px;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #0078d7;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #start-user-info {
+            flex: 1;
+        }
+
+        #start-user-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        #start-user-status {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        #start-content {
+            display: flex;
+            height: calc(100% - 200px);
+        }
+
+        #start-left {
+            flex: 1;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        #start-right {
+            width: 300px;
+            background: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+        }
+
+        .start-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .start-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .start-item i {
+            margin-left: 12px;
+            font-style: normal;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .start-tile {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .start-tile:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .tile-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tile-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* النوافذ */
+        .window {
+            position: absolute;
+            min-width: 400px;
+            min-height: 300px;
+            background: #f3f3f3;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .window.active {
+            display: flex;
+        }
+
+        .window-header {
+            height: 32px;
+            background: #fff;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            cursor: move;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .window-title {
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .window-title i {
+            margin-left: 8px;
+            font-style: normal;
+        }
+
+        .window-controls {
+            display: flex;
+        }
+
+        .window-control {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-radius: 3px;
+        }
+
+        .window-control:hover {
+            background: #f0f0f0;
+        }
+
+        .window-control.close:hover {
+            background: #e81123;
+            color: white;
+        }
+
+        .window-content {
+            flex: 1;
+            padding: 0;
+            overflow: auto;
+            color: #000;
+            background: #fff;
+        }
+
+        /* نافذة CMD */
+        #cmd-window .window-content {
+            background: #0c0c0c;
+            color: #cccccc;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .cmd-line {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .cmd-prompt {
+            color: #0ad200;
+            margin-left: 5px;
+        }
+
+        .cmd-input {
+            background: transparent;
+            border: none;
+            color: #cccccc;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+            margin-right: 5px;
+        }
+
+        .cmd-output {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        /* محتوى النوافذ الأخرى */
+        .content-section {
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+
+        .content-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #0078d7;
+        }
+
+        .button {
+            padding: 8px 16px;
+            background: #0078d7;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            color: white;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .button:hover {
+            background: #106ebe;
+        }
+
+        .button:active {
+            background: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div id="boot-screen">
+        <div id="boot-logo">
+            <span class="windows-logo"></span>
+            Ftouh Windows 10
+        </div>
+        <div id="boot-progress">
+            <div id="boot-progress-bar"></div>
+        </div>
+        <div id="boot-text">جاري إعداد النظام...</div>
+    </div>
+
+    <!-- سطح المكتب -->
+    <div id="desktop">
+        <!-- أيقونات سطح المكتب -->
+        <div class="desktop-icon" style="top: 20px; right: 20px;" data-app="cmd">
+            <div class="icon-image"></div>
+            <div class="icon-label">موجه الأوامر</div>
+        </div>
+        <div class="desktop-icon" style="top: 20px; right: 120px;" data-app="file-explorer">
+            <div class="icon-image"></div>
+            <div class="icon-label">مستكشف الملفات</div>
+        </div>
+        <div class="desktop-icon" style="top: 120px; right: 20px;" data-app="browser">
+            <div class="icon-image"></div>
+            <div class="icon-label">Microsoft Edge</div>
+        </div>
+        <div class="desktop-icon" style="top: 120px; right: 120px;" data-app="settings">
+            <div class="icon-image"></div>
+            <div class="icon-label">الإعدادات</div>
+        </div>
+        <div class="desktop-icon" style="top: 220px; right: 20px;" data-app="notepad">
+            <div class="icon-image"></div>
+            <div class="icon-label">المفكرة</div>
+        </div>
+        <div class="desktop-icon" style="top: 220px; right: 120px;" data-app="calculator">
+            <div class="icon-image"></div>
+            <div class="icon-label">الآلة الحاسبة</div>
+        </div>
+    </div>
+
+    <!-- شريط المهام -->
+    <div id="taskbar">
+        <div id="start-button" onclick="toggleStartMenu()">
+            <span id="start-icon"></span>
+            ابدأ
+        </div>
+        <div id="taskbar-apps">
+            <!-- التطبيقات المفتوحة تظهر هنا -->
+        </div>
+        <div id="system-tray">
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
+            <div class="tray-icon"></div>
+            <div id="clock">12:00 م</div>
+        </div>
+    </div>
+
+    <!-- قائمة ابدأ -->
+    <div id="start-menu">
+        <div id="start-header">
+            <div id="start-user-info">
+                <div id="start-user-name">Ftouh</div>
+                <div id="start-user-status">متصل</div>
+            </div>
+            <div id="start-user">ف</div>
+        </div>
+        <div id="start-content">
+            <div id="start-left">
+                <div class="start-item" onclick="openApp('file-explorer')">
+                    <i></i> مستكشف الملفات
+                </div>
+                <div class="start-item" onclick="openApp('settings')">
+                    <i></i> الإعدادات
+                </div>
+                <div class="start-item" onclick="openApp('browser')">
+                    <i></i> Microsoft Edge
+                </div>
+                <div class="start-item" onclick="openApp('notepad')">
+                    <i></i> المفكرة
+                </div>
+                <div class="start-item" onclick="openApp('calculator')">
+                    <i></i> الآلة الحاسبة
+                </div>
+                <div class="start-item" onclick="openApp('cmd')">
+                    <i></i> موجه الأوامر
+                </div>
+            </div>
+            <div id="start-right">
+                <div class="start-tile" onclick="openApp('file-explorer')">
+                    <div class="tile-title">مستكشف الملفات</div>
+                    <div class="tile-desc">تصفح الملفات والمجلدات</div>
+                </div>
+                <div class="start-tile" onclick="openApp('settings')">
+                    <div class="tile-title">الإعدادات</div>
+                    <div class="tile-desc">تخصيص نظامك</div>
+                </div>
+                <div class="start-tile" onclick="openApp('browser')">
+                    <div class="tile-title">Microsoft Edge</div>
+                    <div class="tile-desc">تصفح الإنترنت</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نوافذ التطبيقات -->
+    <div class="window" id="cmd-window">
+        <div class="window-header">
+            <div class="window-title">
+                <i></i> موجه الأوامر
+            </div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('cmd')">−</div>
+                <div class="window-control" onclick="maximizeWindow('cmd')">☐</div>
+                <div class="window-control close" onclick="closeWindow('cmd')">✕</div>
+            </div>
+        </div>
+        <div class="window-content" id="cmd-content">
+            <div class="cmd-output">Microsoft Windows [Version 10.0.19042.1237]<br>(c) Microsoft Corporation. All rights reserved.<br><br>C:\Users\Ftouh></div>
+            <div class="cmd-line">
+                <span class="cmd-prompt">C:\Users\Ftouh></span>
+                <input type="text" class="cmd-input" id="cmd-input" autocomplete="off" autofocus>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="file-explorer-window">
+        <div class="window-header">
+            <div class="window-title">
+                <i></i> مستكشف الملفات
+            </div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('file-explorer')">−</div>
+                <div class="window-control" onclick="maximizeWindow('file-explorer')">☐</div>
+                <div class="window-control close" onclick="closeWindow('file-explorer')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div class="content-title">المجلدات السريعة</div>
+                <div>📁 سطح المكتب</div>
+                <div>📁 المستندات</div>
+                <div>📁 الصور</div>
+                <div>📁 الموسيقى</div>
+            </div>
+            <div class="content-section">
+                <div class="content-title">الأجهزة والمحركات</div>
+                <div>💽 قرص محلي (C:)</div>
+                <div>💽 قرص محلي (D:)</div>
+                <div>📀 محرك الأقراص (E:)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="browser-window">
+        <div class="window-header">
+            <div class="window-title">
+                <i></i> Microsoft Edge
+            </div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('browser')">−</div>
+                <div class="window-control" onclick="maximizeWindow('browser')">☐</div>
+                <div class="window-control close" onclick="closeWindow('browser')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div style="display: flex; margin-bottom: 10px;">
+                    <button class="button">←</button>
+                    <button class="button">→</button>
+                    <input type="text" style="flex: 1; margin: 0 5px; padding: 8px; border: 1px solid #ccc; border-radius: 20px;" value="https://www.ftouh-windows.com/">
+                    <button class="button">↻</button>
+                </div>
+                <div style="border: 1px solid #e1e1e1; height: 400px; padding: 20px; background: white;">
+                    <h2>مرحباً بك في Ftouh Windows 10</h2>
+                    <p>هذا هو متصفح Microsoft Edge المدمج في نظام Ftouh Windows 10.</p>
+                    <p>يمكنك استخدامه لتصفح الإنترنت والوصول إلى مختلف المواقع.</p>
+                    <hr>
+                    <h3>أخبار النظام</h3>
+                    <ul>
+                        <li>تم تحديث النظام إلى الإصدار 10.0.19042.1237</li>
+                        <li>أضيفت ميزات جديدة لتحسين الأداء</li>
+                        <li>تم إصلاح بعض الأخطاء المعروفة</li>
+            
