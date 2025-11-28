@@ -3,759 +3,621 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لياقتي - موقع اللياقة البدنية الشامل</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Ftouh XP</title>
     <style>
-        /* الأساسيات */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Tahoma", sans-serif;
+            user-select: none;
         }
-        
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-        }
-        
+
         body {
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
+            background: #008080 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23008080" width="100" height="100"/><path fill="%23006060" d="M0 0h50v50H0z"/></svg>');
+            background-size: 200px 200px;
+            overflow: hidden;
+            height: 100vh;
+            color: #fff;
         }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* الهيدر */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
-            font-weight: bold;
-        }
-        
-        .logo i {
-            color: var(--accent);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-        
-        nav ul li a:hover {
-            color: var(--accent);
-        }
-        
-        nav ul li a::after {
-            content: '';
-            position: absolute;
+
+        /* شريط المهام */
+        #taskbar {
+            position: fixed;
             bottom: 0;
             left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s;
-        }
-        
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-        
-        .auth-buttons {
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, #316AC5, #1A4A9A);
+            border-top: 1px solid #0F327C;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            padding: 0 5px;
+            z-index: 1000;
         }
-        
-        .btn {
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
-            border: none;
+
+        #start-button {
+            height: 32px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #5CB300, #3F7F00);
+            border: 1px solid #245F00;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+            margin-right: 5px;
         }
-        
-        .btn-primary {
-            background-color: var(--accent);
-            color: white;
+
+        #start-button:hover {
+            background: linear-gradient(to bottom, #6CC300, #4F9F00);
         }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
+
+        #start-button:active {
+            background: linear-gradient(to bottom, #3F7F00, #2A5F00);
         }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* الهيرو */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 6rem 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: fadeIn 1s ease;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            animation: fadeIn 1.5s ease;
-        }
-        
-        .hero-buttons {
+
+        #taskbar-apps {
+            flex: 1;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            animation: fadeIn 2s ease;
+            align-items: center;
         }
-        
-        /* قسم الميزات */
-        .features {
-            padding: 5rem 0;
-            background-color: white;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title p {
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            background: white;
-            border-radius: 10px;
+
+        .taskbar-app {
+            height: 30px;
+            padding: 0 10px;
+            background: linear-gradient(to bottom, #7B9DCE, #3A6BC0);
+            border: 1px solid #2A5AA0;
+            border-radius: 3px;
+            margin-left: 3px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            max-width: 200px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+
+        .taskbar-app.active {
+            background: linear-gradient(to bottom, #E0A727, #D18C1A);
+            border: 1px solid #B87A0F;
         }
-        
-        .feature-icon {
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+
+        #system-tray {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            height: 100%;
+            background: linear-gradient(to bottom, #3A6BC0, #1A4A9A);
+            border-left: 1px solid #0F327C;
+        }
+
+        .tray-icon {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        #clock {
+            font-size: 12px;
+            padding: 0 10px;
+        }
+
+        /* قائمة ابدأ */
+        #start-menu {
+            position: fixed;
+            bottom: 40px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: linear-gradient(to bottom, #316AC5, #1A4A9A);
+            border: 1px solid #0F327C;
+            border-bottom: none;
+            display: none;
+            z-index: 999;
+            box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #start-header {
+            height: 100px;
+            background: linear-gradient(to right, #4A8CEC, #1A6CE8);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
             color: white;
-            font-size: 2.5rem;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .feature-content {
-            padding: 1.5rem;
-        }
-        
-        .feature-content h3 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        /* قسم خطط التمرين */
-        .workout-plans {
-            padding: 5rem 0;
-            background-color: var(--light);
-        }
-        
-        .plans-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .plan-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            position: relative;
-        }
-        
-        .plan-card:hover {
-            transform: scale(1.03);
-        }
-        
-        .plan-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: var(--accent);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 18px;
             font-weight: bold;
         }
-        
-        .plan-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .plan-content {
-            padding: 1.5rem;
-        }
-        
-        .plan-content h3 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .plan-details {
-            margin-bottom: 1.5rem;
-        }
-        
-        .plan-details li {
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .plan-details i {
-            color: var(--success);
-        }
-        
-        /* قسم التمارين */
-        .exercises {
-            padding: 5rem 0;
-            background-color: white;
-        }
-        
-        .exercise-categories {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 3rem;
-        }
-        
-        .category-btn {
-            padding: 0.7rem 1.5rem;
-            background-color: var(--light);
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .category-btn.active, .category-btn:hover {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .exercises-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        
-        .exercise-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        
-        .exercise-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .exercise-image {
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .exercise-content {
-            padding: 1.5rem;
-        }
-        
-        .exercise-content h3 {
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .exercise-meta {
-            display: flex;
-            justify-content: space-between;
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        
-        /* الفوتر */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 4rem 0 2rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-column h3 {
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 0.5rem;
-        }
-        
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 50px;
-            height: 2px;
-            background-color: var(--accent);
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .footer-column ul li a {
-            color: #bbb;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-column ul li a:hover {
-            color: var(--accent);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 1rem;
-        }
-        
-        .social-links a {
+
+        #start-user {
+            margin-right: 15px;
+            width: 60px;
+            height: 60px;
+            background: #FFD700;
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            color: #1A4A9A;
+        }
+
+        #start-content {
+            display: flex;
+            height: calc(100% - 100px);
+        }
+
+        #start-left {
+            flex: 1;
+            padding: 10px;
+        }
+
+        #start-right {
             width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: white;
-            transition: all 0.3s;
+            background: linear-gradient(to bottom, #1A4A9A, #0F327C);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
         }
-        
-        .social-links a:hover {
-            background-color: var(--accent);
-            transform: translateY(-3px);
+
+        .start-item {
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
         }
-        
-        .copyright {
+
+        .start-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .start-item i {
+            margin-left: 10px;
+            font-style: normal;
+            width: 20px;
             text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #bbb;
-            font-size: 0.9rem;
         }
-        
-        /* مؤثرات */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* سطح المكتب */
+        #desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            overflow: hidden;
         }
-        
-        .pulse {
-            animation: pulse 2s infinite;
+
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 3px;
         }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
-        /* التجاوب */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
+
+        .desktop-icon.selected {
+            background: rgba(30, 144, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            background: #FFD700;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            font-size: 24px;
+            color: #1A4A9A;
+        }
+
+        .icon-label {
+            text-align: center;
+            font-size: 12px;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        /* النوافذ */
+        .window {
+            position: absolute;
+            min-width: 300px;
+            min-height: 200px;
+            background: #ECE9D8;
+            border: 2px solid #316AC5;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .window.active {
+            display: flex;
+        }
+
+        .window-header {
+            height: 30px;
+            background: linear-gradient(to bottom, #316AC5, #1A4A9A);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            cursor: move;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .window-title {
+            font-weight: bold;
+        }
+
+        .window-controls {
+            display: flex;
+        }
+
+        .window-control {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            background: #ECE9D8;
+            border: 1px solid #ACA899;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            color: black;
+        }
+
+        .window-control:hover {
+            background: #D6D3C6;
+        }
+
+        .window-content {
+            flex: 1;
+            padding: 10px;
+            overflow: auto;
+            color: black;
+        }
+
+        /* محتوى النوافذ */
+        .content-section {
+            margin-bottom: 15px;
+        }
+
+        .content-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ACA899;
+            padding-bottom: 3px;
+        }
+
+        .button {
+            padding: 5px 10px;
+            background: linear-gradient(to bottom, #ECE9D8, #D6D3C6);
+            border: 1px solid #ACA899;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background: linear-gradient(to bottom, #F5F3EA, #E5E2D6);
+        }
+
+        .button:active {
+            background: linear-gradient(to bottom, #D6D3C6, #C6C3B6);
+        }
+
+        /* شاشة التحميل */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            color: white;
+        }
+
+        #boot-logo {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #FFD700;
+        }
+
+        #boot-progress {
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        #boot-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to bottom, #316AC5, #1A4A9A);
+            transition: width 0.5s;
+        }
+
+        #boot-text {
+            margin-top: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- الهيدر -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-dumbbell"></i>
-                    <span>لياقتي</span>
+    <!-- شاشة التحميل -->
+    <div id="boot-screen">
+        <div id="boot-logo">Ftouh XP</div>
+        <div id="boot-progress">
+            <div id="boot-progress-bar"></div>
+        </div>
+        <div id="boot-text">جاري تحميع النظام...</div>
+    </div>
+
+    <!-- سطح المكتب -->
+    <div id="desktop">
+        <!-- أيقونات سطح المكتب -->
+        <div class="desktop-icon" style="top: 20px; left: 20px;" data-app="my-computer">
+            <div class="icon-image">💻</div>
+            <div class="icon-label">جهاز الكمبيوتر</div>
+        </div>
+        <div class="desktop-icon" style="top: 20px; left: 120px;" data-app="documents">
+            <div class="icon-image">📁</div>
+            <div class="icon-label">مستنداتي</div>
+        </div>
+        <div class="desktop-icon" style="top: 120px; left: 20px;" data-app="browser">
+            <div class="icon-image">🌐</div>
+            <div class="icon-label">مستعرض الويب</div>
+        </div>
+        <div class="desktop-icon" style="top: 120px; left: 120px;" data-app="media">
+            <div class="icon-image">🎵</div>
+            <div class="icon-label">المشغل الصوتي</div>
+        </div>
+        <div class="desktop-icon" style="top: 220px; left: 20px;" data-app="notepad">
+            <div class="icon-image">📝</div>
+            <div class="icon-label">المفكرة</div>
+        </div>
+    </div>
+
+    <!-- شريط المهام -->
+    <div id="taskbar">
+        <div id="start-button" onclick="toggleStartMenu()">
+            ابدأ
+        </div>
+        <div id="taskbar-apps">
+            <!-- التطبيقات المفتوحة تظهر هنا -->
+        </div>
+        <div id="system-tray">
+            <div class="tray-icon">🔊</div>
+            <div class="tray-icon">🌐</div>
+            <div id="clock">12:00 م</div>
+        </div>
+    </div>
+
+    <!-- قائمة ابدأ -->
+    <div id="start-menu">
+        <div id="start-header">
+            <div id="start-user">ف</div>
+            <div>Ftouh XP</div>
+        </div>
+        <div id="start-content">
+            <div id="start-left">
+                <div class="start-item" onclick="openApp('my-computer')">
+                    <i>💻</i> جهاز الكمبيوتر
                 </div>
-                <nav>
+                <div class="start-item" onclick="openApp('documents')">
+                    <i>📁</i> مستنداتي
+                </div>
+                <div class="start-item" onclick="openApp('browser')">
+                    <i>🌐</i> مستعرض الويب
+                </div>
+                <div class="start-item" onclick="openApp('media')">
+                    <i>🎵</i> المشغل الصوتي
+                </div>
+                <div class="start-item" onclick="openApp('notepad')">
+                    <i>📝</i> المفكرة
+                </div>
+                <div class="start-item" onclick="openApp('settings')">
+                    <i>⚙️</i> الإعدادات
+                </div>
+            </div>
+            <div id="start-right">
+                <div class="start-item"><i>❓</i></div>
+                <div class="start-item"><i>🔍</i></div>
+                <div class="start-item"><i>🖥️</i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نوافذ التطبيقات -->
+    <div class="window" id="my-computer-window">
+        <div class="window-header">
+            <div class="window-title">جهاز الكمبيوتر</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('my-computer')">−</div>
+                <div class="window-control" onclick="closeWindow('my-computer')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div class="content-title">الأقراص الصلبة</div>
+                <div>قرص محلي (C:) - 120 GB متاح من 250 GB</div>
+                <div>قرص محلي (D:) - 80 GB متاح من 120 GB</div>
+            </div>
+            <div class="content-section">
+                <div class="content-title">الأجهزة مع وسائط قابلة للإزالة</div>
+                <div>مشغل الأقراص (E:)</div>
+                <div>USB Drive (F:)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="documents-window">
+        <div class="window-header">
+            <div class="window-title">مستنداتي</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('documents')">−</div>
+                <div class="window-control" onclick="closeWindow('documents')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div class="content-title">المجلدات</div>
+                <div>📁 العمل</div>
+                <div>📁 الدراسة</div>
+                <div>📁 الصور</div>
+                <div>📁 الموسيقى</div>
+            </div>
+            <div class="content-section">
+                <div class="content-title">الملفات</div>
+                <div>📄 تقرير نهائي.docx</div>
+                <div>📄 مشروع التخرج.pdf</div>
+                <div>📊 البيانات.xlsx</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="browser-window">
+        <div class="window-header">
+            <div class="window-title">مستعرض الويب - Ftouh Explorer</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('browser')">−</div>
+                <div class="window-control" onclick="closeWindow('browser')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div style="display: flex; margin-bottom: 10px;">
+                    <button class="button">← السابق</button>
+                    <button class="button">التالي →</button>
+                    <input type="text" style="flex: 1; margin: 0 5px; padding: 5px;" value="https://www.ftouh-xp.com/">
+                    <button class="button">اذهب</button>
+                </div>
+                <div style="border: 1px solid #ACA899; height: 300px; padding: 10px; background: white;">
+                    <h2>مرحباً بك في Ftouh XP</h2>
+                    <p>هذا هو مستعرض الويب المدمج في نظام Ftouh XP.</p>
+                    <p>يمكنك استخدامه لتصفح الإنترنت والوصول إلى مختلف المواقع.</p>
+                    <hr>
+                    <h3>أخبار النظام</h3>
                     <ul>
-                        <li><a href="#home">الرئيسية</a></li>
-                        <li><a href="#plans">خطط التمرين</a></li>
-                        <li><a href="#exercises">التمارين</a></li>
-                        <li><a href="#nutrition">التغذية</a></li>
-                        <li><a href="#blog">المدونة</a></li>
-                        <li><a href="#contact">اتصل بنا</a></li>
-                    </ul>
-                </nav>
-                <div class="auth-buttons">
-                    <button class="btn btn-outline">تسجيل الدخول</button>
-                    <button class="btn btn-primary">اشترك الآن</button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- الهيرو -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h1>ابدأ رحلتك نحو لياقة أفضل</h1>
-            <p>موقعنا يوفر لك خطط تمرين مخصصة، تمارين متنوعة، ونصائح غذائية لمساعدتك في تحقيق أهدافك الرياضية</p>
-            <div class="hero-buttons">
-                <button class="btn btn-primary pulse">ابدأ الآن</button>
-                <button class="btn btn-outline">اعرف المزيد</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم الميزات -->
-    <section class="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>لماذا تختارنا؟</h2>
-                <p>نقدم لك كل ما تحتاجه لتحقيق أهدافك الرياضية في مكان واحد</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>خطط تمرين مخصصة</h3>
-                        <p>احصل على خطط تمرين مصممة خصيصًا لأهدافك ومستوى لياقتك</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>نصائح غذائية</h3>
-                        <p>خطط غذائية متكاملة تدعم أهدافك الرياضية وتحسن أداءك</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>تتبع التقدم</h3>
-                        <p>تتبع تقدمك مع إحصائيات مفصلة ورسوم بيانية توضيحية</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم خطط التمرين -->
-    <section class="workout-plans" id="plans">
-        <div class="container">
-            <div class="section-title">
-                <h2>خطط التمرين</h2>
-                <p>اختر الخطة التي تناسب أهدافك ومستوى لياقتك</p>
-            </div>
-            <div class="plans-container">
-                <div class="plan-card">
-                    <div class="plan-badge">مبتدئ</div>
-                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
-                    <div class="plan-content">
-                        <h3>خطة اللياقة الأساسية</h3>
-                        <ul class="plan-details">
-                            <li><i class="fas fa-check"></i> 3 أيام تمرين أسبوعيًا</li>
-                            <li><i class="fas fa-check"></i> تمارين كاملة للجسم</li>
-                            <li><i class="fas fa-check"></i> مناسب للمبتدئين</li>
-                            <li><i class="fas fa-check"></i> تمارين منزلية أو في النادي</li>
-                        </ul>
-                        <button class="btn btn-primary">ابدأ الخطة</button>
-                    </div>
-                </div>
-                <div class="plan-card">
-                    <div class="plan-badge">متوسط</div>
-                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
-                    <div class="plan-content">
-                        <h3>خطة بناء العضلات</h3>
-                        <ul class="plan-details">
-                            <li><i class="fas fa-check"></i> 5 أيام تمرين أسبوعيًا</li>
-                            <li><i class="fas fa-check"></i> تقسيم مجموعات عضلية</li>
-                            <li><i class="fas fa-check"></i> تمارين متقدمة</li>
-                            <li><i class="fas fa-check"></i> نصائح غذائية مكثفة</li>
-                        </ul>
-                        <button class="btn btn-primary">ابدأ الخطة</button>
-                    </div>
-                </div>
-                <div class="plan-card">
-                    <div class="plan-badge">متقدم</div>
-                    <div class="plan-image" style="background-image: url('https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80');"></div>
-                    <div class="plan-content">
-                        <h3>خطة التحدي الرياضي</h3>
-                        <ul class="plan-details">
-                            <li><i class="fas fa-check"></i> 6 أيام تمرين أسبوعيًا</li>
-                            <li><i class="fas fa-check"></i> تمارين مكثفة ومتقدمة</li>
-                            <li><i class="fas fa-check"></i> متابعة أسبوعية مع مدرب</li>
-                            <li><i class="fas fa-check"></i> خطة غذائية مفصلة</li>
-                        </ul>
-                        <button class="btn btn-primary">ابدأ الخطة</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم التمارين -->
-    <section class="exercises" id="exercises">
-        <div class="container">
-            <div class="section-title">
-                <h2>مكتبة التمارين</h2>
-                <p>استكشف مجموعة واسعة من التمارين مع شرح مفصل لكل تمرين</p>
-            </div>
-            <div class="exercise-categories">
-                <button class="category-btn active">الكل</button>
-                <button class="category-btn">تمارين القوة</button>
-                <button class="category-btn">تمارين الكارديو</button>
-                <button class="category-btn">تمارين المرونة</button>
-                <button class="category-btn">تمارين المنزل</button>
-            </div>
-            <div class="exercises-grid">
-                <div class="exercise-card">
-                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
-                    <div class="exercise-content">
-                        <h3>تمرين الضغط</h3>
-                        <div class="exercise-meta">
-                            <span><i class="fas fa-dumbbell"></i> القوة</span>
-                            <span><i class="fas fa-clock"></i> 15 دقيقة</span>
-                        </div>
-                        <p>تمرين أساسي لتقوية عضلات الصدر والذراعين والكتفين</p>
-                    </div>
-                </div>
-                <div class="exercise-card">
-                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
-                    <div class="exercise-content">
-                        <h3>تمرين القرفصاء</h3>
-                        <div class="exercise-meta">
-                            <span><i class="fas fa-dumbbell"></i> القوة</span>
-                            <span><i class="fas fa-clock"></i> 20 دقيقة</span>
-                        </div>
-                        <p>تمرين أساسي لتقوية عضلات الساقين والأرداف</p>
-                    </div>
-                </div>
-                <div class="exercise-card">
-                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
-                    <div class="exercise-content">
-                        <h3>تمرين الجري</h3>
-                        <div class="exercise-meta">
-                            <span><i class="fas fa-running"></i> الكارديو</span>
-                            <span><i class="fas fa-clock"></i> 30 دقيقة</span>
-                        </div>
-                        <p>تمرين ممتاز لتحسين اللياقة القلبية والتنفسية</p>
-                    </div>
-                </div>
-                <div class="exercise-card">
-                    <div class="exercise-image" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1520&q=80');"></div>
-                    <div class="exercise-content">
-                        <h3>تمرين اليوغا</h3>
-                        <div class="exercise-meta">
-                            <span><i class="fas fa-spa"></i> المرونة</span>
-                            <span><i class="fas fa-clock"></i> 45 دقيقة</span>
-                        </div>
-                        <p>تمارين اليوغا لتحسين المرونة والتوازن والاسترخاء</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>لياقتي</h3>
-                    <p>موقع متكامل لللياقة البدنية يقدم خطط تمرين مخصصة، تمارين متنوعة، ونصائح غذائية لمساعدتك في تحقيق أهدافك الرياضية.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>روابط سريعة</h3>
-                    <ul>
-                        <li><a href="#home">الرئيسية</a></li>
-                        <li><a href="#plans">خطط التمرين</a></li>
-                        <li><a href="#exercises">التمارين</a></li>
-                        <li><a href="#nutrition">التغذية</a></li>
-                        <li><a href="#blog">المدونة</a></li>
+                        <li>تم تحديث النظام إلى الإصدار 1.2</li>
+                        <li>أضيفت ميزات جديدة لتحسين الأداء</li>
+                        <li>تم إصلاح بعض الأخطاء المعروفة</li>
                     </ul>
                 </div>
-                <div class="footer-column">
-                    <h3>الدعم</h3>
-                    <ul>
-                        <li><a href="#">الأسئلة الشائعة</a></li>
-                        <li><a href="#">اتصل بنا</a></li>
-                        <li><a href="#">الشروط والأحكام</a></li>
-                        <li><a href="#">سياسة الخصوصية</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>اشترك في النشرة البريدية</h3>
-                    <p>احصل على آخر التحديثات والنصائح الرياضية مباشرة إلى بريدك الإلكتروني</p>
-                    <form>
-                        <input type="email" placeholder="بريدك الإلكتروني" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none;">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">اشترك</button>
-                    </form>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2023 لياقتي. جميع الحقوق محفوظة.</p>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <script>
-        // مؤثرات تفاعلية بسيطة
-        document.addEventListener('DOMContentLoaded', function() {
-            // إضافة تأثير عند التمرير
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-            
-            // تطبيق المؤثر على العناصر
-            const cards = document.querySelectorAll('.feature-card, .plan-card, .exercise-card');
-            cards.forEach(card => {
-                card.style.opacity = 0;
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.5s, transform 0.5s';
-                observer.observe(card);
-            });
-            
-            // تفعيل أزرار التصنيفات
-            const categoryButtons = document.querySelectorAll('.category-btn');
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    <div class="window" id="media-window">
+        <div class="window-header">
+            <div class="window-title">المشغل الصوتي</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('media')">−</div>
+                <div class="window-control" onclick="closeWindow('media')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div class="content-title">قائمة التشغيل</div>
+                <div>▶️ أغنية 1 - فنان 1</div>
+                <div>⏸️ أغنية 2 - فنان 2</div>
+                <div>▶️ أغنية 3 - فنان 3</div>
+                <div>▶️ أغنية 4 - فنان 4</div>
+            </div>
+            <div class="content-section">
+                <div class="content-title">عناصر التحكم</div>
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="button">⏮️</button>
+                    <button class="button">▶️</button>
+                    <button class="button">⏸️</button>
+                    <button class="button">⏭️</button>
+                    <button class="button">⏹️</button>
+                </div>
+                <div style="margin-top: 10px;">
+                    <div style="height: 10px; background: #D6D3C6; border: 1px solid #ACA899; margin-top: 5px;">
+                        <div style="width: 30%; height: 100%; background: #316AC5;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                        <span>1:20</span>
+                        <span>4:35</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="notepad-window">
+        <div class="window-header">
+            <div class="window-title">المفكرة - مستند غير محفوظ</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('notepad')">−</div>
+                <div class="window-control" onclick="closeWindow('notepad')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <textarea style="width: 100%; height: 100%; border: none; resize: none; padding: 5px; font-family: 'Courier New', monospace;">
+مرحباً بك في نظام Ftouh XP!
+
+هذا تطبيق المفكرة البسيط الذي يمكنك استخدامه لكتابة النصوص.
+
+مميزات النظام:
+- واجهة مستخدم تشبه Windows XP
+- نوافذ قابلة للسحب والتكبير والتصغير
+- قائمة ابدأ وشريط مهام
+- أيقونات سطح المكتب
+- تطبيقات متعددة
+
+استمتع بتجربة النظام!
+            </textarea>
+        </div>
+    </div>
+
+    <div class="window" id="settings-window">
+        <div class="window-header">
+            <div class="window-title">إعدادات النظام</div>
+            <div class="window-controls">
+                <div class="window-control" onclick="minimizeWindow('settings')">−</div>
+                <div class="window-control" onclick="closeWindow('settings')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="content-section">
+                <div class="content-title">المظهر</div>
+                <div>
+                    <label><input type="radio" name="theme" checked> مظهر أزرق كلاسيكي</label><br>
+                    <label><input type="radio" name="theme"> مظهر فضي</label><br>
+                    <label><input type="radio" name="theme"> مظهر أخضر</label>
+                </div>
+            </div>
+            <div class="content-section">
+                <div class="content-title">خيارات أخرى</div>
+                <div>
+                    <label><input type="checkbox" checked> إظهار أيقونات سطح المكتب</label><br>
+                    <label><input type
