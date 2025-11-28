@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ftout Windows 10</title>
+    <style>
+        /* أنماط عامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0078d7;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* شاشة تسجيل الدخول */
+        .login-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0078d7 0%, #106ebe 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .login-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* سطح المكتب */
+        .desktop {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: none;
+        }
+
+        /* شريط المهام */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .start-button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .taskbar-icons {
+            display: flex;
+            margin-left: 10px;
+        }
+
+        .taskbar-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .taskbar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .time {
+            margin-left: auto;
+            color: white;
+            font-size: 14px;
+            padding: 0 10px;
+        }
+
+        /* أيقونات سطح المكتب */
+        .desktop-icons {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            height: calc(100% - 40px);
+            align-content: flex-start;
+        }
+
+        .desktop-icon {
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .desktop-icon img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+
+        .desktop-icon span {
+            color: white;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* النوافذ */
+        .window {
+            position: absolute;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 300px;
+            min-height: 200px;
+        }
+
+        .window.active {
+            display: flex;
+            z-index: 10;
+        }
+
+        .window-header {
+            background-color: #f0f0f0;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .window-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .window-controls {
+            display: flex;
+        }
+
+        .window-control {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #333;
+        }
+
+        .window-control:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .window-content {
+            flex: 1;
+            padding: 10px;
+            overflow: auto;
+            color: #333;
+        }
+
+        /* الآلة الحاسبة */
+        .calculator {
+            width: 250px;
+            height: 350px;
+        }
+
+        .calculator-display {
+            width: 100%;
+            height: 60px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 10px;
+            font-size: 24px;
+            overflow: hidden;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        .calc-btn {
+            height: 50px;
+            border: none;
+            background-color: #f0f0f0;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+
+        .calc-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .calc-btn.operator {
+            background-color: #ff9500;
+            color: white;
+        }
+
+        .calc-btn.operator:hover {
+            background-color: #e08500;
+        }
+
+        /* موجه الأوامر */
+        .cmd {
+            width: 600px;
+            height: 400px;
+            background-color: #1e1e1e;
+            color: #cccccc;
+        }
+
+        .cmd-content {
+            font-family: 'Courier New', monospace;
+            height: 100%;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .cmd-line {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .cmd-prompt {
+            color: #00ff00;
+            margin-right: 5px;
+        }
+
+        .cmd-input {
+            background: transparent;
+            border: none;
+            color: #cccccc;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+        }
+
+        /* مساعد الذكاء الاصطناعي */
+        .ai-assistant {
+            width: 500px;
+            height: 500px;
+        }
+
+        .ai-header {
+            background-color: #4a4a4a;
+            color: white;
+        }
+
+        .ai-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .ai-chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-message {
+            max-width: 80%;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            line-height: 1.4;
+        }
+
+        .ai-user {
+            align-self: flex-end;
+            background-color: #0078d7;
+            color: white;
+        }
+
+        .ai-bot {
+            align-self: flex-start;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .ai-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .ai-send {
+            padding: 8px 15px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* تأثيرات */
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div class="login-screen fade-in" id="loginScreen">
+        <div class="login-container">
+            <h1 class="login-title">Ftout Windows</h1>
+            <input type="text" class="login-input" id="username" placeholder="اسم المستخدم">
+            <input type="password" class="login-input" id="password" placeholder="كلمة المرور">
+            <button class="login-button" id="loginButton">تسجيل الدخول</button>
+        </div>
+    </div>
+
+    <!-- سطح المكتب -->
+    <div class="desktop" id="desktop">
+        <!-- أيقونات سطح المكتب -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" data-app="calculator">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik03LDJIMTdWMjJIN1YyTTksNEgxNVYyMEg5VjRNMTAsNlY4SDE0VjZIMTBWTTEwLDEwVjEySDE0VjEwSDEwTTEwLDE0VjE2SDE0VjE0SDEwTTEwLDE4VjIwSDEyVjE4SDEwWiIvPjwvc3ZnPg==" alt="آلة حاسبة">
+                <span>آلة حاسبة</span>
+            </div>
+            <div class="desktop-icon" data-app="cmd">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0yLDJWMjJIMjJWMkgxOE0xNiwxNlYyMEg4VjE2SDE2TTE2LDE0SDhWNEgxNlYxNE0xNiwySDZWMjBIMTZWMjJINFYySDE2WiIvPjwvc3ZnPg==" alt="موجه الأوامر">
+                <span>موجه الأوامر</span>
+            </div>
+            <div class="desktop-icon" data-app="ai">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiwyQTEwLDEwIDAgMCwwIDIsMTJBMTAsMTAgMCAwLDAgMTIsMjJBMTAsMTAgMCAwLDAgMjIsMTJBMTAsMTAgMCAwLDAgMTIsMk0xMiw0QTgsOCAwIDAsMSAyMCwxMkE4LDggMCAwLDEgMTIsMjBBOCw4IDAgMCwxIDQsMTJBOCw4IDAgMCwxIDEyLDRNMTIsMTBBMiwyIDAgMCwwIDEwLDEyQTIsMiAwIDAsMCAxMiwxNEEyLDIgMCAwLDAgMTQsMTJBMiwyIDAgMCwwIDEyLDEwWiIvPjwvc3ZnPg==" alt="Ftout AI">
+                <span>Ftout AI</span>
+            </div>
+        </div>
+
+        <!-- شريط المهام -->
+        <div class="taskbar">
+            <div class="start-button">☰</div>
+            <div class="taskbar-icons">
+                <div class="taskbar-icon" data-app="calculator">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik03LDJIMTdWMjJIN1YyTTksNEgxNVYyMEg5VjRNMTAsNlY4SDE0VjZIMTBWTTEwLDEwVjEySDE0VjEwSDEwTTEwLDE0VjE2SDE0VjE0SDEwTTEwLDE4VjIwSDEyVjE4SDEwWiIvPjwvc3ZnPg==" alt="آلة حاسبة">
+                </div>
+                <div class="taskbar-icon" data-app="cmd">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0yLDJWMjJIMjJWMkgxOE0xNiwxNlYyMEg4VjE2SDE2TTE2LDE0SDhWNEgxNlYxNE0xNiwySDZWMjBIMTZWMjJINFYySDE2WiIvPjwvc3ZnPg==" alt="موجه الأوامر">
+                </div>
+                <div class="taskbar-icon" data-app="ai">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiwyQTEwLDEwIDAgMCwwIDIsMTJBMTAsMTAgMCAwLDAgMTIsMjJBMTAsMTAgMCAwLDAgMjIsMTJBMTAsMTAgMCAwLDAgMTIsMk0xMiw0QTgsOCAwIDAsMSAyMCwxMkE4LDggMCAwLDEgMTIsMjBBOCw4IDAgMCwxIDQsMTJBOCw4IDAgMCwxIDEyLDRNMTIsMTBBMiwyIDAgMCwwIDEwLDEyQTIsMiAwIDAsMCAxMiwxNEEyLDIgMCAwLDAgMTQsMTJBMiwyIDAgMCwwIDEyLDEwWiIvPjwvc3ZnPg==" alt="Ftout AI">
+                </div>
+            </div>
+            <div class="time" id="time">12:00</div>
+        </div>
+    </div>
+
+    <!-- نوافذ التطبيقات -->
+    <!-- نافذة الآلة الحاسبة -->
+    <div class="window calculator" id="calculatorWindow">
+        <div class="window-header">
+            <div class="window-title">آلة حاسبة</div>
+            <div class="window-controls">
+                <div class="window-control minimize">−</div>
+                <div class="window-control maximize">□</div>
+                <div class="window-control close">×</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="calculator-display" id="calcDisplay">0</div>
+            <div class="calculator-buttons">
+                <button class="calc-btn" onclick="clearDisplay()">C</button>
+                <button class="calc-btn" onclick="deleteLast()">⌫</button>
+                <button class="calc-btn operator" onclick="appendToDisplay('/')">/</button>
+                <button class="calc-btn operator" onclick="appendToDisplay('*')">×</button>
+                
+                <button class="calc-btn" onclick="appendToDisplay('7')">7</button>
+                <button class="calc-btn" onclick="appendToDisplay('8')">8</button>
+                <button class="calc-btn" onclick="appendToDisplay('9')">9</button>
+                <button class="calc-btn operator" onclick="appendToDisplay('-')">-</button>
+                
+                <button class="calc-btn" onclick="appendToDisplay('4')">4</button>
+                <button class="calc-btn" onclick="appendToDisplay('5')">5</button>
+                <button class="calc-btn" onclick="appendToDisplay('6')">6</button>
+                <button class="calc-btn operator" onclick="appendToDisplay('+')">+</button>
+                
+                <button class="calc-btn" onclick="appendToDisplay('1')">1</button>
+                <button class="calc-btn" onclick="appendToDisplay('2')">2</button>
+                <button class="calc-btn" onclick="appendToDisplay('3')">3</button>
+                <button class="calc-btn operator" onclick="calculate()" style="grid-row: span 2;">=</button>
+                
+                <button class="calc-btn" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+                <button class="calc-btn" onclick="appendToDisplay('.')">.</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة موجه الأوامر -->
+    <div class="window cmd" id="cmdWindow">
+        <div class="window-header">
+            <div class="window-title">موجه الأوامر</div>
+            <div class="window-controls">
+                <div class="window-control minimize">−</div>
+                <div class="window-control maximize">□</div>
+                <div class="window-control close">×</div>
+            </div>
+        </div>
+        <div class="window-content cmd-content" id="cmdContent">
+            <div>Microsoft Windows [الإصدار 10.0.19042.1237]</div>
+            <div>(ج) Microsoft Corporation. جميع الحقوق محفوظة.</div>
+            <div class="cmd-line">
+                <span class="cmd-prompt">C:\Users\Ftout></span>
+                <input type="text" class="cmd-input" id="cmdInput" autofocus>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الذكاء الاصطناعي -->
+    <div class="window ai-assistant" id="aiWindow">
+        <div class="window-header ai-header">
+            <div class="window-title">Ftout AI</div>
+            <div class="window-controls">
+                <div class="window-control minimize">−</div>
+                <div class="window-control maximize">□</div>
+                <div class="window-control close">×</div>
+            </div>
+        </div>
+        <div class="window-content ai-content">
+            <div class="ai-chat" id="aiChat">
+                <div class="ai-message ai-bot">
+                    مرحباً! أنا Ftout AI، مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟
+                </div>
+            </div>
+            <div class="ai-input-container">
+                <input type="text" class="ai-input" id="aiInput" placeholder="اكتب رسالتك هنا...">
+                <button class="ai-send" id="aiSend">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عناصر DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const desktop = document.getElementById('desktop');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const timeElement = document.getElementById('time');
+        
+        // نوافذ التطبيقات
+        const calculatorWindow = document.getElementById('calculatorWindow');
+        const cmdWindow = document.getElementById('cmdWindow');
+        const aiWindow = document.getElementById('aiWindow');
+        
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            timeElement.textContent = timeString;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // تسجيل الدخول
+        loginButton.addEventListener('click', login);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+        
+        function login() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            
+            if (username === 'ftouh' && password === 'ftouh') {
+                loginScreen.classList.add('hidden');
+                setTimeout(() => {
+                    desktop.style.display = 'block';
+                    loginScreen.style.display = 'none';
+                }, 500);
+            } else {
+                loginScreen.classList.add('shake');
+                setTimeout(() => {
+                    loginScreen.classList.remove('shake');
+                }, 500);
+            }
+        }
+        
+        // فتح التطبيقات
+        document.querySelectorAll('.desktop-icon, .taskbar-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const app = this.getAttribute('data-app');
+                openApp(app);
+            });
+        });
+        
+        function openApp(appName) {
+            // إغلاق جميع النوافذ أولاً
+            document.querySelectorAll('.window').forEach(window => {
+                window.classList.remove('active');
+            });
+            
+            // فتح النافذة المطلوبة
+            switch(appName) {
+                case 'calculator':
+                    calculatorWindow.classList.add('active');
+                    break;
+                case 'cmd':
+                    cmdWindow.classList.add('active');
+                    document.getElementById('cmdInput').focus();
+                    break;
+                case 'ai':
+                    aiWindow.classList.add('active');
+                    document.getElementById('aiInput').focus();
+                    break;
+            }
+        }
+        
+        // إغلاق النوافذ
+        document.querySelectorAll('.window-control.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                this.closest('.window').classList.remove('active');
+            });
+        });
+        
+        // الآلة الحاسبة
+        let calcDisplay = document.getElementById('calcDisplay');
+        let currentInput = '0';
+        let operator = null;
+        let previousInput = '0';
+        
+        function updateDisplay() {
+            calcDisplay.textContent = currentInput;
+        }
+        
+        function appendToDisplay(value) {
+            if (currentInput === '0' && value !== '.') {
+                currentInput = value;
+            } else {
+                currentInput += value;
+            }
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            currentInput = '0';
+            operator = null;
+            previousInput = '0';
+            updateDisplay();
+        }
+        
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+        
+        function calculate() {
+            try {
+                // استبدال الرموز لجعلها مفهومة لـ eval
+                let expression = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+                currentInput = eval(expression).toString();
+                updateDisplay();
+            } catch (error) {
+                currentInput = 'خطأ';
+                updateDisplay();
+            }
+        }
+        
+        // موجه الأوامر
+        const cmdInput = document.getElementById('cmdInput');
+        const cmdContent = document.getElementById('cmdContent');
+        
+        cmdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim();
+                executeCommand(command);
+                this.value = '';
+            }
+        });
+        
+        function executeCommand(command) {
+            // إضافة الأمر إلى المحتوى
+            const commandLine = document.createElement('div');
+            commandLine.innerHTML = `<span class="cmd-prompt">C:\\Users\\Ftout></span> ${command}`;
+            cmdContent.appendChild(commandLine);
+            
+            // معالجة الأمر
+            let output = '';
+            
+            if (command === '') {
+                output = '';
+            } else if (command === 'help') {
+                output = `الأوامر المتاحة:<br>
+                help - عرض هذه المساعدة<br>
+                dir - عرض محتويات المجلد<br>
+                date - عرض التاريخ والوقت<br>
+                echo [نص] - إعادة طباعة النص<br>
+                cls - مسح الشاشة<br>
+                calc - فتح الآلة الحاسبة<br>
+                ai - فتح مساعد Ftout AI`;
+            } else if (command === 'dir') {
+                output = `مجلد C:\\Users\\Ftout<br><br>
+                12/10/2023  02:30 م    &lt;DIR&gt;          .<br>
+                12/10/2023  02:30 م    &lt;DIR&gt;          ..<br>
+                12/10/2023  02:25 م             1,234 ملف.txt<br>
+                12/10/2023  02:20 م    &lt;DIR&gt;          المستندات<br>
+                12/10/2023  02:15 م    &lt;DIR&gt;          الصور<br>
+                12/10/2023  02:10 م    &lt;DIR&gt;          التنزيلات<br>
+                        1 ملف(ملفات)          1,234 بايت<br>
+                        4 مجلد(مجلدات)   25,678,901,234 بايت متاح`;
+            } else if (command === 'date') {
+                const now = new Date();
+                output = now.toLocaleString('ar-EG', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            } else if (command.startsWith('echo ')) {
+                output = command.substring(5);
+            } else if (command === 'cls') {
+                cmdContent.innerHTML = '';
+                return;
+            } else if (command === 'calc') {
+                openApp('calculator');
+                output = 'تم فتح الآلة الحاسبة';
+            } else if (command === 'ai') {
+                openApp('ai');
+                output = 'تم فتح مساعد Ftout AI';
+            } else {
+                output = `'${command}'不被识别为内部或外部命令、可运行的程序或批处理文件。`;
+            }
+            
+            if (output) {
+                const outputLine = document.createElement('div');
+                outputLine.innerHTML = output;
+                cmdContent.appendChild(outputLine);
+            }
+            
+            // إضافة سطر جديد للأمر التالي
+            const newLine = document.createElement('div');
+            newLine.className = 'cmd-line';
+            newLine.innerHTML = `<span class="cmd-prompt">C:\\Users\\Ftout></span>
+                                <input type="text" class="cmd-input" autofocus>`;
+            cmdContent.appendChild(newLine);
+            
+            // إضافة مستمع حدث للحقل الجديد
+            const newInput = newLine.querySelector('.cmd-input');
+            newInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const command = this.value.trim();
+                    executeCommand(command);
+                    this.parentElement.remove();
+                }
+            });
+            
+            // التمرير إلى الأسفل
+            cmdContent.scrollTop = cmdContent.scrollHeight;
+            
+            // التركيز على الحقل الجديد
+            newInput.focus();
+        }
+        
+        // مساعد الذكاء الاصطناعي
+        const aiInput = document.getElementById('aiInput');
+        const aiSend = document.getElementById('aiSend');
+        const aiChat = document.getElementById('aiChat');
+        
+        aiSend.addEventListener('click', sendAiMessage);
+        aiInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendAiMessage();
+        });
+        
+        function sendAiMessage() {
+            const message = aiInput.value.trim();
+            if (!message) return;
+            
+            // إضافة رسالة المستخدم
+            const userMessage = document.createElement('div');
+            userMessage.className = 'ai-message ai-user';
+            userMessage.textContent = message;
+            aiChat.appendChild(userMessage);
+            
+            // مسح حقل الإدخال
+            aiInput.value = '';
+            
+            // إضافة رسالة الرد الآلي بعد تأخير
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'ai-message ai-bot';
+                botMessage.textContent = generateAiResponse(message);
+                aiChat.appendChild(botMessage);
+                
+                // التمرير إلى الأسفل
+                aiChat.scrollTop = aiChat.scrollHeight;
+            }, 1000);
+            
+            // التمرير إلى الأسفل
+            aiChat.scrollTop = aiChat.scrollHeight;
+        }
+        
+        function generateAiResponse(message) {
+            const responses = [
+                "هذا سؤال مثير للاهتمام! يمكنني مساعدتك في ذلك.",
+                "شكراً لسؤالك. إليك ما أعرفه عن هذا الموضوع...",
+                "أفهم استفسارك. دعني أوضح ذلك لك.",
+                "هذا موضوع رائع! إليك بعض المعلومات التي قد تكون مفيدة.",
+                "بناءً على سؤالك، أعتقد أن هذه الإجابة قد تساعدك.",
+                "لقد سألت عن شيء مهم. دعني أشاركك ما أعرفه.",
+                "هذا استفسار جيد. إليك ما يمكنني قوله عنه.",
+                "أقدر فضولك! هذه إجابتي على سؤالك.",
+                "شكراً لتواصلك معي. إليك ردّي على استفسارك.",
+                "هذا سؤال عميق. دعني أفكر في أفضل طريقة للإجابة."
+            ];
+            
+            // إجابة عشوائية من القائمة
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // جعل النوافذ قابلة للسحب
+        document.querySelectorAll('.window-header').forEach(header => {
+            header.addEventListener('mousedown', initDrag);
+        });
+        
+        function initDrag(e) {
+            const window = this.closest('.window');
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            e = e || window.event;
+            e.preventDefault();
+            // الحصول على موضع المؤشر عند النقر
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // حساب الموضع الجديد
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // تعيين الموضع الجديد للنافذة
+                window.style.top = (window.offsetTop - pos2) + "px";
+                window.style.left = (window.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                // إيقاف السحب عند تحرير زر الفأرة
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+</body>
+</html>
